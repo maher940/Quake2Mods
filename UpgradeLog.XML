@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="quake2">
+</Property><Property Name="Solution File" Value="C:\Users\Jacob\Desktop\quake2-tutorials-bc0d51eb68a66c068df22822a391d46484f8e9a9\quake2.sln">
+</Property><Property Name="Date" Value="Monday, April 04, 2016">
+</Property><Property Name="Time" Value="17:48 PM">
+</Property></Properties><Event ErrorLevel="2" Project="ctf" Source="ctf\ctf.dsp" Description="Project upgrade failed.">
+</Event><Event ErrorLevel="2" Project="game" Source="game\game.dsp" Description="Project upgrade failed.">
+</Event><Event ErrorLevel="2" Project="quake2" Source="quake2.dsp" Description="Project upgrade failed.">
+</Event><Event ErrorLevel="2" Project="ref_gl" Source="ref_gl\ref_gl.dsp" Description="Project upgrade failed.">
+</Event><Event ErrorLevel="2" Project="ref_soft" Source="ref_soft\ref_soft.dsp" Description="Project upgrade failed.">
+</Event><Event ErrorLevel="0" Project="" Source="quake2.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="quake2.sln" Description="Converted">
+</Event></UpgradeLog>
