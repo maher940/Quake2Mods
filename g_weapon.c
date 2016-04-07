@@ -284,8 +284,8 @@ void fire_shotgun (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int k
 	for (i = 0; i < count+10; i++)
 		fire_lead (self, start, aimdir, damage, kick, TE_SHOTGUN, hspread, vspread, mod);
 		fire_rocket (self, start, aimdir, 20, 200, 300.0, 30);
-		fire_rocket (self, offset, aimdir, 20, 100, 300.0, 30);
-		fire_rocket (self, offsetb, aimdir, 20, 100, 300.0, 30);
+		fire_rocket (self, offset, aimdir, 20, 200, 300.0, 30);
+		fire_rocket (self, offsetb, aimdir, 20, 200, 300.0, 30);
 }
 
 
