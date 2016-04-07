@@ -1,6 +1,6 @@
  gamex86
 
- Timestamp is 5702e1aa (Mon Apr 04 17:50:34 2016)
+ Timestamp is 57045ffa (Tue Apr 05 21:01:46 2016)
 
  Preferred load address is 20000000
 
@@ -20,7 +20,7 @@
  0002:00000190 00000004H .CRT$XTA                DATA
  0002:00000194 00000004H .CRT$XTZ                DATA
  0002:000001a0 00015cf8H .rdata                  DATA
- 0002:00015e98 00000041H .rdata$debug            DATA
+ 0002:00015e98 00000044H .rdata$debug            DATA
  0002:00015edc 000001c4H .rdata$r                DATA
  0002:000160a0 0000002cH .rdata$sxdata           DATA
  0002:000160cc 00000004H .rtc$IAA                DATA
@@ -1154,8 +1154,8 @@
  0001:00044b7f       __cos_default              20045b7f     LIBCMTD:_cos_.obj
  0001:00044c20       _atan2                     20045c20 f   LIBCMTD:_87ctriga_.obj
  0001:00044c2a       __CIatan2                  20045c2a f   LIBCMTD:_87ctriga_.obj
- 0001:00044c40       __alloca_probe             20045c40     LIBCMTD:chkstk.obj
  0001:00044c40       __chkstk                   20045c40 f   LIBCMTD:chkstk.obj
+ 0001:00044c40       __alloca_probe             20045c40     LIBCMTD:chkstk.obj
  0001:00044c70       _strncmp                   20045c70 f   LIBCMTD:strncmp.obj
  0001:00044df0       _abs                       20045df0 f   LIBCMTD:abs.obj
  0001:00044e20       __abs64                    20045e20 f   LIBCMTD:abs.obj
@@ -1807,8 +1807,8 @@
  0001:00077430       ___InternalCxxFrameHandler 20078430 f   LIBCMTD:frame.obj
  0001:00077a30       ??0bad_exception@std@@QAE@PBD@Z 20078a30 f i LIBCMTD:frame.obj
  0001:00077a60       ??1bad_exception@std@@UAE@XZ 20078a60 f i LIBCMTD:frame.obj
- 0001:00077a80       ??_Gbad_exception@std@@UAEPAXI@Z 20078a80 f i LIBCMTD:frame.obj
  0001:00077a80       ??_Ebad_exception@std@@UAEPAXI@Z 20078a80 f i LIBCMTD:frame.obj
+ 0001:00077a80       ??_Gbad_exception@std@@UAEPAXI@Z 20078a80 f i LIBCMTD:frame.obj
  0001:00077ab0       ??0bad_exception@std@@QAE@ABV01@@Z 20078ab0 f i LIBCMTD:frame.obj
  0001:00077c70       ___TypeMatch               20078c70 f   LIBCMTD:frame.obj
  0001:00077d20       ___FrameUnwindFilter       20078d20 f   LIBCMTD:frame.obj
@@ -1910,8 +1910,8 @@
  0001:0007f910       __CxxThrowException@8      20080910 f   LIBCMTD:throw.obj
  0001:0007f970       ?name@type_info@@QBEPBDPAU__type_info_node@@@Z 20080970 f   LIBCMTD:typinfo.obj
  0001:0007f990       ??1type_info@@UAE@XZ       20080990 f   LIBCMTD:typinfo.obj
- 0001:0007f9c0       ??_Etype_info@@UAEPAXI@Z   200809c0 f i LIBCMTD:typinfo.obj
  0001:0007f9c0       ??_Gtype_info@@UAEPAXI@Z   200809c0 f i LIBCMTD:typinfo.obj
+ 0001:0007f9c0       ??_Etype_info@@UAEPAXI@Z   200809c0 f i LIBCMTD:typinfo.obj
  0001:0007f9f0       ?_name_internal_method@type_info@@QBEPBDPAU__type_info_node@@@Z 200809f0 f   LIBCMTD:typinfo.obj
  0001:0007fa10       ?_type_info_dtor_internal_method@type_info@@QAEXXZ 20080a10 f   LIBCMTD:typinfo.obj
  0001:0007fa30       ??8type_info@@QBE_NABV0@@Z 20080a30 f   LIBCMTD:typinfo.obj
@@ -1942,8 +1942,8 @@
  0001:0007fe90       ??0bad_typeid@std@@QAE@ABV01@@Z 20080e90 f   LIBCMTD:stdexcpt.obj
  0001:0007fec0       ??1bad_typeid@std@@UAE@XZ  20080ec0 f   LIBCMTD:stdexcpt.obj
  0001:0007fee0       ??0__non_rtti_object@std@@QAE@PBD@Z 20080ee0 f   LIBCMTD:stdexcpt.obj
- 0001:0007ff10       ??_G__non_rtti_object@std@@UAEPAXI@Z 20080f10 f i LIBCMTD:stdexcpt.obj
  0001:0007ff10       ??_E__non_rtti_object@std@@UAEPAXI@Z 20080f10 f i LIBCMTD:stdexcpt.obj
+ 0001:0007ff10       ??_G__non_rtti_object@std@@UAEPAXI@Z 20080f10 f i LIBCMTD:stdexcpt.obj
  0001:0007ff40       ??0__non_rtti_object@std@@QAE@ABV01@@Z 20080f40 f   LIBCMTD:stdexcpt.obj
  0001:0007ff70       ??1__non_rtti_object@std@@UAE@XZ 20080f70 f   LIBCMTD:stdexcpt.obj
  0001:0007ff90       ??3@YAXPAX@Z               20080f90 f   LIBCMTD:dbgdel.obj
@@ -2214,8 +2214,8 @@
  0001:00090cc0       _GetProcessHeap@0          20091cc0 f   kernel32:KERNEL32.dll
  0001:00090cc6       _CompareStringW@24         20091cc6 f   kernel32:KERNEL32.dll
  0001:00090ccc       _SetEnvironmentVariableA@8 20091ccc f   kernel32:KERNEL32.dll
- 0001:00090ce0       __strdup                   20091ce0 f   LIBCMTD:strdup.obj
  0001:00090ce0       _strdup                    20091ce0 f   LIBCMTD:strdup.obj
+ 0001:00090ce0       __strdup                   20091ce0 f   LIBCMTD:strdup.obj
  0001:00090d00       __strdup_dbg               20091d00 f   LIBCMTD:strdup.obj
  0002:00000000       __imp__GetSystemTimeAsFileTime@4 20092000     kernel32:KERNEL32.dll
  0002:00000004       __imp__GetCurrentThreadId@0 20092004     kernel32:KERNEL32.dll
@@ -2925,7 +2925,7 @@
  0002:00002b44       ??_C@_0L@JKCONGEA@maxclients?$AA@ 20094b44     g_save.obj
  0002:00002b50       ??_C@_01FAMBOPH@4?$AA@     20094b50     g_save.obj
  0002:00002b54       ??_C@_08CLLHAKFA@gamedate?$AA@ 20094b54     g_save.obj
- 0002:00002b60       ??_C@_0M@IEAKKMEO@Apr?5?54?52016?$AA@ 20094b60     g_save.obj
+ 0002:00002b60       ??_C@_0M@CCHNKHPK@Apr?5?55?52016?$AA@ 20094b60     g_save.obj
  0002:00002b6c       ??_C@_08HCPAIKAO@gamename?$AA@ 20094b6c     g_save.obj
  0002:00002b78       ??_C@_06LHNLGKIK@baseq2?$AA@ 20094b78     g_save.obj
  0002:00002b80       ??_C@_06LJMIHJCM@cheats?$AA@ 20094b80     g_save.obj
@@ -3780,8 +3780,8 @@
  0002:000071a0       ??_C@_1GC@OILHAOLL@?$AAf?$AA?3?$AA?2?$AAd?$AAd?$AA?2?$AAv?$AAc?$AAt?$AAo?$AAo?$AAl?$AAs?$AA?2?$AAc?$AAr?$AAt?$AA_?$AAb?$AAl?$AAd?$AA?2?$AAs?$AAe?$AAl?$AAf?$AA_?$AAx?$AA8?$AA6?$AA?2?$AAc@ 200991a0     LIBCMTD:stricmp.obj
  0002:00007204       ??_C@_1BI@GKKCBDMD@?$AAd?$AAs?$AAt?$AA?5?$AA?$CB?$AA?$DN?$AA?5?$AAN?$AAU?$AAL?$AAL?$AA?$AA@ 20099204     LIBCMTD:stricmp.obj
  0002:0000721c       ??_C@_1BC@JLGKKIIG@?$AA_?$AAs?$AAt?$AAr?$AAi?$AAc?$AAm?$AAp?$AA?$AA@ 2009921c     LIBCMTD:stricmp.obj
- 0002:00007230       __pDefaultRawDllMain       20099230     LIBCMTD:dllcrt0.obj
  0002:00007230       __pRawDllMain              20099230     LIBCMTD:dllcrt0.obj
+ 0002:00007230       __pDefaultRawDllMain       20099230     LIBCMTD:dllcrt0.obj
  0002:00007234       ??_C@_0DB@OLNOAEGF@f?3?2dd?2vctools?2crt_bld?2self_x86?2c@ 20099234     LIBCMTD:dllcrt0.obj
  0002:00007268       ??_C@_1GE@KOCFNGPB@?$AA_?$AAc?$AAo?$AAn?$AAt?$AAr?$AAo?$AAl?$AAf?$AAp?$AA_?$AAs?$AA?$CI?$AA?$CI?$AA?$CI?$AAv?$AAo?$AAi?$AAd?$AA?5?$AA?$CK?$AA?$CJ?$AA0?$AA?$CJ?$AA?0?$AA?5?$AA0?$AAx?$AA0?$AA0?$AA0?$AA1@ 20099268     LIBCMTD:fp8.obj
  0002:000072cc       ??_C@_1CK@JMKHCBEI@?$AA_?$AAs?$AAe?$AAt?$AAd?$AAe?$AAf?$AAa?$AAu?$AAl?$AAt?$AAp?$AAr?$AAe?$AAc?$AAi?$AAs?$AAi?$AAo?$AAn?$AA?$AA@ 200992cc     LIBCMTD:fp8.obj
