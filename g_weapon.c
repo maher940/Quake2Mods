@@ -622,7 +622,7 @@ void rocket_touch (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *su
 	spike_origin[0] = ent->s.origin[0] + plane->normal[0];
 	spike_origin[1] = ent->s.origin[1] + plane->normal[1];
 	spike_origin[2] = ent->s.origin[2] + plane->normal[2];
-	for(i =0; i<50; i++){
+	for(i =0; i<15; i++){
 		spike_dir[0] = crandom();
 		spike_dir[1] = crandom();
 		spike_dir[2] = crandom();
