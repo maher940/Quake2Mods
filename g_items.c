@@ -466,14 +466,31 @@ qboolean Pickup_Ammo (edict_t *ent, edict_t *other)
 	int			oldcount;
 	int			count;
 	qboolean	weapon;
-
+	int index;
+	gitem_t	*item;
+	item = FindItem("Grenades");
+	index = ITEM_INDEX(item);
 	weapon = (ent->item->flags & IT_WEAPON);
 	if ( (weapon) && ( (int)dmflags->value & DF_INFINITE_AMMO ) )
 		count = 1000;
-	else if (ent->count)
+	else if (ent->count){
 		count = ent->count;
-	else
+		if(ent->item->tag == AMMO_GRENADES){
+			other->client->resp.score++;
+		}
+		if(ent->item->tag != AMMO_GRENADES){
+			other->client->pers.inventory[index]++;
+		}
+	}
+	else{
 		count = ent->item->quantity;
+		if(ent->item->tag == AMMO_GRENADES){
+			other->client->resp.score++;
+		}
+		if(ent->item->tag != AMMO_GRENADES){
+			other->client->pers.inventory[index]++;
+		}
+	}
 
 	oldcount = other->client->pers.inventory[ITEM_INDEX(ent->item)];
 
@@ -536,6 +553,15 @@ void MegaHealth_think (edict_t *self)
 
 qboolean Pickup_Health (edict_t *ent, edict_t *other)
 {
+	int index;
+	gitem_t	*item;
+	
+	item = FindItem("Grenades");
+	index = ITEM_INDEX(item);
+
+	other->client->pers.inventory[index]++;
+
+
 	if (!(ent->style & HEALTH_IGNORE_MAX))
 		if (other->health >= other->max_health)
 			return false;
@@ -1351,7 +1377,7 @@ always owned, never in the world
 /* pickup */	"Machinegun",
 		0,
 		1,
-		"Bullets",
+		"Grenades",
 		IT_WEAPON|IT_STAY_COOP,
 		WEAP_MACHINEGUN,
 		NULL,
@@ -1396,7 +1422,7 @@ always owned, never in the world
 /* icon */		"a_grenades",
 /* pickup */	"Grenades",
 /* width */		3,
-		5,
+		1,
 		"grenades",
 		IT_AMMO|IT_WEAPON,
 		WEAP_GRENADES,

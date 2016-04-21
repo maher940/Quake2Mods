@@ -273,19 +273,19 @@ void fire_shotgun (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int k
 	int		i;
 	vec3_t offset;
 	vec3_t offsetb;
-	offset[0] = start[0] +10;
-	offset[1] = start[1] +10;
-	offset[2] = start[2] +10;
+	//offset[0] = start[0] +10;
+	//offset[1] = start[1] +10;
+	//offset[2] = start[2] +10;
 
-	offsetb[0] = start[0] -10;
-	offsetb[1] = start[1] -10;
-	offsetb[2] = start[2] -10;
+	//offsetb[0] = start[0] -10;
+	//offsetb[1] = start[1] -10;
+	//offsetb[2] = start[2] -10;
 
 	for (i = 0; i < count+10; i++)
 		fire_lead (self, start, aimdir, damage, kick, TE_SHOTGUN, hspread, vspread, mod);
-		fire_rocket (self, start, aimdir, 20, 200, 300.0, 30);
-		fire_rocket (self, offset, aimdir, 20, 200, 300.0, 30);
-		fire_rocket (self, offsetb, aimdir, 20, 200, 300.0, 30);
+		//fire_rocket (self, start, aimdir, 20, 200, 300.0, 30);
+		//fire_rocket (self, offset, aimdir, 20, 200, 300.0, 30);
+		//fire_rocket (self, offsetb, aimdir, 20, 200, 300.0, 30);
 }
 
 
@@ -575,8 +575,8 @@ void rocket_touch (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *su
 	vec3_t		origin;
 	int			n;
 	int         i;
-	vec3_t		spike_origin;
-	vec3_t		spike_dir;
+	//vec3_t		spike_origin;
+	//vec3_t		spike_dir;
 	if (other == ent->owner)
 		return;
 
@@ -619,15 +619,15 @@ void rocket_touch (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *su
 		gi.WriteByte (TE_ROCKET_EXPLOSION);
 	gi.WritePosition (origin);
 	gi.multicast (ent->s.origin, MULTICAST_PHS);
-	spike_origin[0] = ent->s.origin[0] + plane->normal[0];
-	spike_origin[1] = ent->s.origin[1] + plane->normal[1];
-	spike_origin[2] = ent->s.origin[2] + plane->normal[2];
-	for(i =0; i<15; i++){
-		spike_dir[0] = crandom();
-		spike_dir[1] = crandom();
-		spike_dir[2] = crandom();
-		fire_blaster (ent->owner, spike_origin, spike_dir, 300, 100, EF_HYPERBLASTER, true);
-	}
+	//spike_origin[0] = ent->s.origin[0] + plane->normal[0];
+	//spike_origin[1] = ent->s.origin[1] + plane->normal[1];
+	//spike_origin[2] = ent->s.origin[2] + plane->normal[2];
+	//for(i =0; i<15; i++){
+	//	spike_dir[0] = crandom();
+	//	spike_dir[1] = crandom();
+	//	spike_dir[2] = crandom();
+	//	fire_blaster (ent->owner, spike_origin, spike_dir, 300, 100, EF_HYPERBLASTER, true);
+	//}
 	G_FreeEdict (ent);
 }
 
