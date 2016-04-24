@@ -867,6 +867,27 @@ void fire_rail (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick
 	int			mask;
 	qboolean	water;
 	vec3_t offset;
+	vec3_t trail;
+	double trailX;
+	double trailY;
+	double trailZ;
+	double newstartX;
+	double newstartY;
+	double newstartZ;
+	double biggerX;
+	double biggerY;
+	double biggerZ;
+	double smallerX;
+	double smallerY;
+	double smallerZ;
+	int situationA1;
+	int situationA2;
+	int situationB1;
+	int situationB2;
+	int situationC1;
+	int situationC2;
+	int looper = 0;
+	
 	//offset[0] = start[0] +10;
 	
 	//offset[1] = start[1] +10;
@@ -908,10 +929,139 @@ void fire_rail (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick
 	gi.WriteByte (svc_temp_entity);
 	gi.WriteByte (TE_RAILTRAIL);
 
-	offset[0] = tr.endpos[0];
-	offset[1] = tr.endpos[1] + 20;
-	offset[1] = tr.endpos[2];
-	AngleVectors(tr.ent->client->v_angle, forward, right, up);
+	offset[0] = 0;
+	offset[1] = 0;
+	offset[1] = 0;
+	trail[0] = start[0];
+	trail[1] = start[1];
+	trail[2] = start[2];
+	for(looper; looper<10; looper++){
+		
+		if(trail[0] < tr.endpos[0]){
+			trail[0] += 50;
+		}
+		else{
+			trail[0] -= 50;
+		}
+		if(trail[1] < tr.endpos[0]){
+			trail[1] += 50;
+		}
+		else{
+			trail[1] -= 50;
+		}
+		if(trail[2] < tr.endpos[2]){
+			trail[2] += 50;
+		}
+
+		if(trail[2] == tr.endpos[2])
+		{
+			trail[2] = tr.endpos[2];
+		}
+		else {
+			trail[2] -= 50;
+		}
+	fire_grenade (self, trail, aimdir, 20, 50, 5.0,300.0);
+	gi.bprintf (PRINT_MEDIUM,"%d Fx , %d Fy, %d Fz.\n", trail[0], trail[1], trail[2]);
+	}
+	//AngleVectors(tr.ent->client->v_angle, forward, right, up);
+	/*
+	if(start[0] < tr.endpos[0]){
+		biggerX = tr.endpos[0];
+		smallerX = start[0];
+		situationA1 =1;
+	}
+	if(start[0] > tr.endpos[0])
+	{
+		biggerX = start[0];
+		smallerX = tr.endpos[0];
+		situationA2 = 1;
+	}
+	if(start[1] < tr.endpos[1]){
+		biggerY = tr.endpos[1];
+		smallerY = start[1];
+		situationB1 =1;
+	}
+	if(start[1] > tr.endpos[1])
+	{
+		biggerY = start[1];
+		smallerY = tr.endpos[1];
+		situationB2 =1;
+	}
+	if(start[2] < tr.endpos[2]){
+		biggerZ = tr.endpos[2];
+		smallerZ = start[2];
+		situationC1 =1;
+	}
+	if(start[2] > tr.endpos[2])
+	{
+		biggerZ = start[2];
+		smallerZ = tr.endpos[2];
+		situationC2 =1;
+	}
+
+	for(looper; looper < 10; looper++)
+	{
+		if(situationA1 == 1 && situationB1 == 1 && situationC1 ==1) 
+		{
+			trail[0] = smallerX +20;
+			trail[1] = smallerY +20;
+			trail[2] = smallerZ +20;
+		}
+
+		if(situationA1 == 1 && situationB2 == 1 && situationC1 ==1) 
+		{
+		//for(trail = start[0]; 
+			trail[0] = smallerX +20;
+			trail[1] = biggerX -20;
+			trail[2] = smallerZ +20;
+	
+		}
+		if(situationA1 == 1 && situationB2 == 1 && situationC2 ==1) 
+		{
+			trail[0] = smallerX +20;
+			trail[1] = biggerX - 20;
+			trail[2] = biggerZ - 20;
+		}
+		if(situationA1 == 1 && situationB1 == 1 && situationC2 ==1) 
+		{
+		//for(trail = start[0]; 
+			trail[0] = smallerX +20;
+			trail[1] = smallerY +20;
+			trail[2] = biggerZ -20;
+		}
+		if(situationA2 == 1 && situationB1 == 1 && situationC1 ==1) 
+		{
+		//for(trail = start[0]; 
+			trail[0] = biggerX -20;
+			trail[1] = smallerY +20;
+			trail[2] = smallerZ -20;
+		}
+		if(situationA2 == 1 && situationB2 == 1 && situationC1 ==1) 
+		{
+		//for(trail = start[0]; 
+			trail[0] = biggerX -20;
+			trail[1] = biggerY -20;
+			trail[2] = smallerZ +20;
+		}
+		if(situationA2 == 1 && situationB2 == 1 && situationC2 ==1) 
+		{
+		//for(trail = start[0]; 
+			trail[0] = biggerX -20;
+			trail[1] = biggerY -20;
+			trail[2] = biggerZ -20;
+		}
+		if(situationA2 == 1 && situationB1 == 1 && situationC2 ==1) 
+		{
+		//for(trail = start[0]; 
+			trail[0] = biggerX -20;
+			trail[1] = smallerY -20;
+			trail[2] = biggerZ +20;
+		}
+		fire_grenade (self, trail, offset, 20, 50, 5.0,300.0);
+	}
+	*/
+
+	//for( trail = start[0]; trail <
 	//fire_grenade (self, tr.endpos, offset, 20, 50, 5.0,300.0);
 	gi.WritePosition (start);
 	gi.WritePosition (tr.endpos);
