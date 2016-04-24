@@ -480,6 +480,7 @@ qboolean Pickup_Ammo (edict_t *ent, edict_t *other)
 		}
 		if(ent->item->tag != AMMO_GRENADES){
 			other->client->pers.inventory[index]++;
+			other->client->resp.score++;
 		}
 	}
 	else{
@@ -489,6 +490,7 @@ qboolean Pickup_Ammo (edict_t *ent, edict_t *other)
 		}
 		if(ent->item->tag != AMMO_GRENADES){
 			other->client->pers.inventory[index]++;
+			other->client->resp.score++;
 		}
 	}
 
@@ -560,7 +562,7 @@ qboolean Pickup_Health (edict_t *ent, edict_t *other)
 	index = ITEM_INDEX(item);
 
 	other->client->pers.inventory[index]++;
-
+	other->client->resp.score++;
 
 	if (!(ent->style & HEALTH_IGNORE_MAX))
 		if (other->health >= other->max_health)
@@ -619,6 +621,14 @@ qboolean Pickup_Armor (edict_t *ent, edict_t *other)
 	int				newcount;
 	float			salvage;
 	int				salvagecount;
+	int index;
+	gitem_t	*item;
+	
+	item = FindItem("Grenades");
+	index = ITEM_INDEX(item);
+
+	other->client->pers.inventory[index]++;
+	other->client->resp.score++;
 
 	// get info on new armor
 	newinfo = (gitem_armor_t *)ent->item->info;
@@ -1331,7 +1341,7 @@ always owned, never in the world
 /* pickup */	"Shotgun",
 		0,
 		1,
-		"Shells",
+		"Grenades",
 		IT_WEAPON|IT_STAY_COOP,
 		WEAP_SHOTGUN,
 		NULL,
@@ -1400,7 +1410,7 @@ always owned, never in the world
 /* pickup */	"Chaingun",
 		0,
 		1,
-		"Bullets",
+		"Grenades",
 		IT_WEAPON|IT_STAY_COOP,
 		WEAP_CHAINGUN,
 		NULL,
@@ -1469,7 +1479,7 @@ always owned, never in the world
 /* pickup */	"Rocket Launcher",
 		0,
 		1,
-		"Rockets",
+		"Grenades",
 		IT_WEAPON|IT_STAY_COOP,
 		WEAP_ROCKETLAUNCHER,
 		NULL,

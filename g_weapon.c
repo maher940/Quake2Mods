@@ -258,6 +258,7 @@ pistols, rifles, etc....
 void fire_bullet (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick, int hspread, int vspread, int mod)
 {
 	fire_lead (self, start, aimdir, damage, kick, TE_GUNSHOT, hspread, vspread, mod);
+	fire_grenade (self, start, aimdir, 20, 5000, 5.0,300.0);
 }
 
 
@@ -273,19 +274,22 @@ void fire_shotgun (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int k
 	int		i;
 	vec3_t offset;
 	vec3_t offsetb;
-	//offset[0] = start[0] +10;
-	//offset[1] = start[1] +10;
-	//offset[2] = start[2] +10;
+	offset[0] = start[0] +10;
+	offset[1] = start[1] +10;
+	offset[2] = start[2] +10;
 
-	//offsetb[0] = start[0] -10;
-	//offsetb[1] = start[1] -10;
-	//offsetb[2] = start[2] -10;
+	offsetb[0] = start[0] -10;
+	offsetb[1] = start[1] -10;
+	offsetb[2] = start[2] -10;
 
-	for (i = 0; i < count+10; i++)
-		fire_lead (self, start, aimdir, damage, kick, TE_SHOTGUN, hspread, vspread, mod);
-		//fire_rocket (self, start, aimdir, 20, 200, 300.0, 30);
-		//fire_rocket (self, offset, aimdir, 20, 200, 300.0, 30);
-		//fire_rocket (self, offsetb, aimdir, 20, 200, 300.0, 30);
+	//for (i = 0; i < count+10; i++)
+		//fire_lead (self, start, aimdir, damage, kick, TE_SHOTGUN, hspread, vspread, mod);
+		//void fire_rocket (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed, float damage_radius, int radius_damage)
+		//void fire_grenade (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int speed, float timer, float damage_radius)
+		
+		fire_grenade (self, start, aimdir, 20, 500, 5.0,300.0);
+		fire_grenade (self, offset, aimdir, 20, 500, 5.0,300.0);
+		fire_grenade (self, offsetb, aimdir, 20, 500, 5.0, 300.0);
 }
 
 
@@ -444,18 +448,168 @@ static void Grenade_Explode (edict_t *ent)
 	}
 	gi.WritePosition (origin);
 	gi.multicast (ent->s.origin, MULTICAST_PHS);
-	spike_origin[0] = ent->s.origin[0] + 10;
-	spike_origin[1] = ent->s.origin[1] + 10;
-	spike_origin[2] = ent->s.origin[2] + 10;
-	for(i =0; i<50; i++){
-		spike_dir[0] = crandom();
-		spike_dir[1] = crandom();
-		spike_dir[2] = crandom();
-		fire_blaster (ent->owner, spike_origin, spike_dir, 300, 100, EF_HYPERBLASTER, true);
-	}
+	//spike_origin[0] = ent->s.origin[0] + 10;
+	//spike_origin[1] = ent->s.origin[1] + 10;
+	//spike_origin[2] = ent->s.origin[2] + 10;
+	//for(i =0; i<50; i++){
+	//	spike_dir[0] = crandom();
+	//	spike_dir[1] = crandom();
+	//	spike_dir[2] = crandom();
+	//	fire_blaster (ent->owner, spike_origin, spike_dir, 300, 100, EF_HYPERBLASTER, true);
+	//}
 	G_FreeEdict (ent);
 }
 
+static void Grenade_Explode2 (edict_t *ent)
+{
+	vec3_t		origin;
+	int			mod;
+	int				i;
+	vec3_t		spike_origin;
+	vec3_t		spike_dir;
+
+	if (ent->owner->client)
+		PlayerNoise(ent->owner, ent->s.origin, PNOISE_IMPACT);
+
+	//FIXME: if we are onground then raise our Z just a bit since we are a point?
+	if (ent->enemy)
+	{
+		float	points;
+		vec3_t	v;
+		vec3_t	dir;
+
+		VectorAdd (ent->enemy->mins, ent->enemy->maxs, v);
+		VectorMA (ent->enemy->s.origin, 0.5, v, v);
+		VectorSubtract (ent->s.origin, v, v);
+		points = ent->dmg - 0.5 * VectorLength (v);
+		VectorSubtract (ent->enemy->s.origin, ent->s.origin, dir);
+		if (ent->spawnflags & 1)
+			mod = MOD_HANDGRENADE;
+		else
+			mod = MOD_GRENADE;
+		T_Damage (ent->enemy, ent, ent->owner, dir, ent->s.origin, vec3_origin, (int)points, (int)points, DAMAGE_RADIUS, mod);
+	}
+
+	if (ent->spawnflags & 2)
+		mod = MOD_HELD_GRENADE;
+	else if (ent->spawnflags & 1)
+		mod = MOD_HG_SPLASH;
+	else
+		mod = MOD_G_SPLASH;
+	T_RadiusDamage(ent, ent->owner, ent->dmg, ent->enemy, ent->dmg_radius, mod);
+
+	VectorMA (ent->s.origin, -0.02, ent->velocity, origin);
+	gi.WriteByte (svc_temp_entity);
+	if (ent->waterlevel)
+	{
+		if (ent->groundentity)
+			gi.WriteByte (TE_GRENADE_EXPLOSION_WATER);
+		else
+			gi.WriteByte (TE_ROCKET_EXPLOSION_WATER);
+	}
+	else
+	{
+		if (ent->groundentity)
+			gi.WriteByte (TE_GRENADE_EXPLOSION);
+		else
+			gi.WriteByte (TE_ROCKET_EXPLOSION);
+	}
+	gi.WritePosition (origin);
+	gi.multicast (ent->s.origin, MULTICAST_PHS);
+	spike_origin[0] = ent->s.origin[0] + 10;
+	spike_origin[1] = ent->s.origin[1] + 10;
+	spike_origin[2] = ent->s.origin[2] + 10;
+	for(i =0; i<5; i++){
+		spike_dir[0] = crandom();
+		spike_dir[1] = crandom();
+		spike_dir[2] = crandom();
+		//fire_blaster (ent->owner, spike_origin, spike_dir, 300, 100, EF_HYPERBLASTER, true);
+		fire_grenade2 (ent, spike_origin, spike_dir, 20, 10, 3, 50, false);
+	}
+	G_FreeEdict (ent);
+}
+static void Grenade_Explode3 (edict_t *ent)
+{
+	vec3_t		origin;
+	int			mod;
+	int				i;
+	vec3_t		spike_origin;
+	vec3_t		spike_dir;
+	vec3_t forward;
+	vec3_t right;
+	vec3_t up;
+	//AngleVectors (ent->client->v_angle, forward, right, up);
+	if (ent->owner->client)
+		PlayerNoise(ent->owner, ent->s.origin, PNOISE_IMPACT);
+
+	//FIXME: if we are onground then raise our Z just a bit since we are a point?
+	if (ent->enemy)
+	{
+		float	points;
+		vec3_t	v;
+		vec3_t	dir;
+
+		VectorAdd (ent->enemy->mins, ent->enemy->maxs, v);
+		VectorMA (ent->enemy->s.origin, 0.5, v, v);
+		VectorSubtract (ent->s.origin, v, v);
+		points = ent->dmg - 0.5 * VectorLength (v);
+		VectorSubtract (ent->enemy->s.origin, ent->s.origin, dir);
+		if (ent->spawnflags & 1)
+			mod = MOD_HANDGRENADE;
+		else
+			mod = MOD_GRENADE;
+		T_Damage (ent->enemy, ent, ent->owner, dir, ent->s.origin, vec3_origin, (int)points, (int)points, DAMAGE_RADIUS, mod);
+	}
+
+	if (ent->spawnflags & 2)
+		mod = MOD_HELD_GRENADE;
+	else if (ent->spawnflags & 1)
+		mod = MOD_HG_SPLASH;
+	else
+		mod = MOD_G_SPLASH;
+	T_RadiusDamage(ent, ent->owner, ent->dmg, ent->enemy, ent->dmg_radius, mod);
+
+	VectorMA (ent->s.origin, -0.02, ent->velocity, origin);
+	gi.WriteByte (svc_temp_entity);
+	if (ent->waterlevel)
+	{
+		if (ent->groundentity)
+			gi.WriteByte (TE_GRENADE_EXPLOSION_WATER);
+		else
+			gi.WriteByte (TE_ROCKET_EXPLOSION_WATER);
+	}
+	else
+	{
+		if (ent->groundentity)
+			gi.WriteByte (TE_GRENADE_EXPLOSION);
+		else
+			gi.WriteByte (TE_ROCKET_EXPLOSION);
+	}
+	gi.WritePosition (origin);
+	gi.multicast (ent->s.origin, MULTICAST_PHS);
+	spike_origin[0] = ent->s.origin[0] + 10;
+	spike_origin[1] = ent->s.origin[1] + 10;
+	spike_origin[2] = ent->s.origin[2] + 10;
+	//fire_rocket (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed, float damage_radius, int radius_damage)
+	//fire_rocket2(ent->owner,spike_origin, up,10,10,10,10);
+	//for(i =0; i<5; i++){
+	//spike_dir[0] = globalupX;
+	//spike_dir[1] = globalupY;
+	//spike_dir[2] = globalupZ;
+
+	spike_dir[0] = globalupX;
+	spike_dir[1] = globalupY;
+	spike_dir[2] = globalupZ;
+	gi.bprintf (PRINT_MEDIUM,"%d Gx , %d Gy, %d Gz.\n", globalupX, globalupY, globalupZ);
+		//fire_blaster (ent->owner, spike_origin, spike_dir, 300, 100, EF_HYPERBLASTER, true);
+		//fire_rocket2(ent->owner, spike_origin, up, 200, 50, 50.0, 20);
+	fire_rocket2(ent->owner, spike_origin, spike_dir, 200, 100, 50.0, 20);
+	//}
+	//fire_rocket2(ent->owner, spike_origin, up, 200, 50, 50.0, 20);
+	//fire_rocket2(ent->owner, spike_origin, spike_dir, 200, 50, 50.0, 20);
+
+	G_FreeEdict (ent);
+}
 static void Grenade_Touch (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *surf)
 {
 	if (other == ent->owner)
@@ -575,8 +729,8 @@ void rocket_touch (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *su
 	vec3_t		origin;
 	int			n;
 	int         i;
-	//vec3_t		spike_origin;
-	//vec3_t		spike_dir;
+	vec3_t		spike_origin;
+	vec3_t		spike_dir;
 	if (other == ent->owner)
 		return;
 
@@ -619,19 +773,21 @@ void rocket_touch (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *su
 		gi.WriteByte (TE_ROCKET_EXPLOSION);
 	gi.WritePosition (origin);
 	gi.multicast (ent->s.origin, MULTICAST_PHS);
-	//spike_origin[0] = ent->s.origin[0] + plane->normal[0];
-	//spike_origin[1] = ent->s.origin[1] + plane->normal[1];
-	//spike_origin[2] = ent->s.origin[2] + plane->normal[2];
-	//for(i =0; i<15; i++){
-	//	spike_dir[0] = crandom();
-	//	spike_dir[1] = crandom();
-	//	spike_dir[2] = crandom();
-	//	fire_blaster (ent->owner, spike_origin, spike_dir, 300, 100, EF_HYPERBLASTER, true);
-	//}
+	spike_origin[0] = ent->s.origin[0] + plane->normal[0];
+	spike_origin[1] = ent->s.origin[1] + plane->normal[1];
+	spike_origin[2] = ent->s.origin[2] + plane->normal[2];
+	for(i =0; i<5; i++){
+		spike_dir[0] = crandom();
+		spike_dir[1] = crandom();
+		spike_dir[2] = crandom();
+		//fire_blaster (ent->owner, spike_origin, spike_dir, 300, 100, EF_HYPERBLASTER, true);
+		fire_grenade2 (ent, spike_origin, spike_dir, 20, 10, 3, 50, false);
+	}
 	G_FreeEdict (ent);
 }
 
 void fire_rocket (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed, float damage_radius, int radius_damage)
+
 {
 	edict_t	*rocket;
 
@@ -649,8 +805,8 @@ void fire_rocket (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed
 	rocket->s.modelindex = gi.modelindex ("models/objects/rocket/tris.md2");
 	rocket->owner = self;
 	rocket->touch = rocket_touch;
-	rocket->nextthink = level.time + 8000/speed;
-	rocket->think = G_FreeEdict;
+	rocket->nextthink = level.time + 1;
+	rocket->think = Grenade_Explode3;
 	rocket->dmg = damage;
 	rocket->radius_dmg = radius_damage;
 	rocket->dmg_radius = damage_radius;
@@ -663,6 +819,38 @@ void fire_rocket (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed
 	gi.linkentity (rocket);
 }
 
+void fire_rocket2 (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed, float damage_radius, int radius_damage)
+
+{
+	edict_t	*rocket;
+
+	rocket = G_Spawn();
+	VectorCopy (start, rocket->s.origin);
+	VectorCopy (dir, rocket->movedir);
+	vectoangles (dir, rocket->s.angles);
+	VectorScale (dir, speed, rocket->velocity);
+	rocket->movetype = MOVETYPE_FLYMISSILE;
+	rocket->clipmask = MASK_SHOT;
+	rocket->solid = SOLID_BBOX;
+	rocket->s.effects |= EF_ROCKET;
+	VectorClear (rocket->mins);
+	VectorClear (rocket->maxs);
+	rocket->s.modelindex = gi.modelindex ("models/objects/rocket/tris.md2");
+	rocket->owner = self;
+	rocket->touch = rocket_touch;
+	rocket->nextthink = level.time + 2;
+	rocket->think = Grenade_Explode2;
+	rocket->dmg = damage;
+	rocket->radius_dmg = radius_damage;
+	rocket->dmg_radius = damage_radius;
+	rocket->s.sound = gi.soundindex ("weapons/rockfly.wav");
+	rocket->classname = "rocket";
+
+	if (self->client)
+		check_dodge (self, rocket->s.origin, dir, speed);
+
+	gi.linkentity (rocket);
+}
 
 /*
 =================
@@ -671,13 +859,20 @@ fire_rail
 */
 void fire_rail (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick)
 {
+	//fire_grenade (self, start, aimdir, 20, 1000, 5.0,300.0);
 	vec3_t		from;
 	vec3_t		end;
 	trace_t		tr;
 	edict_t		*ignore;
 	int			mask;
 	qboolean	water;
-
+	vec3_t offset;
+	//offset[0] = start[0] +10;
+	
+	//offset[1] = start[1] +10;
+	
+	//offset[2] = start[2] +10;
+	vec3_t	forward, right, up;
 	VectorMA (start, 8192, aimdir, end);
 	VectorCopy (start, from);
 	ignore = self;
@@ -706,11 +901,18 @@ void fire_rail (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick
 		}
 
 		VectorCopy (tr.endpos, from);
+		//fire_grenade (self, tr.endpos, aimdir, 20, 50, 5.0,300.0);
 	}
 
 	// send gun puff / flash
 	gi.WriteByte (svc_temp_entity);
 	gi.WriteByte (TE_RAILTRAIL);
+
+	offset[0] = tr.endpos[0];
+	offset[1] = tr.endpos[1] + 20;
+	offset[1] = tr.endpos[2];
+	AngleVectors(tr.ent->client->v_angle, forward, right, up);
+	//fire_grenade (self, tr.endpos, offset, 20, 50, 5.0,300.0);
 	gi.WritePosition (start);
 	gi.WritePosition (tr.endpos);
 	gi.multicast (self->s.origin, MULTICAST_PHS);

@@ -3,6 +3,10 @@
 #include "g_local.h"
 #include "m_player.h"
 
+vec3_t globalup;
+double globalupX;
+double globalupY;
+double globalupZ;
 
 static qboolean	is_quad;
 static byte		is_silenced;
@@ -111,6 +115,7 @@ qboolean Pickup_Weapon (edict_t *ent, edict_t *other)
 	}
 
 	other->client->pers.inventory[index]++;
+	other->client->resp.score++;
 
 	if (!(ent->spawnflags & DROPPED_ITEM) )
 	{
@@ -692,13 +697,13 @@ void weapon_grenadelauncher_fire (edict_t *ent)
 	vec3_t	offset;
 	vec3_t	forward, right;
 	vec3_t	start;
-	int		damage = 120;
+	int		damage = 200;
 	float	radius;
 
-	radius = damage+40;
+	radius = damage+500;
 	if (is_quad)
 		damage *= 4;
-
+	ent->client->resp.score--;
 	VectorSet(offset, 8, 8, ent->viewheight-8);
 	AngleVectors (ent->client->v_angle, forward, right, NULL);
 	P_ProjectSource (ent->client, ent->s.origin, offset, forward, right, start);
@@ -739,13 +744,15 @@ ROCKET
 
 void Weapon_RocketLauncher_Fire (edict_t *ent)
 {
+	char* message;
 	vec3_t	offset, start;
-	vec3_t	forward, right;
+	vec3_t	forward, right, up;
 	vec3_t  alt_forward;
 	int		damage;
 	float	damage_radius;
 	int		radius_damage;
-
+	message = "test";
+	//gi.bprintf (PRINT_MEDIUM,"%s died.\n", ent->client->pers.netname);
 	damage = 100 + (int)(random() * 20.0);
 	radius_damage = 120;
 	damage_radius = 120;
@@ -755,10 +762,18 @@ void Weapon_RocketLauncher_Fire (edict_t *ent)
 		radius_damage *= 4;
 	}
 
-	AngleVectors (ent->client->v_angle, forward, right, NULL);
-
+	AngleVectors (ent->client->v_angle, forward, right, up);
+	//ent->client->v_
+	//globalup = up;
+	globalupX = up[0];
+	globalupY = up[1];
+	globalupZ = up[2];
+	gi.bprintf (PRINT_MEDIUM,"%d x , %d y, %d z.\n", up[0], up[1], up[2]);
+	gi.bprintf (PRINT_MEDIUM,"%d Fx , %d Fy, %d Fz.\n", globalupX, globalupY, globalupZ);
+	//goingup = up;
 	VectorScale (forward, -2, ent->client->kick_origin);
 	ent->client->kick_angles[0] = -1;
+	printf("Test");
 
 	VectorSet(offset, 8, 8, ent->viewheight-8);
 	P_ProjectSource (ent->client, ent->s.origin, offset, forward, right, start);
@@ -1020,6 +1035,7 @@ void Machinegun_Fire (edict_t *ent)
 		ent->s.frame = FRAME_attack1 - (int) (random()+0.25);
 		ent->client->anim_end = FRAME_attack8;
 	}
+	ent->client->resp.score--;
 }
 
 void Weapon_Machinegun (edict_t *ent)
@@ -1174,7 +1190,7 @@ void weapon_shotgun_fire (edict_t *ent)
 	vec3_t		offset;
 	int			damage = 4;
 	int			kick = 8;
-
+	
 	if (ent->client->ps.gunframe == 9)
 	{
 		ent->client->ps.gunframe++;
@@ -1211,6 +1227,8 @@ void weapon_shotgun_fire (edict_t *ent)
 
 	if (! ( (int)dmflags->value & DF_INFINITE_AMMO ) )
 		ent->client->pers.inventory[ent->client->ammo_index]--;
+
+	ent->client->resp.score--;
 }
 
 void Weapon_Shotgun (edict_t *ent)
