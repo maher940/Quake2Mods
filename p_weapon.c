@@ -8,6 +8,10 @@ double globalupX;
 double globalupY;
 double globalupZ;
 
+
+int	  powerupnum;
+
+
 static qboolean	is_quad;
 static byte		is_silenced;
 
@@ -231,18 +235,22 @@ void NoAmmoWeaponChange (edict_t *ent)
 		ent->client->newweapon = FindItem ("hyperblaster");
 		return;
 	}
+		/*
 	if ( ent->client->pers.inventory[ITEM_INDEX(FindItem("bullets"))]
 		&&  ent->client->pers.inventory[ITEM_INDEX(FindItem("chaingun"))] )
 	{
 		ent->client->newweapon = FindItem ("chaingun");
 		return;
 	}
+	*/
+		/*
 	if ( ent->client->pers.inventory[ITEM_INDEX(FindItem("bullets"))]
 		&&  ent->client->pers.inventory[ITEM_INDEX(FindItem("machinegun"))] )
 	{
 		ent->client->newweapon = FindItem ("machinegun");
 		return;
 	}
+	*/
 	if ( ent->client->pers.inventory[ITEM_INDEX(FindItem("shells"))] > 1
 		&&  ent->client->pers.inventory[ITEM_INDEX(FindItem("super shotgun"))] )
 	{
@@ -539,10 +547,29 @@ void weapon_grenade_fire (edict_t *ent, qboolean held)
 	int		speed;
 	float	radius;
 
+	int index;
+	//int index2;
+	char *message;
+	gitem_t	*item;
+	//gitem_t *itemB;
+	item = FindItem("Grenades");
+	//itemB = FindItem("Quad Damage");
+	index = ITEM_INDEX(item);
+
 	radius = damage+40;
-	if (is_quad)
-		damage *= 4;
+	if (is_quad){
+		damage *= 4;	
+		Drop_Item(ent, item);
+		Drop_Item(ent, item);
+		Drop_Item(ent, item);
+		Drop_Item(ent, item);
+	}
+	else{
+		powerupnum = 0;
+	}
 	ent->client->resp.score--;
+	//Drop_Ammo(ent,item);
+	
 	VectorSet(offset, 8, 8, ent->viewheight-8);
 	AngleVectors (ent->client->v_angle, forward, right, NULL);
 	P_ProjectSource (ent->client, ent->s.origin, offset, forward, right, start);
@@ -844,6 +871,35 @@ void Blaster_Fire (edict_t *ent, vec3_t g_offset, int damage, qboolean hyper, in
 	PlayerNoise(ent, start, PNOISE_WEAPON);
 }
 
+void Blaster_Fire2 (edict_t *ent, vec3_t g_offset, int damage, qboolean hyper, int effect)
+{
+	vec3_t	forward, right;
+	vec3_t	start;
+	vec3_t	offset;
+
+	if (is_quad)
+		damage *= 4;
+	AngleVectors (ent->client->v_angle, forward, right, NULL);
+	VectorSet(offset, 24, 8, ent->viewheight-8);
+	VectorAdd (offset, g_offset, offset);
+	P_ProjectSource (ent->client, ent->s.origin, offset, forward, right, start);
+
+	VectorScale (forward, -2, ent->client->kick_origin);
+	ent->client->kick_angles[0] = -1;
+
+	fire_blaster2 (ent, start, forward, damage, 1000, effect, hyper);
+
+	// send muzzle flash
+	gi.WriteByte (svc_muzzleflash);
+	gi.WriteShort (ent-g_edicts);
+	if (hyper)
+		gi.WriteByte (MZ_HYPERBLASTER | is_silenced);
+	else
+		gi.WriteByte (MZ_BLASTER | is_silenced);
+	gi.multicast (ent->s.origin, MULTICAST_PVS);
+
+	PlayerNoise(ent, start, PNOISE_WEAPON);
+}
 
 void Weapon_Blaster_Fire (edict_t *ent)
 {
@@ -905,7 +961,7 @@ void Weapon_HyperBlaster_Fire (edict_t *ent)
 				damage = 15;
 			else
 				damage = 20;
-			Blaster_Fire (ent, offset, damage, true, effect);
+			Blaster_Fire2 (ent, offset, damage, true, effect);
 			if (! ( (int)dmflags->value & DF_INFINITE_AMMO ) )
 				ent->client->pers.inventory[ent->client->ammo_index]--;
 
@@ -989,8 +1045,11 @@ void Machinegun_Fire (edict_t *ent)
 	{
 		damage *= 4;
 		kick *= 4;
+		powerupnum = 1;
 	}
-
+	else{
+		powerupnum = 0;
+	}
 	for (i=1 ; i<3 ; i++)
 	{
 		ent->client->kick_origin[i] = crandom() * 0.35;

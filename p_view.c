@@ -576,6 +576,8 @@ void P_WorldEffects (void)
 	breather = current_client->breather_framenum > level.framenum;
 	envirosuit = current_client->enviro_framenum > level.framenum;
 
+
+
 	//
 	// if just entered a water volume, play a sound
 	//
@@ -714,6 +716,12 @@ void P_WorldEffects (void)
 				T_Damage (current_player, world, world, vec3_origin, current_player->s.origin, vec3_origin, 1*waterlevel, 0, 0, MOD_SLIME);
 			}
 		}
+	}
+	if(envirosuit){
+		powerupnum = 2;
+	}
+	else{
+		powerupnum = 0;
 	}
 }
 

@@ -27,6 +27,7 @@ static int	body_armor_index;
 static int	power_screen_index;
 static int	power_shield_index;
 
+
 #define HEALTH_IGNORE_MAX	1
 #define HEALTH_TIMED		2
 
@@ -212,6 +213,7 @@ qboolean Pickup_Bandolier (edict_t *ent, edict_t *other)
 		other->client->pers.max_cells = 250;
 	if (other->client->pers.max_slugs < 75)
 		other->client->pers.max_slugs = 75;
+	/*
 
 	item = FindItem("Bullets");
 	if (item)
@@ -221,7 +223,7 @@ qboolean Pickup_Bandolier (edict_t *ent, edict_t *other)
 		if (other->client->pers.inventory[index] > other->client->pers.max_bullets)
 			other->client->pers.inventory[index] = other->client->pers.max_bullets;
 	}
-
+	*/
 	item = FindItem("Shells");
 	if (item)
 	{
@@ -254,7 +256,7 @@ qboolean Pickup_Pack (edict_t *ent, edict_t *other)
 		other->client->pers.max_cells = 300;
 	if (other->client->pers.max_slugs < 100)
 		other->client->pers.max_slugs = 100;
-
+	/*
 	item = FindItem("Bullets");
 	if (item)
 	{
@@ -263,6 +265,7 @@ qboolean Pickup_Pack (edict_t *ent, edict_t *other)
 		if (other->client->pers.inventory[index] > other->client->pers.max_bullets)
 			other->client->pers.inventory[index] = other->client->pers.max_bullets;
 	}
+	*/
 
 	item = FindItem("Shells");
 	if (item)
@@ -320,7 +323,7 @@ qboolean Pickup_Pack (edict_t *ent, edict_t *other)
 void Use_Quad (edict_t *ent, gitem_t *item)
 {
 	int		timeout;
-
+	
 	ent->client->pers.inventory[ITEM_INDEX(item)]--;
 	ValidateSelectedItem (ent);
 
@@ -463,13 +466,35 @@ qboolean Add_Ammo (edict_t *ent, gitem_t *item, int count)
 
 qboolean Pickup_Ammo (edict_t *ent, edict_t *other)
 {
+	//edict_t *powerup;
+	//char	*newclass;
+	//powerup->classname = "item_quad";
 	int			oldcount;
 	int			count;
 	qboolean	weapon;
+
 	int index;
+	int index2;
+	int index3;
+	char *message;
+	char *message2;
 	gitem_t	*item;
+	gitem_t *itemB;
+	gitem_t *itemC;
 	item = FindItem("Grenades");
+	itemB = FindItem("Quad Damage");
+	itemC = FindItem("Environment Suit");
 	index = ITEM_INDEX(item);
+	index2 = ITEM_INDEX(itemB);
+	index3 = ITEM_INDEX(itemC);
+	//gitem_t	*item2;
+	//item2 = FindItem("Quad Damage");
+	//index2 = ITEM_INDEX(item2);
+
+	message = "Quad";
+	message2 = "Envir";
+	//newclass = "item_quad";
+	//powerup->classname = newclass;
 	weapon = (ent->item->flags & IT_WEAPON);
 	if ( (weapon) && ( (int)dmflags->value & DF_INFINITE_AMMO ) )
 		count = 1000;
@@ -477,20 +502,61 @@ qboolean Pickup_Ammo (edict_t *ent, edict_t *other)
 		count = ent->count;
 		if(ent->item->tag == AMMO_GRENADES){
 			other->client->resp.score++;
+			if(other->client->resp.score == 10){
+				other->client->pers.inventory[index2]++;
+				gi.bprintf(PRINT_MEDIUM, "HELLO %s\n", message);
+				powerupnum =1;
+			}
+			if(other->client->resp.score == 12){
+				other->client->pers.inventory[index3]++;
+				gi.bprintf(PRINT_MEDIUM, "Hello %s\n", message2);
+				powerupnum =2;
+			}
 		}
 		if(ent->item->tag != AMMO_GRENADES){
 			other->client->pers.inventory[index]++;
 			other->client->resp.score++;
+			if(other->client->resp.score == 10){
+				other->client->pers.inventory[index2]++;
+				gi.bprintf(PRINT_MEDIUM, "HELLO %s\n", message);
+				powerupnum =1;
+			}
+			if(other->client->resp.score == 12){
+				other->client->pers.inventory[index3]++;
+				gi.bprintf(PRINT_MEDIUM, "Hello %s\n", message2);
+				powerupnum =2;
+			}
+			
 		}
 	}
 	else{
 		count = ent->item->quantity;
 		if(ent->item->tag == AMMO_GRENADES){
 			other->client->resp.score++;
+			if(other->client->resp.score == 10){
+				other->client->pers.inventory[index2]++;
+				gi.bprintf(PRINT_MEDIUM, "HELLO %s\n", message);
+				powerupnum =1;
+			}
+			if(other->client->resp.score == 12){
+				other->client->pers.inventory[index3]++;
+				gi.bprintf(PRINT_MEDIUM, "Hello %s\n", message2);
+				powerupnum =2;
+			}
 		}
 		if(ent->item->tag != AMMO_GRENADES){
 			other->client->pers.inventory[index]++;
 			other->client->resp.score++;
+			if(other->client->resp.score == 10){
+				other->client->pers.inventory[index2]++;
+				gi.bprintf(PRINT_MEDIUM, "HELLO %s\n", message);
+				powerupnum =1;
+			}
+			if(other->client->resp.score == 12){
+				other->client->pers.inventory[index3]++;
+				gi.bprintf(PRINT_MEDIUM, "Hello %s\n", message2);
+				powerupnum =2;
+			}
 		}
 	}
 
@@ -508,6 +574,30 @@ qboolean Pickup_Ammo (edict_t *ent, edict_t *other)
 	if (!(ent->spawnflags & (DROPPED_ITEM | DROPPED_PLAYER_ITEM)) && (deathmatch->value))
 		SetRespawn (ent, 30);
 	return true;
+
+	//if(other->client->resp.score >= 10){
+	//	other->client->pers.inventory[index2]++; 
+	//	gi.bprintf (PRINT_MEDIUM,"%s\n", message);
+	//}
+}
+
+void Give_Powerups( edict_t *player){
+	gitem_t *item;
+	int index;
+	int score;
+	score = player->client->resp.score;
+	item = FindItem("Quad Damage");
+
+	index = ITEM_INDEX(item);
+
+	gi.bprintf(PRINT_MEDIUM, "Score is %d\n", score);
+
+	if(player->client->resp.score == 10){
+
+		player->client->pers.inventory[index]++;
+	}
+
+
 }
 
 void Drop_Ammo (edict_t *ent, gitem_t *item)
@@ -563,6 +653,7 @@ qboolean Pickup_Health (edict_t *ent, edict_t *other)
 
 	other->client->pers.inventory[index]++;
 	other->client->resp.score++;
+	
 
 	if (!(ent->style & HEALTH_IGNORE_MAX))
 		if (other->health >= other->max_health)
@@ -629,6 +720,7 @@ qboolean Pickup_Armor (edict_t *ent, edict_t *other)
 
 	other->client->pers.inventory[index]++;
 	other->client->resp.score++;
+	
 
 	// get info on new armor
 	newinfo = (gitem_armor_t *)ent->item->info;
@@ -1592,12 +1684,12 @@ always owned, never in the world
 		Drop_Ammo,
 		NULL,
 		"misc/am_pkup.wav",
-		"models/items/ammo/bullets/medium/tris.md2", 0,
-		NULL,
-/* icon */		"a_bullets",
-/* pickup */	"Bullets",
+		"models/items/ammo/grenades/medium/tris.md2", 0,
+		"models/weapons/v_handgr/tris.md2",
+/* icon */		"a_grenades",
+/* pickup */	"Grenades",
 /* width */		3,
-		50,
+		1,
 		NULL,
 		IT_AMMO,
 		0,

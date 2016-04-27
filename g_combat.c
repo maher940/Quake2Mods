@@ -364,6 +364,26 @@ void T_Damage (edict_t *targ, edict_t *inflictor, edict_t *attacker, vec3_t dir,
 	int			psave;
 	int			te_sparks;
 
+	
+	
+	int index;
+	//int index2;
+
+	char *message;
+	gitem_t	*item;
+	//gitem_t *itemB;
+	item = FindItem("Grenades");
+	//itemB = FindItem("Quad Damage");
+	index = ITEM_INDEX(item);
+	message = "Envirosuit dmg";
+	if(powerupnum == 2){
+		//other->client->pers.inventory[index]++;
+			//other->client->resp.score++;
+		targ->client->pers.inventory[index]++;
+		targ->client->resp.score++;
+		gi.bprintf(PRINT_MEDIUM, "This is %s\n", message);
+	}
+	
 	if (!targ->takedamage)
 		return;
 
@@ -438,8 +458,9 @@ void T_Damage (edict_t *targ, edict_t *inflictor, edict_t *attacker, vec3_t dir,
 		save = damage;
 		SpawnDamage (te_sparks, point, normal, save);
 	}
-
+	//if(client && client->
 	// check for invincibility
+	
 	if ((client && client->invincible_framenum > level.framenum ) && !(dflags & DAMAGE_NO_PROTECTION))
 	{
 		if (targ->pain_debounce_time < level.time)
