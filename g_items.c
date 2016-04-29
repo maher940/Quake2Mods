@@ -1,6 +1,6 @@
 #include "g_local.h"
 
-
+int			quadnum;
 qboolean	Pickup_Weapon (edict_t *ent, edict_t *other);
 void		Use_Weapon (edict_t *ent, gitem_t *inv);
 void		Drop_Weapon (edict_t *ent, gitem_t *inv);
@@ -472,27 +472,33 @@ qboolean Pickup_Ammo (edict_t *ent, edict_t *other)
 	int			oldcount;
 	int			count;
 	qboolean	weapon;
-
+	
 	int index;
 	int index2;
 	int index3;
+	int index4;
 	char *message;
 	char *message2;
+	char *message3;
 	gitem_t	*item;
 	gitem_t *itemB;
 	gitem_t *itemC;
+	gitem_t *itemD;
 	item = FindItem("Grenades");
 	itemB = FindItem("Quad Damage");
 	itemC = FindItem("Environment Suit");
+	itemD = FindItem("Rebreather");
 	index = ITEM_INDEX(item);
 	index2 = ITEM_INDEX(itemB);
 	index3 = ITEM_INDEX(itemC);
+	index4 = ITEM_INDEX(itemD);
 	//gitem_t	*item2;
 	//item2 = FindItem("Quad Damage");
 	//index2 = ITEM_INDEX(item2);
 
 	message = "Quad";
 	message2 = "Envir";
+	message3 = "Rebre";
 	//newclass = "item_quad";
 	//powerup->classname = newclass;
 	weapon = (ent->item->flags & IT_WEAPON);
@@ -506,11 +512,23 @@ qboolean Pickup_Ammo (edict_t *ent, edict_t *other)
 				other->client->pers.inventory[index2]++;
 				gi.bprintf(PRINT_MEDIUM, "HELLO %s\n", message);
 				powerupnum =1;
+				quadnum = 1;
 			}
 			if(other->client->resp.score == 12){
 				other->client->pers.inventory[index3]++;
 				gi.bprintf(PRINT_MEDIUM, "Hello %s\n", message2);
 				powerupnum =2;
+			}
+			if(other->client->resp.score == 5){
+				other->client->pers.inventory[index4]++;
+				gi.bprintf(PRINT_MEDIUM, "Hello %s\n", message3);
+				powerupnum =3;
+			}
+			if(other->client->resp.score == 11){
+				other->client->pers.inventory[index2]++;
+				gi.bprintf(PRINT_MEDIUM, "Hello2 %s\n", message);
+				powerupnum =4;
+				quadnum = 2;
 			}
 		}
 		if(ent->item->tag != AMMO_GRENADES){
@@ -520,11 +538,23 @@ qboolean Pickup_Ammo (edict_t *ent, edict_t *other)
 				other->client->pers.inventory[index2]++;
 				gi.bprintf(PRINT_MEDIUM, "HELLO %s\n", message);
 				powerupnum =1;
+				quadnum = 1;
 			}
 			if(other->client->resp.score == 12){
 				other->client->pers.inventory[index3]++;
 				gi.bprintf(PRINT_MEDIUM, "Hello %s\n", message2);
 				powerupnum =2;
+			}
+			if(other->client->resp.score == 5){
+				other->client->pers.inventory[index4]++;
+				gi.bprintf(PRINT_MEDIUM, "Hello %s\n", message3);
+				powerupnum =3;
+			}
+			if(other->client->resp.score == 11){
+				other->client->pers.inventory[index2]++;
+				gi.bprintf(PRINT_MEDIUM, "Hello2 %s\n", message);
+				powerupnum =4;
+				quadnum = 2;
 			}
 			
 		}
@@ -537,11 +567,23 @@ qboolean Pickup_Ammo (edict_t *ent, edict_t *other)
 				other->client->pers.inventory[index2]++;
 				gi.bprintf(PRINT_MEDIUM, "HELLO %s\n", message);
 				powerupnum =1;
+				quadnum = 1;
 			}
 			if(other->client->resp.score == 12){
 				other->client->pers.inventory[index3]++;
 				gi.bprintf(PRINT_MEDIUM, "Hello %s\n", message2);
 				powerupnum =2;
+			}
+			if(other->client->resp.score == 5){
+				other->client->pers.inventory[index4]++;
+				gi.bprintf(PRINT_MEDIUM, "Hello %s\n", message3);
+				powerupnum =3;
+			}
+			if(other->client->resp.score == 11){
+				other->client->pers.inventory[index2]++;
+				gi.bprintf(PRINT_MEDIUM, "Hello2 %s\n", message);
+				powerupnum =4;
+				quadnum = 2;
 			}
 		}
 		if(ent->item->tag != AMMO_GRENADES){
@@ -551,11 +593,23 @@ qboolean Pickup_Ammo (edict_t *ent, edict_t *other)
 				other->client->pers.inventory[index2]++;
 				gi.bprintf(PRINT_MEDIUM, "HELLO %s\n", message);
 				powerupnum =1;
+				quadnum = 1;
 			}
 			if(other->client->resp.score == 12){
 				other->client->pers.inventory[index3]++;
 				gi.bprintf(PRINT_MEDIUM, "Hello %s\n", message2);
 				powerupnum =2;
+			}
+			if(other->client->resp.score == 5){
+				other->client->pers.inventory[index4]++;
+				gi.bprintf(PRINT_MEDIUM, "Hello %s\n", message3);
+				powerupnum =3;
+			}
+			if(other->client->resp.score == 11){
+				other->client->pers.inventory[index2]++;
+				gi.bprintf(PRINT_MEDIUM, "Hello2 %s\n", message);
+				powerupnum =4;
+				quadnum = 2;
 			}
 		}
 	}
@@ -997,7 +1051,22 @@ edict_t *Drop_Item (edict_t *ent, gitem_t *item)
 
 	return dropped;
 }
-
+qboolean *GetThis_Item( edict_t *player, edict_t *item){
+	//edict_t *temp;
+	
+	//gitem_t *tempi;
+	char *message;
+	message = "Hello";
+	gi.bprintf(PRINT_MEDIUM, "%s\n", message);
+	//temp->classname = item->classname;
+	//temp->item = item;
+	//temp->owner = player;
+//	tempi = item->item;
+	//temp->item = item;
+	Pickup_Ammo(item, player);
+	//return tempi;
+	return 0;
+}
 void Use_Item (edict_t *ent, edict_t *other, edict_t *activator)
 {
 	ent->svflags &= ~SVF_NOCLIENT;

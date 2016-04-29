@@ -281,6 +281,8 @@ extern double globalupX;
 extern double globalupY;
 extern double globalupZ;
 extern int	  powerupnum;
+extern	int	  quadnum;
+extern int	  grinder;
 //
 // this structure is cleared as each map is entered
 // it is read/written to the level.sav file for savegames
@@ -600,6 +602,7 @@ gitem_t	*FindItem (char *pickup_name);
 gitem_t	*FindItemByClassname (char *classname);
 #define	ITEM_INDEX(x) ((x)-itemlist)
 edict_t *Drop_Item (edict_t *ent, gitem_t *item);
+qboolean	*GetThis_Item(edict_t *player, edict_t *item);
 void SetRespawn (edict_t *ent, float delay);
 void ChangeWeapon (edict_t *ent);
 void SpawnItem (edict_t *ent, gitem_t *item);
@@ -720,11 +723,17 @@ void fire_blaster2 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int 
 void fire_grenade (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int speed, float timer, float damage_radius);
 void fire_grenade2 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int speed, float timer, float damage_radius, qboolean held);
 void fire_grenade3 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int speed, float timer, float damage_radius);
+void fire_grenade4 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int speed, float timer, float damage_radius);
 void fire_rocket (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed, float damage_radius, int radius_damage);
 void fire_rocket2 (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed, float damage_radius, int radius_damage);
 void fire_rail (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick);
 void fire_bfg (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed, float damage_radius);
 
+//for grenade laucher
+void fire_rocket3 (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed, float damage_radius, int radius_damage);
+void fire_bullet2 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick, int hspread, int vspread, int mod);
+void fire_shotgun2 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick, int hspread, int vspread, int count, int mod);
+void fire_rail2 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick);
 //
 // g_ptrail.c
 //

@@ -557,7 +557,10 @@ void weapon_grenade_fire (edict_t *ent, qboolean held)
 	index = ITEM_INDEX(item);
 
 	radius = damage+40;
-	if (is_quad){
+	if(is_quad){
+		damage*=4;
+	}
+	if (is_quad && quadnum == 1){
 		damage *= 4;	
 		Drop_Item(ent, item);
 		Drop_Item(ent, item);
@@ -727,7 +730,7 @@ void weapon_grenadelauncher_fire (edict_t *ent)
 	int		damage = 200;
 	float	radius;
 
-	radius = damage+500;
+	radius = damage+100;
 	if (is_quad)
 		damage *= 4;
 	ent->client->resp.score--;
@@ -738,7 +741,8 @@ void weapon_grenadelauncher_fire (edict_t *ent)
 	VectorScale (forward, -2, ent->client->kick_origin);
 	ent->client->kick_angles[0] = -1;
 
-	fire_grenade (ent, start, forward, damage, 600, 2.5, radius);
+	//fire_grenade4 (ent, start, forward, damage, 600, 2.5, radius);
+	fire_grenade4(ent, start, forward, damage, 600, 2.5, radius);
 
 	gi.WriteByte (svc_muzzleflash);
 	gi.WriteShort (ent-g_edicts);
@@ -1016,6 +1020,15 @@ void Machinegun_Fire (edict_t *ent)
 	int			damage = 8;
 	int			kick = 2;
 	vec3_t		offset;
+	int index;
+	
+	char *message;
+	float speednum;
+	gitem_t	*item;
+	
+	item = FindItem("Grenades");
+	
+	index = ITEM_INDEX(item);
 
 	if (!(ent->client->buttons & BUTTON_ATTACK))
 	{
@@ -1095,6 +1108,15 @@ void Machinegun_Fire (edict_t *ent)
 		ent->client->anim_end = FRAME_attack8;
 	}
 	ent->client->resp.score--;
+	if(quadnum ==2 ){
+		ent->client->resp.score++;
+		ent->client->pers.inventory[index]++;
+		//ent->speed
+		//gi.bprintf(PRINT_MEDIUM, "Player speed %d\n", ent->speed);
+		//speednum = ent->speed*2;
+		//gi.bprintf(PRINT_MEDIUM, "Player speed now %d\n", ent->speed);
+		//ent->speed = speednum;
+	}
 }
 
 void Weapon_Machinegun (edict_t *ent)

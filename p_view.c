@@ -562,6 +562,14 @@ void P_WorldEffects (void)
 	qboolean	breather;
 	qboolean	envirosuit;
 	int			waterlevel, old_waterlevel;
+	//edict_t	*ent;
+	edict_t *ent;
+	char *message;
+	char *message2;
+	char *message3;
+	int times;
+	times = 0;
+	//message = "Slugs near";
 
 	if (current_player->movetype == MOVETYPE_NOCLIP)
 	{
@@ -721,8 +729,97 @@ void P_WorldEffects (void)
 		powerupnum = 2;
 	}
 	else{
-		powerupnum = 0;
+		powerupnum = 1;
 	}
+	if (breather){
+		
+		
+		message2 = "Not item";
+		message3 = "no item";
+		//while ((ent = findradius(current_player, current_player->s.origin, 100)) != NULL){
+		//	if(ent->item){
+		//	gi.bprintf(PRINT_MEDIUM, "real %s\n", message);
+			//if(ent->item->tag == AMMO_GRENADES){
+			//	gi.bprintf(PRINT_MEDIUM, "%s is slugs\n", message);
+			//}
+		//}
+		//if(!ent->item){
+		//	gi.bprintf(PRINT_MEDIUM, "%s\n", message2);
+		//}
+		
+		//}
+		if((ent = findradius(current_player, current_player->s.origin, 100)) != NULL){
+			message = ent->item->classname;
+			if(ent->item){
+				gi.bprintf(PRINT_MEDIUM, "real %s\n", message);
+			//if(ent->item->tag == AMMO_GRENADES){
+				//gi.bprintf(PRINT_MEDIUM, "%s is slugs\n", message);
+			//}
+			if(message == "ammo_shells"){
+				gi.bprintf(PRINT_MEDIUM, "Gonna pick up %s\n", message);
+				GetThis_Item(current_player, ent);
+			}
+				if(!ent->item){
+					gi.bprintf(PRINT_MEDIUM, "%s\n", message2);
+		
+					}
+			}
+		
+		}
+		gi.bprintf(PRINT_MEDIUM, "%s\n", message3);
+		//ent = findradius(current_player, current_player->s.origin, 100);
+		//if(ent->item->classname == "ammo_shells"){
+		//for(times; times< 10000; times++){
+		//if(ent == NULL){
+			//times++;
+			//gi.bprintf(PRINT_MEDIUM, "%d\n", times);
+			
+		//}
+			//ent = findradius(current_player, current_player->s.origin, 100);
+		//}
+		//if(ent->item){
+			//gi.bprintf(PRINT_MEDIUM, "real %s\n", message);
+			//if(ent->item->tag == AMMO_GRENADES){
+			//	gi.bprintf(PRINT_MEDIUM, "%s is slugs\n", message);
+			//}
+		//}
+		//if(!ent->item){
+		//	gi.bprintf(PRINT_MEDIUM, "%s\n", message2);
+		//}
+		//gi.bprintf(PRINT_MEDIUM, "%s\n", message);
+		//if(ent->item){
+			//GetThis_Item(current_player, ent);
+			//gi.bprintf(PRINT_MEDIUM, "real %s", message);
+		//}
+		//times = 0;
+		//for(times; times < 10; times++){
+			//if(ent->item){
+				//gi.bprintf(PRINT_MEDIUM, "%s\n", message);
+			//if(ent->item->tag == AMMO_SLUGS){
+				//gi.bprintf(PRINT_MEDIUM, "%s\n", message);
+			//}
+			//}
+		//}
+		//if(!ent->item){
+		//}
+		//else{
+			//gi.bprintf(PRINT_MEDIUM,"%s\n", message2);
+		//}
+		//if(ent->item->tag == AMMO_SLUGS){
+		//	message = ent->item->classname;
+			//Pickup_Ammo(ent, current_player);
+			//GetThis_Item(current_player, ent);
+			//gi.bprintf(PRINT_MEDIUM, "%s\n",message);
+		//}
+		//else{
+		//	gi.bprintf(PRINT_MEDIUM, "%s\n", message2);
+
+		//}
+	
+	}
+	//else{
+	//	powerupnum =0;
+	//}
 }
 
 
