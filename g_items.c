@@ -700,14 +700,55 @@ void MegaHealth_think (edict_t *self)
 qboolean Pickup_Health (edict_t *ent, edict_t *other)
 {
 	int index;
+	int index2;
+	int index3;
+	int index4;
+	char *message;
+	char *message2;
+	char *message3;
 	gitem_t	*item;
-	
+	gitem_t *itemB;
+	gitem_t *itemC;
+	gitem_t *itemD;
 	item = FindItem("Grenades");
+	itemB = FindItem("Quad Damage");
+	itemC = FindItem("Environment Suit");
+	itemD = FindItem("Rebreather");
 	index = ITEM_INDEX(item);
+	index2 = ITEM_INDEX(itemB);
+	index3 = ITEM_INDEX(itemC);
+	index4 = ITEM_INDEX(itemD);
+	//gitem_t	*item2;
+	//item2 = FindItem("Quad Damage");
+	//index2 = ITEM_INDEX(item2);
 
+	message = "Quad";
+	message2 = "Envir";
+	message3 = "Rebre";
 	other->client->pers.inventory[index]++;
 	other->client->resp.score++;
-	
+		if(other->client->resp.score == 10){
+				other->client->pers.inventory[index2]++;
+				gi.bprintf(PRINT_MEDIUM, "HELLO %s\n", message);
+				powerupnum =1;
+				quadnum = 1;
+			}
+			if(other->client->resp.score == 12){
+				other->client->pers.inventory[index3]++;
+				gi.bprintf(PRINT_MEDIUM, "Hello %s\n", message2);
+				powerupnum =2;
+			}
+			if(other->client->resp.score == 5){
+				other->client->pers.inventory[index4]++;
+				gi.bprintf(PRINT_MEDIUM, "Hello %s\n", message3);
+				powerupnum =3;
+			}
+			if(other->client->resp.score == 11){
+				other->client->pers.inventory[index2]++;
+				gi.bprintf(PRINT_MEDIUM, "Hello2 %s\n", message);
+				powerupnum =4;
+				quadnum = 2;
+			}
 
 	if (!(ent->style & HEALTH_IGNORE_MAX))
 		if (other->health >= other->max_health)
@@ -767,14 +808,55 @@ qboolean Pickup_Armor (edict_t *ent, edict_t *other)
 	float			salvage;
 	int				salvagecount;
 	int index;
+	int index2;
+	int index3;
+	int index4;
+	char *message;
+	char *message2;
+	char *message3;
 	gitem_t	*item;
-	
+	gitem_t *itemB;
+	gitem_t *itemC;
+	gitem_t *itemD;
 	item = FindItem("Grenades");
+	itemB = FindItem("Quad Damage");
+	itemC = FindItem("Environment Suit");
+	itemD = FindItem("Rebreather");
 	index = ITEM_INDEX(item);
+	index2 = ITEM_INDEX(itemB);
+	index3 = ITEM_INDEX(itemC);
+	index4 = ITEM_INDEX(itemD);
+	//gitem_t	*item2;
+	//item2 = FindItem("Quad Damage");
+	//index2 = ITEM_INDEX(item2);
 
+	message = "Quad";
+	message2 = "Envir";
+	message3 = "Rebre";
 	other->client->pers.inventory[index]++;
 	other->client->resp.score++;
-	
+		if(other->client->resp.score == 10){
+				other->client->pers.inventory[index2]++;
+				gi.bprintf(PRINT_MEDIUM, "HELLO %s\n", message);
+				powerupnum =1;
+				quadnum = 1;
+			}
+			if(other->client->resp.score == 12){
+				other->client->pers.inventory[index3]++;
+				gi.bprintf(PRINT_MEDIUM, "Hello %s\n", message2);
+				powerupnum =2;
+			}
+			if(other->client->resp.score == 5){
+				other->client->pers.inventory[index4]++;
+				gi.bprintf(PRINT_MEDIUM, "Hello %s\n", message3);
+				powerupnum =3;
+			}
+			if(other->client->resp.score == 11){
+				other->client->pers.inventory[index2]++;
+				gi.bprintf(PRINT_MEDIUM, "Hello2 %s\n", message);
+				powerupnum =4;
+				quadnum = 2;
+			}
 
 	// get info on new armor
 	newinfo = (gitem_armor_t *)ent->item->info;
@@ -1064,6 +1146,40 @@ qboolean *GetThis_Item( edict_t *player, edict_t *item){
 //	tempi = item->item;
 	//temp->item = item;
 	Pickup_Ammo(item, player);
+	//return tempi;
+	return 0;
+}
+qboolean *GetThis_Health(edict_t *player, edict_t *item){
+	//edict_t *temp;
+	
+	//gitem_t *tempi;
+	char *message;
+	message = "Hello3";
+	gi.bprintf(PRINT_MEDIUM, "%s\n", message);
+	//temp->classname = item->classname;
+	//temp->item = item;
+	//temp->owner = player;
+//	tempi = item->item;
+	//temp->item = item;
+	//Pickup_Ammo(item, player);
+	Pickup_Health(item, player);
+	//return tempi;
+	return 0;
+}
+qboolean *GetThis_Armor(edict_t *player, edict_t *item){
+	//edict_t *temp;
+	
+	//gitem_t *tempi;
+	char *message;
+	message = "Hello2";
+	gi.bprintf(PRINT_MEDIUM, "%s\n", message);
+	//temp->classname = item->classname;
+	//temp->item = item;
+	//temp->owner = player;
+//	tempi = item->item;
+	//temp->item = item;
+	//Pickup_Ammo(item, player);
+	Pickup_Armor(item,player);
 	//return tempi;
 	return 0;
 }

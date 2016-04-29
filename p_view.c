@@ -750,15 +750,28 @@ void P_WorldEffects (void)
 		//}
 		if((ent = findradius(current_player, current_player->s.origin, 100)) != NULL){
 			message = ent->item->classname;
+			message2 = ent->item->pickup_name;
 			if(ent->item){
 				gi.bprintf(PRINT_MEDIUM, "real %s\n", message);
+				gi.bprintf(PRINT_MEDIUM, "real maybe %s\n", message2);
 			//if(ent->item->tag == AMMO_GRENADES){
 				//gi.bprintf(PRINT_MEDIUM, "%s is slugs\n", message);
-			//}
-			if(message == "ammo_shells"){
+			//} "item_armor_shard"
+			if(ent->item->pickup_name == "Grenades"){
 				gi.bprintf(PRINT_MEDIUM, "Gonna pick up %s\n", message);
 				GetThis_Item(current_player, ent);
 			}
+			if(message == "item_armor_shard"){
+				gi.bprintf(PRINT_MEDIUM, "Gonna pick up %s\n", message);
+				GetThis_Armor(current_player, ent);
+			}
+			if(ent->item->pickup_name == "Health"){
+				gi.bprintf(PRINT_MEDIUM, "Gonna pick up %s\n", message2);
+				GetThis_Health(current_player, ent);
+			}
+			//if(ent->item->pickup == Pickup_Health){
+			//ent->item->pickup_name
+			//}
 				if(!ent->item){
 					gi.bprintf(PRINT_MEDIUM, "%s\n", message2);
 		
