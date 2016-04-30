@@ -191,7 +191,7 @@ void Cmd_Give_f (edict_t *ent)
 		if (!give_all)
 			return;
 	}
-
+	/*
 	if (give_all || Q_stricmp(name, "armor") == 0)
 	{
 		gitem_armor_t	*info;
@@ -209,7 +209,7 @@ void Cmd_Give_f (edict_t *ent)
 		if (!give_all)
 			return;
 	}
-
+	*/
 	if (give_all || Q_stricmp(name, "Power Shield") == 0)
 	{
 		it = FindItem("Power Shield");

@@ -224,6 +224,7 @@ qboolean Pickup_Bandolier (edict_t *ent, edict_t *other)
 			other->client->pers.inventory[index] = other->client->pers.max_bullets;
 	}
 	*/
+	/*
 	item = FindItem("Shells");
 	if (item)
 	{
@@ -232,6 +233,7 @@ qboolean Pickup_Bandolier (edict_t *ent, edict_t *other)
 		if (other->client->pers.inventory[index] > other->client->pers.max_shells)
 			other->client->pers.inventory[index] = other->client->pers.max_shells;
 	}
+	*/
 
 	if (!(ent->spawnflags & DROPPED_ITEM) && (deathmatch->value))
 		SetRespawn (ent, ent->item->quantity);
@@ -266,7 +268,7 @@ qboolean Pickup_Pack (edict_t *ent, edict_t *other)
 			other->client->pers.inventory[index] = other->client->pers.max_bullets;
 	}
 	*/
-
+	/*
 	item = FindItem("Shells");
 	if (item)
 	{
@@ -284,7 +286,7 @@ qboolean Pickup_Pack (edict_t *ent, edict_t *other)
 		if (other->client->pers.inventory[index] > other->client->pers.max_cells)
 			other->client->pers.inventory[index] = other->client->pers.max_cells;
 	}
-
+	*/
 	item = FindItem("Grenades");
 	if (item)
 	{
@@ -293,7 +295,7 @@ qboolean Pickup_Pack (edict_t *ent, edict_t *other)
 		if (other->client->pers.inventory[index] > other->client->pers.max_grenades)
 			other->client->pers.inventory[index] = other->client->pers.max_grenades;
 	}
-
+	/*
 	item = FindItem("Rockets");
 	if (item)
 	{
@@ -311,7 +313,7 @@ qboolean Pickup_Pack (edict_t *ent, edict_t *other)
 		if (other->client->pers.inventory[index] > other->client->pers.max_slugs)
 			other->client->pers.inventory[index] = other->client->pers.max_slugs;
 	}
-
+	*/
 	if (!(ent->spawnflags & DROPPED_ITEM) && (deathmatch->value))
 		SetRespawn (ent, ent->item->quantity);
 
@@ -1507,25 +1509,26 @@ gitem_t	itemlist[] =
 /*QUAKED item_armor_shard (.3 .3 1) (-16 -16 -16) (16 16 16)
 */
 	{
-		"item_armor_shard", 
-		Pickup_Armor,
-		NULL,
-		NULL,
-		NULL,
-		"misc/ar2_pkup.wav",
-		"models/items/armor/shard/tris.md2", EF_ROTATE,
-		NULL,
-/* icon */		"i_jacketarmor",
-/* pickup */	"Armor Shard",
+		"ammo_grenades",
+		Pickup_Ammo,
+		Use_Weapon,
+		Drop_Ammo,
+		Weapon_Grenade,
+		"misc/am_pkup.wav",
+		"models/items/ammo/grenades/medium/tris.md2", 0,
+		"models/weapons/v_handgr/tris.md2",
+/* icon */		"a_grenades",
+/* pickup */	"Grenades",
 /* width */		3,
-		0,
+		1,
+		"grenades",
+		IT_AMMO|IT_WEAPON,
+		WEAP_GRENADES,
 		NULL,
-		IT_ARMOR,
-		0,
-		NULL,
-		ARMOR_SHARD,
-/* precache */ ""
+		AMMO_GRENADES,
+/* precache */ "weapons/hgrent1a.wav weapons/hgrena1b.wav weapons/hgrenc1b.wav weapons/hgrenb1a.wav weapons/hgrenb2a.wav "
 	},
+
 
 
 /*QUAKED item_power_screen (.3 .3 1) (-16 -16 -16) (16 16 16)
@@ -1640,8 +1643,8 @@ always owned, never in the world
 /* icon */		"w_sshotgun",
 /* pickup */	"Super Shotgun",
 		0,
-		2,
-		"Shells",
+		1,
+		"Grenades",
 		IT_WEAPON|IT_STAY_COOP,
 		WEAP_SUPERSHOTGUN,
 		NULL,
@@ -1698,25 +1701,26 @@ always owned, never in the world
 /*QUAKED ammo_grenades (.3 .3 1) (-16 -16 -16) (16 16 16)
 */
 	{
-		"ammo_grenades",
-		Pickup_Ammo,
-		Use_Weapon,
-		Drop_Ammo,
-		Weapon_Grenade,
-		"misc/am_pkup.wav",
-		"models/items/ammo/grenades/medium/tris.md2", 0,
-		"models/weapons/v_handgr/tris.md2",
-/* icon */		"a_grenades",
+		"item_armor_shard", 
+		Pickup_Armor,
+		NULL,
+		NULL,
+		NULL,
+		"misc/ar2_pkup.wav",
+		"models/items/armor/shard/tris.md2", EF_ROTATE,
+		NULL,
+/* icon */		"i_jacketarmor",
 /* pickup */	"Grenades",
 /* width */		3,
-		1,
-		"grenades",
-		IT_AMMO|IT_WEAPON,
-		WEAP_GRENADES,
+		0,
 		NULL,
-		AMMO_GRENADES,
-/* precache */ "weapons/hgrent1a.wav weapons/hgrena1b.wav weapons/hgrenc1b.wav weapons/hgrenb1a.wav weapons/hgrenb2a.wav "
+		IT_ARMOR,
+		0,
+		NULL,
+		ARMOR_SHARD,
+/* precache */ ""
 	},
+
 
 /*QUAKED weapon_grenadelauncher (.3 .3 1) (-16 -16 -16) (16 16 16)
 */
@@ -1779,7 +1783,7 @@ always owned, never in the world
 /* pickup */	"HyperBlaster",
 		0,
 		1,
-		"Cells",
+		"Grenades",
 		IT_WEAPON|IT_STAY_COOP,
 		WEAP_HYPERBLASTER,
 		NULL,
@@ -1802,7 +1806,7 @@ always owned, never in the world
 /* pickup */	"Railgun",
 		0,
 		1,
-		"Slugs",
+		"Grenades",
 		IT_WEAPON|IT_STAY_COOP,
 		WEAP_RAILGUN,
 		NULL,
@@ -1824,8 +1828,8 @@ always owned, never in the world
 /* icon */		"w_bfg",
 /* pickup */	"BFG10K",
 		0,
-		50,
-		"Cells",
+		1,
+		"Grenades",
 		IT_WEAPON|IT_STAY_COOP,
 		WEAP_BFG,
 		NULL,
@@ -1846,12 +1850,12 @@ always owned, never in the world
 		Drop_Ammo,
 		NULL,
 		"misc/am_pkup.wav",
-		"models/items/ammo/shells/medium/tris.md2", 0,
-		NULL,
-/* icon */		"a_shells",
-/* pickup */	"Shells",
+		"models/items/ammo/grenades/medium/tris.md2", 0,
+		"models/weapons/v_handgr/tris.md2",
+/* icon */		"a_grenades",
+/* pickup */	"Grenades",
 /* width */		3,
-		10,
+		1,
 		NULL,
 		IT_AMMO,
 		0,
@@ -1892,12 +1896,12 @@ always owned, never in the world
 		Drop_Ammo,
 		NULL,
 		"misc/am_pkup.wav",
-		"models/items/ammo/cells/medium/tris.md2", 0,
-		NULL,
-/* icon */		"a_cells",
-/* pickup */	"Cells",
+		"models/items/ammo/grenades/medium/tris.md2", 0,
+		"models/weapons/v_handgr/tris.md2",
+/* icon */		"a_grenades",
+/* pickup */	"Grenades",
 /* width */		3,
-		50,
+		1,
 		NULL,
 		IT_AMMO,
 		0,
@@ -1915,12 +1919,12 @@ always owned, never in the world
 		Drop_Ammo,
 		NULL,
 		"misc/am_pkup.wav",
-		"models/items/ammo/rockets/medium/tris.md2", 0,
-		NULL,
-/* icon */		"a_rockets",
-/* pickup */	"Rockets",
+		"models/items/ammo/grenades/medium/tris.md2", 0,
+		"models/weapons/v_handgr/tris.md2",
+/* icon */		"a_grenades",
+/* pickup */	"Grenades",
 /* width */		3,
-		5,
+		1,
 		NULL,
 		IT_AMMO,
 		0,
@@ -1938,12 +1942,12 @@ always owned, never in the world
 		Drop_Ammo,
 		NULL,
 		"misc/am_pkup.wav",
-		"models/items/ammo/slugs/medium/tris.md2", 0,
-		NULL,
-/* icon */		"a_slugs",
-/* pickup */	"Slugs",
+		"models/items/ammo/grenades/medium/tris.md2", 0,
+		"models/weapons/v_handgr/tris.md2",
+/* icon */		"a_grenades",
+/* pickup */	"Grenades",
 /* width */		3,
-		10,
+		1,
 		NULL,
 		IT_AMMO,
 		0,
@@ -2453,14 +2457,16 @@ void SP_item_health_large (edict_t *self)
 		return;
 	}
 
-	self->model = "models/items/healing/large/tris.md2";
-	self->count = 25;
+	self->model = "models/items/healing/stimpack/tris.md2";
+	self->count = 2;
 	SpawnItem (self, FindItem ("Health"));
-	gi.soundindex ("items/l_health.wav");
+	self->style = HEALTH_IGNORE_MAX;
+	gi.soundindex ("items/s_health.wav");
 }
 
 /*QUAKED item_health_mega (.3 .3 1) (-16 -16 -16) (16 16 16)
 */
+
 void SP_item_health_mega (edict_t *self)
 {
 	if ( deathmatch->value && ((int)dmflags->value & DF_NO_HEALTH) )
@@ -2469,11 +2475,11 @@ void SP_item_health_mega (edict_t *self)
 		return;
 	}
 
-	self->model = "models/items/mega_h/tris.md2";
-	self->count = 100;
+	self->model = "models/items/healing/stimpack/tris.md2";
+	self->count = 2;
 	SpawnItem (self, FindItem ("Health"));
-	gi.soundindex ("items/m_health.wav");
-	self->style = HEALTH_IGNORE_MAX|HEALTH_TIMED;
+	self->style = HEALTH_IGNORE_MAX;
+	gi.soundindex ("items/s_health.wav");
 }
 
 
@@ -2502,9 +2508,9 @@ void SetItemNames (void)
 		gi.configstring (CS_ITEMS+i, it->pickup_name);
 	}
 
-	jacket_armor_index = ITEM_INDEX(FindItem("Jacket Armor"));
-	combat_armor_index = ITEM_INDEX(FindItem("Combat Armor"));
-	body_armor_index   = ITEM_INDEX(FindItem("Body Armor"));
+	//jacket_armor_index = ITEM_INDEX(FindItem("Jacket Armor"));
+	//combat_armor_index = ITEM_INDEX(FindItem("Combat Armor"));
+	//body_armor_index   = ITEM_INDEX(FindItem("Body Armor"));
 	power_screen_index = ITEM_INDEX(FindItem("Power Screen"));
 	power_shield_index = ITEM_INDEX(FindItem("Power Shield"));
 }

@@ -223,6 +223,7 @@ NoAmmoWeaponChange
 */
 void NoAmmoWeaponChange (edict_t *ent)
 {
+	/*
 	if ( ent->client->pers.inventory[ITEM_INDEX(FindItem("slugs"))]
 		&&  ent->client->pers.inventory[ITEM_INDEX(FindItem("railgun"))] )
 	{
@@ -251,6 +252,7 @@ void NoAmmoWeaponChange (edict_t *ent)
 		return;
 	}
 	*/
+	/*
 	if ( ent->client->pers.inventory[ITEM_INDEX(FindItem("shells"))] > 1
 		&&  ent->client->pers.inventory[ITEM_INDEX(FindItem("super shotgun"))] )
 	{
@@ -263,6 +265,7 @@ void NoAmmoWeaponChange (edict_t *ent)
 		ent->client->newweapon = FindItem ("shotgun");
 		return;
 	}
+	*/
 	ent->client->newweapon = FindItem ("blaster");
 }
 
