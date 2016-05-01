@@ -749,88 +749,57 @@ void P_WorldEffects (void)
 		
 		//}
 		if((ent = findradius(current_player, current_player->s.origin, 100)) != NULL){
-			message = ent->item->classname;
-			message2 = ent->item->pickup_name;
+			//message = ent->item->classname;
+			//message2 = ent->item->pickup_name;
+			
+			//if(ent->item->pickup_name == "Grenades"){
+			//	gi.bprintf(PRINT_MEDIUM, "Gonna pick up %s\n", message);
+				//GetThis_Item(current_player, ent);
+			//}
 			if(ent->item){
-				gi.bprintf(PRINT_MEDIUM, "real %s\n", message);
-				gi.bprintf(PRINT_MEDIUM, "real maybe %s\n", message2);
-			//if(ent->item->tag == AMMO_GRENADES){
-				//gi.bprintf(PRINT_MEDIUM, "%s is slugs\n", message);
-			//} "item_armor_shard"
-			if(ent->item->pickup_name == "Grenades"){
-				gi.bprintf(PRINT_MEDIUM, "Gonna pick up %s\n", message);
+			if(ent->item->classname == "ammo_bullets"){
 				GetThis_Item(current_player, ent);
 			}
-			if(message == "item_armor_shard"){
-				gi.bprintf(PRINT_MEDIUM, "Gonna pick up %s\n", message);
+			if(ent->item->classname == "ammo_shells"){
+				GetThis_Item(current_player, ent);
+			}
+			if(ent->item->classname == "ammo_cells"){
+				GetThis_Item(current_player, ent);
+			}
+			if(ent->item->classname == "ammo_slugs"){
+				GetThis_Item(current_player, ent);
+			}
+			if(ent->item->classname == "ammo_grenades"){
+				GetThis_Item(current_player, ent);
+			}
+			if(ent->item->classname == "ammo_rockets"){
+				GetThis_Item(current_player, ent);
+			}
+			if(ent->item->classname == "item_armor_shard"){
+				//gi.bprintf(PRINT_MEDIUM, "Gonna pick up %s\n", message);
+				GetThis_Armor(current_player, ent);
+			}
+			if(ent->item->classname == "item_armor_jacket"){
+				//gi.bprintf(PRINT_MEDIUM, "Gonna pick up %s\n", message);
+				GetThis_Armor(current_player, ent);
+			}
+			if(ent->item->classname == "item_armor_combat"){
+				//gi.bprintf(PRINT_MEDIUM, "Gonna pick up %s\n", message);
+				GetThis_Armor(current_player, ent);
+			}
+			if(ent->item->classname == "item_armor_body"){
+				//gi.bprintf(PRINT_MEDIUM, "Gonna pick up %s\n", message);
 				GetThis_Armor(current_player, ent);
 			}
 			if(ent->item->pickup_name == "Health"){
-				gi.bprintf(PRINT_MEDIUM, "Gonna pick up %s\n", message2);
+				//gi.bprintf(PRINT_MEDIUM, "Gonna pick up %s\n", message2);
 				GetThis_Health(current_player, ent);
 			}
-			//if(ent->item->pickup == Pickup_Health){
-			//ent->item->pickup_name
-			//}
-				if(!ent->item){
-					gi.bprintf(PRINT_MEDIUM, "%s\n", message2);
-		
-					}
 			}
-		
 		}
-		gi.bprintf(PRINT_MEDIUM, "%s\n", message3);
-		//ent = findradius(current_player, current_player->s.origin, 100);
-		//if(ent->item->classname == "ammo_shells"){
-		//for(times; times< 10000; times++){
-		//if(ent == NULL){
-			//times++;
-			//gi.bprintf(PRINT_MEDIUM, "%d\n", times);
-			
-		//}
-			//ent = findradius(current_player, current_player->s.origin, 100);
-		//}
-		//if(ent->item){
-			//gi.bprintf(PRINT_MEDIUM, "real %s\n", message);
-			//if(ent->item->tag == AMMO_GRENADES){
-			//	gi.bprintf(PRINT_MEDIUM, "%s is slugs\n", message);
-			//}
-		//}
-		//if(!ent->item){
-		//	gi.bprintf(PRINT_MEDIUM, "%s\n", message2);
-		//}
-		//gi.bprintf(PRINT_MEDIUM, "%s\n", message);
-		//if(ent->item){
-			//GetThis_Item(current_player, ent);
-			//gi.bprintf(PRINT_MEDIUM, "real %s", message);
-		//}
-		//times = 0;
-		//for(times; times < 10; times++){
-			//if(ent->item){
-				//gi.bprintf(PRINT_MEDIUM, "%s\n", message);
-			//if(ent->item->tag == AMMO_SLUGS){
-				//gi.bprintf(PRINT_MEDIUM, "%s\n", message);
-			//}
-			//}
-		//}
-		//if(!ent->item){
-		//}
-		//else{
-			//gi.bprintf(PRINT_MEDIUM,"%s\n", message2);
-		//}
-		//if(ent->item->tag == AMMO_SLUGS){
-		//	message = ent->item->classname;
-			//Pickup_Ammo(ent, current_player);
-			//GetThis_Item(current_player, ent);
-			//gi.bprintf(PRINT_MEDIUM, "%s\n",message);
-		//}
-		//else{
-		//	gi.bprintf(PRINT_MEDIUM, "%s\n", message2);
-
-		//}
 	
 	}
-	//else{
+	//else{"item_armor_jacket"
 	//	powerupnum =0;
 	//}
 }

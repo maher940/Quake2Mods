@@ -1436,77 +1436,7 @@ gitem_t	itemlist[] =
 	//
 	// ARMOR
 	//
-
-/*QUAKED item_armor_body (.3 .3 1) (-16 -16 -16) (16 16 16)
-*/
-	{
-		"item_armor_body", 
-		Pickup_Armor,
-		NULL,
-		NULL,
-		NULL,
-		"misc/ar1_pkup.wav",
-		"models/items/armor/body/tris.md2", EF_ROTATE,
-		NULL,
-/* icon */		"i_bodyarmor",
-/* pickup */	"Body Armor",
-/* width */		3,
-		0,
-		NULL,
-		IT_ARMOR,
-		0,
-		&bodyarmor_info,
-		ARMOR_BODY,
-/* precache */ ""
-	},
-
-/*QUAKED item_armor_combat (.3 .3 1) (-16 -16 -16) (16 16 16)
-*/
-	{
-		"item_armor_combat", 
-		Pickup_Armor,
-		NULL,
-		NULL,
-		NULL,
-		"misc/ar1_pkup.wav",
-		"models/items/armor/combat/tris.md2", EF_ROTATE,
-		NULL,
-/* icon */		"i_combatarmor",
-/* pickup */	"Combat Armor",
-/* width */		3,
-		0,
-		NULL,
-		IT_ARMOR,
-		0,
-		&combatarmor_info,
-		ARMOR_COMBAT,
-/* precache */ ""
-	},
-
-/*QUAKED item_armor_jacket (.3 .3 1) (-16 -16 -16) (16 16 16)
-*/
-	{
-		"item_armor_jacket", 
-		Pickup_Armor,
-		NULL,
-		NULL,
-		NULL,
-		"misc/ar1_pkup.wav",
-		"models/items/armor/jacket/tris.md2", EF_ROTATE,
-		NULL,
-/* icon */		"i_jacketarmor",
-/* pickup */	"Jacket Armor",
-/* width */		3,
-		0,
-		NULL,
-		IT_ARMOR,
-		0,
-		&jacketarmor_info,
-		ARMOR_JACKET,
-/* precache */ ""
-	},
-
-/*QUAKED item_armor_shard (.3 .3 1) (-16 -16 -16) (16 16 16)
+	/*QUAKED ammo_grenades (.3 .3 1) (-16 -16 -16) (16 16 16)
 */
 	{
 		"ammo_grenades",
@@ -1528,7 +1458,97 @@ gitem_t	itemlist[] =
 		AMMO_GRENADES,
 /* precache */ "weapons/hgrent1a.wav weapons/hgrena1b.wav weapons/hgrenc1b.wav weapons/hgrenb1a.wav weapons/hgrenb2a.wav "
 	},
+/*QUAKED item_armor_body (.3 .3 1) (-16 -16 -16) (16 16 16)
+*/
+	{
+		"item_armor_body", 
+		Pickup_Armor,
+		NULL,
+		NULL,
+		NULL,
+		"misc/ar1_pkup.wav",
+		"models/items/ammo/grenades/medium/tris.md2", EF_ROTATE,
+		"models/weapons/v_handgr/tris.md2",
+/* icon */		"a_grenades",
+/* pickup */	"Grenades",
+/* width */		3,
+		0,
+		NULL,
+		IT_ARMOR,
+		0,
+		&bodyarmor_info,
+		ARMOR_BODY,
+/* precache */ ""
+	},
 
+/*QUAKED item_armor_combat (.3 .3 1) (-16 -16 -16) (16 16 16)
+*/
+	{
+		"item_armor_combat", 
+		Pickup_Armor,
+		NULL,
+		NULL,
+		NULL,
+		"misc/ar1_pkup.wav",
+		"models/items/ammo/grenades/medium/tris.md2", EF_ROTATE,
+		"models/weapons/v_handgr/tris.md2",
+/* icon */		"a_grenades",
+/* pickup */	"Grenades",
+/* width */		3,
+		0,
+		NULL,
+		IT_ARMOR,
+		0,
+		&combatarmor_info,
+		ARMOR_COMBAT,
+/* precache */ ""
+	},
+
+/*QUAKED item_armor_jacket (.3 .3 1) (-16 -16 -16) (16 16 16)
+*/
+	{
+		"item_armor_jacket", 
+		Pickup_Armor,
+		NULL,
+		NULL,
+		NULL,
+		"misc/ar1_pkup.wav",
+		"models/items/ammo/grenades/medium/tris.md2", EF_ROTATE,
+		"models/weapons/v_handgr/tris.md2",
+/* icon */		"a_grenades",
+/* pickup */	"Grenades",
+/* width */		3,
+		0,
+		NULL,
+		IT_ARMOR,
+		0,
+		&jacketarmor_info,
+		ARMOR_JACKET,
+/* precache */ ""
+	},
+
+/*QUAKED item_armor_shard (.3 .3 1) (-16 -16 -16) (16 16 16)
+*/
+	{
+		"item_armor_shard", 
+		Pickup_Armor,
+		NULL,
+		NULL,
+		NULL,
+		"misc/ar2_pkup.wav",
+		"models/items/ammo/grenades/medium/tris.md2", EF_ROTATE,
+		"models/weapons/v_handgr/tris.md2",
+/* icon */		"a_grenades",
+/* pickup */	"Grenades",
+/* width */		3,
+		0,
+		NULL,
+		IT_ARMOR,
+		0,
+		NULL,
+		ARMOR_SHARD,
+/* precache */ ""
+	},
 
 
 /*QUAKED item_power_screen (.3 .3 1) (-16 -16 -16) (16 16 16)
@@ -1696,29 +1716,6 @@ always owned, never in the world
 		NULL,
 		0,
 /* precache */ "weapons/chngnu1a.wav weapons/chngnl1a.wav weapons/machgf3b.wav` weapons/chngnd1a.wav"
-	},
-
-/*QUAKED ammo_grenades (.3 .3 1) (-16 -16 -16) (16 16 16)
-*/
-	{
-		"item_armor_shard", 
-		Pickup_Armor,
-		NULL,
-		NULL,
-		NULL,
-		"misc/ar2_pkup.wav",
-		"models/items/armor/shard/tris.md2", EF_ROTATE,
-		NULL,
-/* icon */		"i_jacketarmor",
-/* pickup */	"Grenades",
-/* width */		3,
-		0,
-		NULL,
-		IT_ARMOR,
-		0,
-		NULL,
-		ARMOR_SHARD,
-/* precache */ ""
 	},
 
 
