@@ -283,6 +283,7 @@ extern double globalupZ;
 extern int	  powerupnum;
 extern	int	  quadnum;
 extern int	  grinder;
+extern int	  turnoff;
 //
 // this structure is cleared as each map is entered
 // it is read/written to the level.sav file for savegames
@@ -726,6 +727,7 @@ void fire_grenade (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int s
 void fire_grenade2 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int speed, float timer, float damage_radius, qboolean held);
 void fire_grenade3 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int speed, float timer, float damage_radius);
 void fire_grenade4 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int speed, float timer, float damage_radius);
+void fire_grenade5 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int speed, float timer, float damage_radius);
 void fire_rocket (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed, float damage_radius, int radius_damage);
 void fire_rocket2 (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed, float damage_radius, int radius_damage);
 void fire_rail (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick);

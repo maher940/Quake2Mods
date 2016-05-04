@@ -448,7 +448,6 @@ void monster_triggered_spawn (edict_t *self)
 	self->svflags &= ~SVF_NOCLIENT;
 	self->air_finished = level.time + 12;
 	gi.linkentity (self);
-
 	monster_start_go (self);
 
 	if (self->enemy && !(self->spawnflags & 1) && !(self->enemy->flags & FL_NOTARGET))

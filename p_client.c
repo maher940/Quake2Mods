@@ -481,6 +481,7 @@ player_die
 void player_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damage, vec3_t point)
 {
 	int		n;
+	int		re;
 
 	VectorClear (self->avelocity);
 
@@ -526,6 +527,7 @@ void player_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damag
 	self->client->breather_framenum = 0;
 	self->client->enviro_framenum = 0;
 	self->flags &= ~FL_POWER_ARMOR;
+	self->client->resp.score = self->client->pers.score = 0;
 
 	if (self->health < -40)
 	{	// gib
@@ -569,6 +571,10 @@ void player_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damag
 		}
 	}
 
+	//for(re = 0; re <= self->client->pers.score; re++)
+	//{
+	//	self->client->pers.score--;
+	//}
 	self->deadflag = DEAD_DEAD;
 
 	gi.linkentity (self);

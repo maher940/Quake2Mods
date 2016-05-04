@@ -561,6 +561,7 @@ void P_WorldEffects (void)
 {
 	qboolean	breather;
 	qboolean	envirosuit;
+	qboolean	quad;
 	int			waterlevel, old_waterlevel;
 	//edict_t	*ent;
 	edict_t *ent;
@@ -583,6 +584,7 @@ void P_WorldEffects (void)
 
 	breather = current_client->breather_framenum > level.framenum;
 	envirosuit = current_client->enviro_framenum > level.framenum;
+	quad = current_client->quad_framenum > level.framenum;
 
 
 
@@ -731,6 +733,20 @@ void P_WorldEffects (void)
 	else{
 		powerupnum = 1;
 	}
+	if(quad)
+	{
+		if(quadnum == 3){
+			turnoff = 1;
+		}
+		else{
+			turnoff = 0;
+		}
+	}
+	else{
+		turnoff = 0;
+	}
+	//else{
+	//}
 	if (breather){
 		
 		
