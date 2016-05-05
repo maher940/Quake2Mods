@@ -581,6 +581,13 @@ void weapon_grenade_fire (edict_t *ent, qboolean held)
 	ent->client->resp.score--;
 	//Drop_Ammo(ent,item);
 	
+if(quadnum ==2 && turnoffC ==1){
+		ent->client->resp.score++;
+		ent->client->pers.inventory[index]++;
+		turnoffB = 0;
+		
+	}
+
 	VectorSet(offset, 8, 8, ent->viewheight-8);
 	AngleVectors (ent->client->v_angle, forward, right, NULL);
 	P_ProjectSource (ent->client, ent->s.origin, offset, forward, right, start);
@@ -749,6 +756,16 @@ void weapon_grenadelauncher_fire (edict_t *ent)
 	vec3_t	start;
 	int		damage = 200;
 	float	radius;
+	int index;
+	
+	char *message;
+	float speednum;
+	gitem_t	*item;
+	
+	item = FindItem("Grenades");
+	
+	index = ITEM_INDEX(item);
+
 
 	radius = damage+100;
 	if (is_quad)
@@ -784,6 +801,13 @@ void weapon_grenadelauncher_fire (edict_t *ent)
 
 	if (! ( (int)dmflags->value & DF_INFINITE_AMMO ) )
 		ent->client->pers.inventory[ent->client->ammo_index]--;
+	if(quadnum ==2 && turnoffC ==1){
+		ent->client->resp.score++;
+		ent->client->pers.inventory[index]++;
+		turnoffB = 0;
+		
+	}
+
 }
 
 void Weapon_GrenadeLauncher (edict_t *ent)
@@ -811,7 +835,19 @@ void Weapon_RocketLauncher_Fire (edict_t *ent)
 	int		damage;
 	float	damage_radius;
 	int		radius_damage;
+	int index;
+	
+	//char *message;
+	float speednum;
+	gitem_t	*item;
+	
+	item = FindItem("Grenades");
+	
+	index = ITEM_INDEX(item);
+
+
 	message = "test";
+
 	//gi.bprintf (PRINT_MEDIUM,"%s died.\n", ent->client->pers.netname);
 	damage = 100 + (int)(random() * 20.0);
 	radius_damage = 120;
@@ -855,6 +891,13 @@ void Weapon_RocketLauncher_Fire (edict_t *ent)
 
 	if (! ( (int)dmflags->value & DF_INFINITE_AMMO ) )
 		ent->client->pers.inventory[ent->client->ammo_index]--;
+	if(quadnum ==2 && turnoffC ==1){
+		ent->client->resp.score++;
+		ent->client->pers.inventory[index]++;
+		turnoffB = 0;
+		
+	}
+
 }
 
 void Weapon_RocketLauncher (edict_t *ent)
@@ -974,6 +1017,16 @@ void Weapon_HyperBlaster_Fire (edict_t *ent)
 	vec3_t	offset;
 	int		effect;
 	int		damage;
+	int index;
+	
+	char *message;
+	float speednum;
+	gitem_t	*item;
+	
+	item = FindItem("Grenades");
+	
+	index = ITEM_INDEX(item);
+
 
 	ent->client->weapon_sound = gi.soundindex("weapons/hyprbl1a.wav");
 
@@ -1034,6 +1087,14 @@ void Weapon_HyperBlaster_Fire (edict_t *ent)
 		gi.sound(ent, CHAN_AUTO, gi.soundindex("weapons/hyprbd1a.wav"), 1, ATTN_NORM, 0);
 		ent->client->weapon_sound = 0;
 	}
+	if(quadnum ==2 && turnoffC ==1){
+		ent->client->resp.score++;
+		ent->client->pers.inventory[index]++;
+		turnoffB = 0;
+		
+	}
+
+
 
 }
 

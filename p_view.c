@@ -806,6 +806,11 @@ void P_WorldEffects (void)
 				//gi.bprintf(PRINT_MEDIUM, "Gonna pick up %s\n", message);
 				GetThis_Armor(current_player, ent);
 			}
+			
+			if(ent->item->classname == "item_pack"){
+				//gi.bprintf(PRINT_MEDIUM, "Gonna pick up %s\n", message);
+				GetThis_Item(current_player, ent);
+			}
 			if(ent->item->pickup_name == "Health"){
 				//gi.bprintf(PRINT_MEDIUM, "Gonna pick up %s\n", message2);
 				GetThis_Health(current_player, ent);
