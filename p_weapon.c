@@ -13,6 +13,7 @@ int	  powerupnum;
 
 
 static qboolean	is_quad;
+qboolean   quadon;
 static byte		is_silenced;
 
 
@@ -289,6 +290,7 @@ void Think_Weapon (edict_t *ent)
 	if (ent->client->pers.weapon && ent->client->pers.weapon->weaponthink)
 	{
 		is_quad = (ent->client->quad_framenum > level.framenum);
+		quadon = is_quad;
 		if (ent->client->silencer_shots)
 			is_silenced = MZ_SILENCED;
 		else
@@ -564,14 +566,17 @@ void weapon_grenade_fire (edict_t *ent, qboolean held)
 		damage*=4;
 	}
 	if (is_quad && quadnum == 1){
+		if(turnoffB == 1){
+		//turnoffB = 1;
 		damage *= 4;	
 		Drop_Item(ent, item);
 		Drop_Item(ent, item);
 		Drop_Item(ent, item);
 		Drop_Item(ent, item);
+		}
 	}
 	else{
-		powerupnum = 0;
+		turnoffB = 0;
 	}
 	ent->client->resp.score--;
 	//Drop_Ammo(ent,item);
@@ -582,7 +587,19 @@ void weapon_grenade_fire (edict_t *ent, qboolean held)
 
 	timer = ent->client->grenade_time - level.time;
 	speed = GRENADE_MINSPEED + (GRENADE_TIMER - timer) * ((GRENADE_MAXSPEED - GRENADE_MINSPEED) / GRENADE_TIMER);
-	fire_grenade2 (ent, start, forward, damage, speed, timer, radius, held);
+	if(quadnum == 3 && turnoff == 1 && quadon){
+		//fire_grenade6(
+		turnoffB = 0;
+		turnoffC = 0;
+		fire_grenade6 (ent, start, forward, damage, speed, timer, radius, held);
+	}
+	else
+	{
+		turnoff = 0;
+		fire_grenade2 (ent, start, forward, damage, speed, timer, radius, held);
+		
+	}
+	gi.bprintf(PRINT_MEDIUM, "%d turnoffnum", turnoff);
 
 	if (! ( (int)dmflags->value & DF_INFINITE_AMMO ) )
 		ent->client->pers.inventory[ent->client->ammo_index]--;
@@ -745,11 +762,15 @@ void weapon_grenadelauncher_fire (edict_t *ent)
 	ent->client->kick_angles[0] = -1;
 
 	//fire_grenade4 (ent, start, forward, damage, 600, 2.5, radius);
-	if(quadnum == 3 && turnoff ==1){
+	if(quadnum == 3 && turnoff ==1 && quadon){
+		turnoffB = 0;
+		turnoffC = 0;
 		fire_grenade5 (ent, start, forward, 20, 100, 3, 50);
 	}
 	else{
-	fire_grenade4(ent, start, forward, damage, 600, 2.5, radius);
+		fire_grenade4(ent, start, forward, damage, 600, 2.5, radius);
+		turnoff = 0;
+
 	}
 
 	gi.WriteByte (svc_muzzleflash);
@@ -1066,11 +1087,11 @@ void Machinegun_Fire (edict_t *ent)
 	{
 		damage *= 4;
 		kick *= 4;
-		powerupnum = 1;
+		//powerupnum = 1;
 	}
-	else{
-		powerupnum = 0;
-	}
+	//else{
+	//	powerupnum = 0;
+	//}
 	for (i=1 ; i<3 ; i++)
 	{
 		ent->client->kick_origin[i] = crandom() * 0.35;
@@ -1116,9 +1137,10 @@ void Machinegun_Fire (edict_t *ent)
 		ent->client->anim_end = FRAME_attack8;
 	}
 	ent->client->resp.score--;
-	if(quadnum ==2 ){
+	if(quadnum ==2 && turnoffC ==1){
 		ent->client->resp.score++;
 		ent->client->pers.inventory[index]++;
+		turnoffB = 0;
 		//ent->speed
 		//gi.bprintf(PRINT_MEDIUM, "Player speed %d\n", ent->speed);
 		//speednum = ent->speed*2;

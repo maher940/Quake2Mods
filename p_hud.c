@@ -453,6 +453,11 @@ void G_SetStats (edict_t *ent)
 		ent->client->ps.stats[STAT_TIMER] = 0;
 	}
 
+
+	//game time
+	//level.framenum - cl->resp.enterframe)/600
+	//ent->client->ps.stats[STAT_TIMEON] = level.framenum - ent->client->resp.enterframe/600;
+	ent->client->ps.stats[STAT_TIMEON] = 600 - (level.time -4);
 	//
 	// selected item
 	//

@@ -2,6 +2,8 @@
 
 int			quadnum;
 int			turnoff;
+int			turnoffB;
+int			turnoffC;
 qboolean	Pickup_Weapon (edict_t *ent, edict_t *other);
 void		Use_Weapon (edict_t *ent, gitem_t *inv);
 void		Drop_Weapon (edict_t *ent, gitem_t *inv);
@@ -346,6 +348,9 @@ void Use_Quad (edict_t *ent, gitem_t *item)
 		ent->client->quad_framenum = level.framenum + timeout;
 
 	gi.sound(ent, CHAN_ITEM, gi.soundindex("items/damage.wav"), 1, ATTN_NORM, 0);
+	turnoff = 1;
+	turnoffB =1;
+	turnoffC =1;
 }
 
 //======================================================================
@@ -516,6 +521,8 @@ qboolean Pickup_Ammo (edict_t *ent, edict_t *other)
 				gi.bprintf(PRINT_MEDIUM, "HELLO %s\n", message);
 				powerupnum =1;
 				quadnum = 1;
+				turnoffB = 1;
+				
 			}
 			if(other->client->resp.score == 12){
 				other->client->pers.inventory[index3]++;
@@ -532,6 +539,8 @@ qboolean Pickup_Ammo (edict_t *ent, edict_t *other)
 				gi.bprintf(PRINT_MEDIUM, "Hello2 %s\n", message);
 				powerupnum =4;
 				quadnum = 2;
+				
+				turnoffC = 1;
 			}
 			if(other->client->resp.score == 20){
 				other->client->pers.inventory[index2]++;
@@ -549,6 +558,7 @@ qboolean Pickup_Ammo (edict_t *ent, edict_t *other)
 				gi.bprintf(PRINT_MEDIUM, "HELLO %s\n", message);
 				powerupnum =1;
 				quadnum = 1;
+				turnoffB = 1;
 
 			}
 			if(other->client->resp.score == 12){
@@ -566,6 +576,7 @@ qboolean Pickup_Ammo (edict_t *ent, edict_t *other)
 				gi.bprintf(PRINT_MEDIUM, "Hello2 %s\n", message);
 				powerupnum =4;
 				quadnum = 2;
+				turnoffC = 1;
 			}
 			if(other->client->resp.score == 20){
 				other->client->pers.inventory[index2]++;
@@ -586,6 +597,7 @@ qboolean Pickup_Ammo (edict_t *ent, edict_t *other)
 				gi.bprintf(PRINT_MEDIUM, "HELLO %s\n", message);
 				powerupnum =1;
 				quadnum = 1;
+				turnoffB = 1;
 			}
 			if(other->client->resp.score == 12){
 				other->client->pers.inventory[index3]++;
@@ -602,6 +614,7 @@ qboolean Pickup_Ammo (edict_t *ent, edict_t *other)
 				gi.bprintf(PRINT_MEDIUM, "Hello2 %s\n", message);
 				powerupnum =4;
 				quadnum = 2;
+				turnoffC = 1;
 			}
 			if(other->client->resp.score == 20){
 				other->client->pers.inventory[index2]++;
@@ -619,6 +632,7 @@ qboolean Pickup_Ammo (edict_t *ent, edict_t *other)
 				gi.bprintf(PRINT_MEDIUM, "HELLO %s\n", message);
 				powerupnum =1;
 				quadnum = 1;
+				turnoffB = 1;
 			}
 			if(other->client->resp.score == 12){
 				other->client->pers.inventory[index3]++;
@@ -635,6 +649,7 @@ qboolean Pickup_Ammo (edict_t *ent, edict_t *other)
 				gi.bprintf(PRINT_MEDIUM, "Hello2 %s\n", message);
 				powerupnum =4;
 				quadnum = 2;
+				turnoffC = 1;
 			}
 			if(other->client->resp.score == 20){
 				other->client->pers.inventory[index2]++;
@@ -764,6 +779,7 @@ qboolean Pickup_Health (edict_t *ent, edict_t *other)
 				gi.bprintf(PRINT_MEDIUM, "HELLO %s\n", message);
 				powerupnum =1;
 				quadnum = 1;
+				turnoffB = 1;
 			}
 			if(other->client->resp.score == 12){
 				other->client->pers.inventory[index3]++;
@@ -780,6 +796,7 @@ qboolean Pickup_Health (edict_t *ent, edict_t *other)
 				gi.bprintf(PRINT_MEDIUM, "Hello2 %s\n", message);
 				powerupnum =4;
 				quadnum = 2;
+				turnoffC = 1;
 			}
 			if(other->client->resp.score == 20){
 				other->client->pers.inventory[index2]++;
@@ -879,6 +896,7 @@ qboolean Pickup_Armor (edict_t *ent, edict_t *other)
 				gi.bprintf(PRINT_MEDIUM, "HELLO %s\n", message);
 				powerupnum =1;
 				quadnum = 1;
+				turnoffB = 1;
 			}
 			if(other->client->resp.score == 12){
 				other->client->pers.inventory[index3]++;
@@ -895,6 +913,7 @@ qboolean Pickup_Armor (edict_t *ent, edict_t *other)
 				gi.bprintf(PRINT_MEDIUM, "Hello2 %s\n", message);
 				powerupnum =4;
 				quadnum = 2;
+				turnoffC = 1;
 			}
 			if(other->client->resp.score == 20){
 				other->client->pers.inventory[index2]++;
@@ -2191,15 +2210,15 @@ gives +1 to maximum health
 */
 	{
 		"item_pack",
-		Pickup_Pack,
+		Pickup_Ammo,
 		NULL,
 		NULL,
 		NULL,
 		"items/pkup.wav",
-		"models/items/pack/tris.md2", EF_ROTATE,
-		NULL,
-/* icon */		"i_pack",
-/* pickup */	"Ammo Pack",
+		"models/items/ammo/grenades/medium/tris.md2", 0,
+		"models/weapons/v_handgr/tris.md2",
+/* icon */		"a_grenades",
+/* pickup */	"Grenades",
 /* width */		2,
 		180,
 		NULL,
@@ -2465,9 +2484,9 @@ void SP_item_health (edict_t *self)
 		return;
 	}
 
-	self->model = "models/items/healing/stimpack/tris.md2";
-	self->count = 2;
-	SpawnItem (self, FindItem ("Health"));
+	self->model = "models/items/ammo/grenades/medium/tris.md2";
+	self->count = 1;
+	SpawnItem (self, FindItem ("Grenades"));
 	self->style = HEALTH_IGNORE_MAX;
 	gi.soundindex ("items/n_health.wav");
 }
@@ -2482,9 +2501,9 @@ void SP_item_health_small (edict_t *self)
 		return;
 	}
 
-	self->model = "models/items/healing/stimpack/tris.md2";
-	self->count = 2;
-	SpawnItem (self, FindItem ("Health"));
+	self->model = "models/items/ammo/grenades/medium/tris.md2";
+	self->count = 1;
+	SpawnItem (self, FindItem ("Grenades"));
 	self->style = HEALTH_IGNORE_MAX;
 	gi.soundindex ("items/s_health.wav");
 }
@@ -2499,9 +2518,9 @@ void SP_item_health_large (edict_t *self)
 		return;
 	}
 
-	self->model = "models/items/healing/stimpack/tris.md2";
-	self->count = 2;
-	SpawnItem (self, FindItem ("Health"));
+	self->model = "models/items/ammo/grenades/medium/tris.md2";
+	self->count = 1;
+	SpawnItem (self, FindItem ("Grenades"));
 	self->style = HEALTH_IGNORE_MAX;
 	gi.soundindex ("items/s_health.wav");
 }
@@ -2517,9 +2536,9 @@ void SP_item_health_mega (edict_t *self)
 		return;
 	}
 
-	self->model = "models/items/healing/stimpack/tris.md2";
-	self->count = 2;
-	SpawnItem (self, FindItem ("Health"));
+	self->model = "models/items/ammo/grenades/medium/tris.md2";
+	self->count = 1;
+	SpawnItem (self, FindItem ("Grenades"));
 	self->style = HEALTH_IGNORE_MAX;
 	gi.soundindex ("items/s_health.wav");
 }

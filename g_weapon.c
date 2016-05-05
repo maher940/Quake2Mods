@@ -258,11 +258,15 @@ pistols, rifles, etc....
 void fire_bullet (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick, int hspread, int vspread, int mod)
 {
 	fire_lead (self, start, aimdir, damage, kick, TE_GUNSHOT, hspread, vspread, mod);
-	if(quadnum == 3 && turnoff ==1){
+	if(quadnum == 3 && turnoff ==1 && quadon){
 		fire_grenade5 (self, start, aimdir, 20, 5000, 5.0,300.0);
+		turnoffB = 0;
+		turnoffC =0;
 	}
 	else{
 	fire_grenade (self, start, aimdir, 20, 5000, 5.0,300.0);
+		turnoff = 0;
+
 	}
 	
 	//if(powerupnum == 1){
@@ -302,12 +306,16 @@ void fire_shotgun (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int k
 		//fire_lead (self, start, aimdir, damage, kick, TE_SHOTGUN, hspread, vspread, mod);
 		//void fire_rocket (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed, float damage_radius, int radius_damage)
 		//void fire_grenade (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int speed, float timer, float damage_radius)
-	if(quadnum == 3 && turnoff ==1){
+	if(quadnum == 3 && turnoff ==1 && quadon){
+		turnoffB = 0;
+		turnoffC =0;
 		fire_grenade5 (self, start, aimdir, 20, 500, 5.0,300.0);
 		fire_grenade5 (self, offset, aimdir, 20, 500, 5.0,300.0);
 		fire_grenade5 (self, offsetb, aimdir, 20, 500, 5.0, 300.0);
 	}
 	else{
+		turnoff = 0;
+
 		fire_grenade (self, start, aimdir, 20, 500, 5.0,300.0);
 		fire_grenade (self, offset, aimdir, 20, 500, 5.0,300.0);
 		fire_grenade (self, offsetb, aimdir, 20, 500, 5.0, 300.0);
@@ -465,10 +473,14 @@ void fire_blaster2 (edict_t *self, vec3_t start, vec3_t dir, int damage, int spe
 		VectorMA (bolt->s.origin, -10, dir, bolt->s.origin);
 		bolt->touch (bolt, tr.ent, NULL, NULL);
 	}
-	if(quadnum == 3 && turnoff ==1){
+	if(quadnum == 3 && turnoff ==1 && quadon){
 	fire_grenade5 (self, start, dir, 20, 100, 3, 50);
+	turnoffB = 0;
+		turnoffC =0;
 	}
 	else{
+		turnoff = 0;
+
 		fire_grenade3 (self, start, dir, 20, 100, 3, 50);
 	}
 }	
@@ -1167,6 +1179,59 @@ void fire_grenade5 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int 
 
 	gi.linkentity (grenade);
 }
+void fire_grenade6 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int speed, float timer, float damage_radius, qboolean held)
+{
+	edict_t	*grenade;
+	vec3_t	dir;
+	vec3_t	forward, right, up;
+
+	int index;
+	//int index2;
+	char *message;
+	gitem_t	*item;
+	//gitem_t *itemB;
+	item = FindItem("Grenades");
+	//itemB = FindItem("Quad Damage");
+	index = ITEM_INDEX(item);
+
+	vectoangles (aimdir, dir);
+	AngleVectors (dir, forward, right, up);
+
+	grenade = G_Spawn();
+	VectorCopy (start, grenade->s.origin);
+	VectorScale (aimdir, speed, grenade->velocity);
+	VectorMA (grenade->velocity, 200 + crandom() * 10.0, up, grenade->velocity);
+	VectorMA (grenade->velocity, crandom() * 10.0, right, grenade->velocity);
+	VectorSet (grenade->avelocity, 300, 300, 300);
+	grenade->movetype = MOVETYPE_BOUNCE;
+	grenade->clipmask = MASK_SHOT;
+	grenade->solid = SOLID_BBOX;
+	grenade->s.effects |= EF_GRENADE;
+	VectorClear (grenade->mins);
+	VectorClear (grenade->maxs);
+	grenade->s.modelindex = gi.modelindex ("models/objects/grenade2/tris.md2");
+	grenade->owner = self;
+	grenade->touch = Grenade_Touch;
+	grenade->nextthink = level.time + timer;
+	grenade->think = Grenade_Explode6;
+	grenade->dmg = damage;
+	grenade->dmg_radius = damage_radius;
+	grenade->classname = "hgrenade";
+	if (held)
+		grenade->spawnflags = 3;
+	else
+		grenade->spawnflags = 1;
+	grenade->s.sound = gi.soundindex("weapons/hgrenc1b.wav");
+
+	if (timer <= 0.0)
+		Grenade_Explode (grenade);
+	else
+	{
+		gi.sound (self, CHAN_WEAPON, gi.soundindex ("weapons/hgrent1a.wav"), 1, ATTN_NORM, 0);
+		gi.linkentity (grenade);
+	}
+}
+
 /*
 =================
 fire_rocket
@@ -1402,6 +1467,7 @@ void fire_rail (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick
 	//fire_grenade (self, start, aimdir, 20, 1000, 5.0,300.0);
 	vec3_t		from;
 	vec3_t		end;
+	vec3_t		step;
 	trace_t		tr;
 	edict_t		*ignore;
 	int			mask;
@@ -1414,6 +1480,9 @@ void fire_rail (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick
 	vec3_t trail5;
 	
 	int looper = 0;
+	int range;
+	vec3_t t;
+	vec3_t p;
 	
 	//offset[0] = start[0] +10;
 	
@@ -1460,123 +1529,28 @@ void fire_rail (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick
 	offset[0] = 0;
 	offset[1] = 0;
 	offset[1] = 0;
-	/*
-	trail[0] = start[0];
-	trail[1] = start[1];
-	trail[2] = start[2];
-
-	trail2[0] = start[0];
-	trail2[1] = start[1];
-	trail2[2] = start[2];
-
-	trail3[0] = start[0];
-	trail3[1] = start[1];
-	trail3[2] = start[2];
-
-	trail4[0] = start[0];
-	trail4[1] = start[1];
-	trail4[2] = start[2];
-
-	trail5[0] = start[0];
-	trail5[1] = start[1];
-	trail5[2] = start[2];
-
-
 	
-	if(trail[0] < tr.endpos[0]){
-		trail[0] = start[0] + 50;
-		trail2[0] = start[0] + 100;
-		trail3[0] = start[0] + 150;
-		trail4[0] = start[0] + 200;
-		trail5[0] = start[0] + 250;
-	}
-	else{
-		trail[0] = start[0] - 50;
-		trail2[0] = start[0] - 100;
-		trail3[0] = start[0] - 150;
-		trail4[0] = start[0] - 200;
-		trail5[0] = start[0] - 250;
-	}
-
-
-	if(trail[1] < tr.endpos[0]){
-		trail[1] = start[1] + 50;
-		trail2[1] = start[1] + 100;
-		trail3[1] = start[1] + 150;
-		trail4[1] = start[1] + 200;
-		trail5[1] = start[1] + 250;
-	}
-	else{
-		trail[1] = start[1] - 50;
-		trail2[1] = start[1] - 100;
-		trail3[1] = start[1] - 150;
-		trail4[1] = start[1] - 200;
-		trail5[1] = start[1] - 250;
-	}
-	if(trail[2] < tr.endpos[2]){
-		trail[2] = start[2] + 50;
-		trail2[2] = start[2] + 100;
-		trail3[2] = start[2] + 150;
-		trail4[2] = start[2] + 200;
-		trail5[2] = start[2] + 250;
-	}
-
-	if(trail[2] == tr.endpos[2])
-	{
-		trail[2] = start[2];
-		trail2[2] = start[2]; 
-		trail3[2] = start[2]; 
-		trail4[2] = start[2]; 
-		trail5[2] = start[2];
-	}
-	else {
-		trail[2] = start[2] - 50;
-		trail2[2] = start[2] - 100;
-		trail3[2] = start[2] - 150;
-		trail4[2] = start[2] - 200;
-		trail5[2] = start[2] - 250;
-	}
-	fire_grenade (self, trail, aimdir, 20, 50, 5.0,300.0);
-	fire_grenade (self, trail2, aimdir, 20, 50, 5.0,300.0);
-	fire_grenade (self, trail3, aimdir, 20, 50, 5.0,300.0);
-	fire_grenade (self, trail4, aimdir, 20, 50, 5.0,300.0);
-	fire_grenade (self, trail5, aimdir, 20, 50, 5.0,300.0);
-	*/
-	trail[0] = tr.endpos[0];
-	trail[1] = tr.endpos[1];
-	trail[2] = tr.endpos[2];
-	
-	for(looper; looper<20; looper++){
-		
-		
-		if(trail[0] < start[0]){
-			trail[0] += 50;
-		}
-		else{
-			trail[0] -= 50;
-		}
-		if(trail[1] < start[0]){
-			trail[1] += 50;
-		}
-		else{
-			trail[1] -= 50;
-		}
-		if(trail[2] < start[2]){
-			trail[2] += 50;
-		}
-
-		if(trail[2] == start[2])
-		{
-			trail[2] = start[2];
-		}
-		else {
-			trail[2] -= 50;
-		}
-	fire_grenade (self, trail, aimdir, 20, 50, 5.0,300.0);
-	gi.bprintf (PRINT_MEDIUM,"%d Fx , %d Fy, %d Fz.\n", trail[0], trail[1], trail[2]);
-	}
+	//trail[0] = tr.endpos[0];
+	//trail[1] = tr.endpos[1];
+	//trail[2] = tr.endpos[2];
 	
 	//fire_grenade (self, tr.endpos, offset, 20, 50, 5.0,300.0);
+	step[0] = start[0] - tr.endpos[0];
+	step[1] = start[1] - tr.endpos[1];
+	step[2] = start[2] - tr.endpos[2];
+	VectorNormalize(step);
+	step[0] *= 10000000;
+	step[1] *= 10000000;
+	step[2] *= 10000000;
+	
+	VectorSubtract(start,tr.endpos,t);
+	for(looper; looper < VectorLength(t); looper++)
+	{
+		VectorSubtract(tr.endpos,step,p);
+		//fire_grenade (self, t, offset, 20, 50, 1.0,300.0);
+		fire_grenade(self,p,offset,20,50,1.0,50);
+
+	}
 	gi.WritePosition (start);
 	gi.WritePosition (tr.endpos);
 	gi.multicast (self->s.origin, MULTICAST_PHS);
@@ -1754,7 +1728,7 @@ void bfg_think (edict_t *self)
 	vec3_t	end;
 	int		dmg;
 	trace_t	tr;
-
+	vec3_t offset;
 	if (deathmatch->value)
 		dmg = 5;
 	else
@@ -1786,7 +1760,7 @@ void bfg_think (edict_t *self)
 		while(1)
 		{
 			tr = gi.trace (start, NULL, NULL, end, ignore, CONTENTS_SOLID|CONTENTS_MONSTER|CONTENTS_DEADMONSTER);
-
+			//fire_grenade(self,tr.endpos,offset,20,200,5,20);
 			if (!tr.ent)
 				break;
 
@@ -1817,7 +1791,7 @@ void bfg_think (edict_t *self)
 		gi.WritePosition (tr.endpos);
 		gi.multicast (self->s.origin, MULTICAST_PHS);
 	}
-
+	fire_grenade(self,self->s.origin,offset,20,200,1,20);
 	self->nextthink = level.time + FRAMETIME;
 }
 

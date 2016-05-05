@@ -733,18 +733,17 @@ void P_WorldEffects (void)
 	else{
 		powerupnum = 1;
 	}
+	/*
 	if(quad)
 	{
 		if(quadnum == 3){
 			turnoff = 1;
 		}
-		else{
-			turnoff = 0;
-		}
+		//else{
+		//	turnoff = 0;
+		//}
 	}
-	else{
-		turnoff = 0;
-	}
+	*/
 	//else{
 	//}
 	if (breather){
