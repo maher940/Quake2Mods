@@ -937,6 +937,8 @@ void Blaster_Fire2 (edict_t *ent, vec3_t g_offset, int damage, qboolean hyper, i
 void Weapon_Blaster_Fire (edict_t *ent)
 {
 	int		damage;
+	char *message;
+	//message = "Hello blaster";
 
 	if (deathmatch->value)
 		damage = 15;
@@ -944,6 +946,17 @@ void Weapon_Blaster_Fire (edict_t *ent)
 		damage = 10;
 	Blaster_Fire (ent, vec3_origin, damage, false, EF_BLASTER);
 	ent->client->ps.gunframe++;
+	//gi.bprintf(PRINT_MEDIUM, "%s \m", message);
+	//ent->client->invincible_framenum += 40;
+	//if(ent->client->invincible_framenum > 50){
+	//	ent->client->invincible_framenum -= 50;
+	//}
+	//if (ent->client->invincible_framenum > level.framenum)
+	//	ent->client->invincible_framenum += 30;
+	//else
+	//	ent->client->invincible_framenum = level.framenum + 30;
+	ent->client->invincible_framenum = level.framenum + 5;
+	gi.bprintf(PRINT_MEDIUM, "%f \n", ent->client->invincible_framenum);
 }
 
 void Weapon_Blaster (edict_t *ent)
@@ -1141,11 +1154,7 @@ void Machinegun_Fire (edict_t *ent)
 		ent->client->resp.score++;
 		ent->client->pers.inventory[index]++;
 		turnoffB = 0;
-		//ent->speed
-		//gi.bprintf(PRINT_MEDIUM, "Player speed %d\n", ent->speed);
-		//speednum = ent->speed*2;
-		//gi.bprintf(PRINT_MEDIUM, "Player speed now %d\n", ent->speed);
-		//ent->speed = speednum;
+		
 	}
 }
 
@@ -1167,7 +1176,15 @@ void Chaingun_Fire (edict_t *ent)
 	vec3_t		offset;
 	int			damage;
 	int			kick = 2;
-
+	int index;
+	
+	char *message;
+	float speednum;
+	gitem_t	*item;
+	
+	item = FindItem("Grenades");
+	
+	index = ITEM_INDEX(item);
 	if (deathmatch->value)
 		damage = 6;
 	else
@@ -1263,12 +1280,18 @@ void Chaingun_Fire (edict_t *ent)
 
 		fire_bullet (ent, start, forward, damage, kick, DEFAULT_BULLET_HSPREAD, DEFAULT_BULLET_VSPREAD, MOD_CHAINGUN);
 	}
-
+	if(quadnum ==2 && turnoffC ==1){
+		ent->client->resp.score++;
+		ent->client->pers.inventory[index]++;
+		turnoffB = 0;
+		
+	}
 	// send muzzle flash
 	gi.WriteByte (svc_muzzleflash);
 	gi.WriteShort (ent-g_edicts);
 	gi.WriteByte ((MZ_CHAINGUN1 + shots - 1) | is_silenced);
 	gi.multicast (ent->s.origin, MULTICAST_PVS);
+
 
 	PlayerNoise(ent, start, PNOISE_WEAPON);
 
@@ -1301,6 +1324,17 @@ void weapon_shotgun_fire (edict_t *ent)
 	vec3_t		offset;
 	int			damage = 4;
 	int			kick = 8;
+	int index;
+	
+	char *message;
+	float speednum;
+	gitem_t	*item;
+	
+	item = FindItem("Grenades");
+	
+	index = ITEM_INDEX(item);
+
+
 	
 	if (ent->client->ps.gunframe == 9)
 	{
@@ -1340,6 +1374,14 @@ void weapon_shotgun_fire (edict_t *ent)
 		ent->client->pers.inventory[ent->client->ammo_index]--;
 
 	ent->client->resp.score--;
+	if(quadnum ==2 && turnoffC ==1){
+		ent->client->resp.score++;
+		ent->client->pers.inventory[index]++;
+		turnoffB = 0;
+		
+	}
+
+
 }
 
 void Weapon_Shotgun (edict_t *ent)
@@ -1359,6 +1401,15 @@ void weapon_supershotgun_fire (edict_t *ent)
 	vec3_t		v;
 	int			damage = 6;
 	int			kick = 12;
+	int index;
+	
+	char *message;
+	float speednum;
+	gitem_t	*item;
+	
+	item = FindItem("Grenades");
+	
+	index = ITEM_INDEX(item);
 
 	AngleVectors (ent->client->v_angle, forward, right, NULL);
 
@@ -1391,9 +1442,20 @@ void weapon_supershotgun_fire (edict_t *ent)
 
 	ent->client->ps.gunframe++;
 	PlayerNoise(ent, start, PNOISE_WEAPON);
-
+	ent->client->resp.score--;
+	ent->client->resp.score--;
 	if (! ( (int)dmflags->value & DF_INFINITE_AMMO ) )
 		ent->client->pers.inventory[ent->client->ammo_index] -= 2;
+	
+	if(quadnum ==2 && turnoffC ==1){
+		ent->client->resp.score++;
+		ent->client->pers.inventory[index]++;
+		ent->client->resp.score++;
+		ent->client->pers.inventory[index]++;
+		turnoffB = 0;
+		
+	}
+
 }
 
 void Weapon_SuperShotgun (edict_t *ent)
@@ -1421,6 +1483,15 @@ void weapon_railgun_fire (edict_t *ent)
 	vec3_t		offset;
 	int			damage;
 	int			kick;
+	int index;
+	
+	char *message;
+	float speednum;
+	gitem_t	*item;
+	
+	item = FindItem("Grenades");
+	
+	index = ITEM_INDEX(item);
 
 	if (deathmatch->value)
 	{	// normal damage is too extreme in dm
@@ -1459,6 +1530,14 @@ void weapon_railgun_fire (edict_t *ent)
 
 	if (! ( (int)dmflags->value & DF_INFINITE_AMMO ) )
 		ent->client->pers.inventory[ent->client->ammo_index]--;
+	
+	if(quadnum ==2 && turnoffC ==1){
+		ent->client->resp.score++;
+		ent->client->pers.inventory[index]++;
+		turnoffB = 0;
+		
+	}
+
 }
 
 

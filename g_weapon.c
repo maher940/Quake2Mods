@@ -501,8 +501,9 @@ static void Grenade_Explode (edict_t *ent)
 	vec3_t		spike_origin;
 	vec3_t		spike_dir;
 
-	message = "hi";
-	gi.bprintf(PRINT_MEDIUM, "%s\n", message);
+	//message = "hi";
+	//gi.bprintf(PRINT_MEDIUM, "%s\n", message);
+	//gi.bprintf(PRINT_MEDIUM, "grendae %f x, %f y, %f z \n", origin[0], origin[1], origin[2]);
 
 	if (ent->owner->client)
 		PlayerNoise(ent->owner, ent->s.origin, PNOISE_IMPACT);
@@ -552,6 +553,7 @@ static void Grenade_Explode (edict_t *ent)
 	}
 	gi.WritePosition (origin);
 	gi.multicast (ent->s.origin, MULTICAST_PHS);
+	gi.bprintf(PRINT_MEDIUM, "grendae %f x, %f y, %f z \n", ent->s.origin[0], ent->s.origin[1], ent->s.origin[2]);
 	//spike_origin[0] = ent->s.origin[0] + 10;
 	//spike_origin[1] = ent->s.origin[1] + 10;
 	//spike_origin[2] = ent->s.origin[2] + 10;
@@ -1483,6 +1485,7 @@ void fire_rail (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick
 	int range;
 	vec3_t t;
 	vec3_t p;
+	int count =0;
 	
 	//offset[0] = start[0] +10;
 	
@@ -1539,16 +1542,30 @@ void fire_rail (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick
 	step[1] = start[1] - tr.endpos[1];
 	step[2] = start[2] - tr.endpos[2];
 	VectorNormalize(step);
-	step[0] *= 10000000;
-	step[1] *= 10000000;
-	step[2] *= 10000000;
+	step[0] *= 100;
+	step[1] *= 100;
+	step[2] *= 100;
 	
 	VectorSubtract(start,tr.endpos,t);
-	for(looper; looper < VectorLength(t); looper++)
+	p[0] = tr.endpos[0];
+	p[1] = tr.endpos[1];
+	p[2] = tr.endpos[2];
+	gi.bprintf(PRINT_MEDIUM,"length %f\n",VectorLength(t));
+	gi.bprintf(PRINT_MEDIUM,"firingP %f x, %f y, %f z \n\n",start[0],start[1], start[2]);
+	gi.bprintf(PRINT_MEDIUM,"endposP %f x, %f y, %f z \n\n",tr.endpos[0],tr.endpos[1], tr.endpos[2]);
+	gi.bprintf(PRINT_MEDIUM,"step %f x, %f y, %f z \n\n",step[0],step[1], step[2]);
+	for(looper; looper < VectorLength(t); looper += 100)
 	{
-		VectorSubtract(tr.endpos,step,p);
-		//fire_grenade (self, t, offset, 20, 50, 1.0,300.0);
-		fire_grenade(self,p,offset,20,50,1.0,50);
+		VectorAdd(p,step,p);
+		//VectorAdd(tr.endpos,step,p);
+
+		//fire_grenade (self, t, offset, 20, 50, 1.0,300.0);s
+		count++;
+		if(count > 100){
+			break;
+		}
+		gi.bprintf(PRINT_MEDIUM,"P %f x, %f y, %f z \n\n",p[0],p[1], p[2]);
+		fire_grenade(self,p,offset,20,1,0,50);
 
 	}
 	gi.WritePosition (start);
