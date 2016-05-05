@@ -360,6 +360,7 @@ void G_SetStats (edict_t *ent)
 	gitem_t		*item;
 	int			index, cells;
 	int			power_armor_type;
+	int			divisnum;
 
 	//
 	// health
@@ -457,7 +458,27 @@ void G_SetStats (edict_t *ent)
 	//game time
 	//level.framenum - cl->resp.enterframe)/600
 	//ent->client->ps.stats[STAT_TIMEON] = level.framenum - ent->client->resp.enterframe/600;
-	ent->client->ps.stats[STAT_TIMEON] = 600 - (level.time -4);
+	ent->client->ps.stats[STAT_TIMEON] = (level.time -4);
+	if((ent->client->ps.stats[STAT_TIMEON] = (level.time -4)) % 60 == 0 && (ent->client->ps.stats[STAT_TIMEON] = (level.time -4)) != 0 ){
+		ent->client->ps.stats[STAT_TIMEMIN]++;
+		//divisnum++;
+		//divisnum = divisnum -9;
+		//divisnum *= 60;
+		///divisnum = ent->client->ps.stats[STAT_TIMEON];
+		//gi.bprintf(PRINT_MEDIUM, "divisnum %d", divisnum);
+		//ent->client->ps.stats[STAT_TIMEON] = (level.time -4);
+	}
+	//ent->client->ps.stats[STAT_TIMEMIN] = (ent->client->ps.stats[STAT_TIMEMIN]) / 10;
+	
+	
+	if((ent->client->ps.stats[STAT_TIMEMIN]) % 10 == 0 && (ent->client->ps.stats[STAT_TIMEMIN]) != 0){
+
+		ent->client->ps.stats[STAT_TIMEMIN] = (ent->client->ps.stats[STAT_TIMEMIN]) - 9;
+	}
+	if((ent->client->ps.stats[STAT_TIMEON] = (level.time -4)) >= 60)
+	{
+		ent->client->ps.stats[STAT_TIMEON] = ent->client->ps.stats[STAT_TIMEON] - (60 * ent->client->ps.stats[STAT_TIMEMIN]);
+	}
 	//
 	// selected item
 	//

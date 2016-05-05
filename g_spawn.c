@@ -766,6 +766,10 @@ char *dm_statusbar =
 "	xr	-200 "
 "	num	3 18 "
 "	xv	100 "
+// timer mins
+"	xr	-250 "
+"	num	3 19 "
+"	xv	100 "
 ;
 
 
