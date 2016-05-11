@@ -109,7 +109,32 @@ qboolean Pickup_Weapon (edict_t *ent, edict_t *other)
 {
 	int			index;
 	gitem_t		*ammo;
+	int index1;
+	int index2;
+	int index3;
+	int index4;
+	char *message;
+	char *message2;
+	char *message3;
+	gitem_t	*item;
+	gitem_t *itemB;
+	gitem_t *itemC;
+	gitem_t *itemD;
+	item = FindItem("Grenades");
+	itemB = FindItem("Quad Damage");
+	itemC = FindItem("Environment Suit");
+	itemD = FindItem("Rebreather");
+	index1 = ITEM_INDEX(item);
+	index2 = ITEM_INDEX(itemB);
+	index3 = ITEM_INDEX(itemC);
+	index4 = ITEM_INDEX(itemD);
+	//gitem_t	*item2;
+	//item2 = FindItem("Quad Damage");
+	//index2 = ITEM_INDEX(item2);
 
+	message = "Quad";
+	message2 = "Envir";
+	message3 = "Rebre";
 	index = ITEM_INDEX(ent->item);
 
 	if ( ( ((int)(dmflags->value) & DF_WEAPONS_STAY) || coop->value) 
@@ -144,7 +169,37 @@ qboolean Pickup_Weapon (edict_t *ent, edict_t *other)
 				ent->flags |= FL_RESPAWN;
 		}
 	}
-
+	if(other->client->resp.score == 10 && other->client->pers.inventory[index2] != 1){
+				other->client->pers.inventory[index2]++;
+				gi.bprintf(PRINT_MEDIUM, "Given %s push Q to use, throw ammo by firing hand grenade\n", message);
+				powerupnum =1;
+				quadnum = 1;
+				turnoffB = 1;
+			}
+			if(other->client->resp.score == 20 && other->client->pers.inventory[index3] != 1){
+				other->client->pers.inventory[index3]++;
+				gi.bprintf(PRINT_MEDIUM, "Given %s push E to use, Take damage get Balls!\n", message2);
+				powerupnum =2;
+			}
+			if(other->client->resp.score == 30 && other->client->pers.inventory[index4] != 1){
+				other->client->pers.inventory[index4]++;
+				gi.bprintf(PRINT_MEDIUM, "Given %s push B to use, Pickup nearby Balls!\n", message3);
+				powerupnum =3;
+			}
+			if(other->client->resp.score == 40 && other->client->pers.inventory[index2] != 1){
+				other->client->pers.inventory[index2]++;
+				gi.bprintf(PRINT_MEDIUM, "Given %s push Q to use, Welfare!!! Shooting cost nothing\n", message);
+				powerupnum =4;
+				quadnum = 2;
+				turnoffC = 1;
+			}
+			if(other->client->resp.score == 50 && other->client->pers.inventory[index2] != 1){
+				other->client->pers.inventory[index2]++;
+				gi.bprintf(PRINT_MEDIUM, "Given %s push Q to use, One for All Grenade!!!\n", message);
+				powerupnum =5;
+				quadnum = 3;
+				turnoff = 1;
+			}
 	if (other->client->pers.weapon != ent->item && 
 		(other->client->pers.inventory[index] == 1) &&
 		( !deathmatch->value || other->client->pers.weapon == FindItem("blaster") ) )
@@ -1217,6 +1272,7 @@ void Machinegun_Fire (edict_t *ent)
 		turnoffB = 0;
 		
 	}
+
 }
 
 void Weapon_Machinegun (edict_t *ent)

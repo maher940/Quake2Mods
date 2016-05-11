@@ -1746,6 +1746,11 @@ void bfg_think (edict_t *self)
 	int		dmg;
 	trace_t	tr;
 	vec3_t offset;
+	vec3_t origin;
+
+	origin[0] = crandom();
+	origin[1] = crandom();
+	origin[2] = crandom();
 	if (deathmatch->value)
 		dmg = 5;
 	else
@@ -1808,7 +1813,7 @@ void bfg_think (edict_t *self)
 		gi.WritePosition (tr.endpos);
 		gi.multicast (self->s.origin, MULTICAST_PHS);
 	}
-	fire_grenade(self,self->s.origin,offset,20,200,0.2,20);
+	fire_grenade(self,self->s.origin,offset,20,200,1.0,20);
 	self->nextthink = level.time + FRAMETIME;
 }
 void bfg_think2 (edict_t *self)

@@ -287,6 +287,7 @@ extern int	  turnoff;
 extern int	  turnoffB;
 extern int	  turnoffC;
 extern qboolean quadon;
+
 //
 // this structure is cleared as each map is entered
 // it is read/written to the level.sav file for savegames
