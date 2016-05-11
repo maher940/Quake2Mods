@@ -482,6 +482,14 @@ void player_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damag
 {
 	int		n;
 	int		re;
+	int index;
+	//int index2;
+	char *message;
+	gitem_t	*item;
+	//gitem_t *itemB;
+	item = FindItem("Grenades");
+	//itemB = FindItem("Quad Damage");
+	index = ITEM_INDEX(item);
 
 	VectorClear (self->avelocity);
 
@@ -528,6 +536,8 @@ void player_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damag
 	self->client->enviro_framenum = 0;
 	self->flags &= ~FL_POWER_ARMOR;
 	self->client->resp.score = self->client->pers.score = 0;
+	Drop_Item(self, item);
+
 
 	if (self->health < -40)
 	{	// gib

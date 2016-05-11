@@ -339,7 +339,7 @@ void Use_Quad (edict_t *ent, gitem_t *item)
 	}
 	else
 	{
-		timeout = 300;
+		timeout = 100;
 	}
 
 	if (ent->client->quad_framenum > level.framenum)
@@ -361,9 +361,9 @@ void Use_Breather (edict_t *ent, gitem_t *item)
 	ValidateSelectedItem (ent);
 
 	if (ent->client->breather_framenum > level.framenum)
-		ent->client->breather_framenum += 300;
+		ent->client->breather_framenum += 100;
 	else
-		ent->client->breather_framenum = level.framenum + 300;
+		ent->client->breather_framenum = level.framenum + 100;
 
 //	gi.sound(ent, CHAN_ITEM, gi.soundindex("items/damage.wav"), 1, ATTN_NORM, 0);
 }
@@ -376,9 +376,9 @@ void Use_Envirosuit (edict_t *ent, gitem_t *item)
 	ValidateSelectedItem (ent);
 
 	if (ent->client->enviro_framenum > level.framenum)
-		ent->client->enviro_framenum += 300;
+		ent->client->enviro_framenum += 100;
 	else
-		ent->client->enviro_framenum = level.framenum + 300;
+		ent->client->enviro_framenum = level.framenum + 100;
 
 //	gi.sound(ent, CHAN_ITEM, gi.soundindex("items/damage.wav"), 1, ATTN_NORM, 0);
 }
@@ -516,35 +516,35 @@ qboolean Pickup_Ammo (edict_t *ent, edict_t *other)
 		count = ent->count;
 		if(ent->item->tag == AMMO_GRENADES){
 			other->client->resp.score++;
-			if(other->client->resp.score == 10){
+			if(other->client->resp.score == 10 && other->client->pers.inventory[index2] != 1){
 				other->client->pers.inventory[index2]++;
-				gi.bprintf(PRINT_MEDIUM, "HELLO %s\n", message);
+				gi.bprintf(PRINT_MEDIUM, "Given %s push Q to use, throw ammo by firing hand grenade\n", message);
 				powerupnum =1;
 				quadnum = 1;
 				turnoffB = 1;
 				
 			}
-			if(other->client->resp.score == 12){
+			if(other->client->resp.score == 12 && other->client->pers.inventory[index3] != 1){
 				other->client->pers.inventory[index3]++;
-				gi.bprintf(PRINT_MEDIUM, "Hello %s\n", message2);
+				gi.bprintf(PRINT_MEDIUM, "Given %s push E to use, Take damage get Balls!\n", message2);
 				powerupnum =2;
 			}
-			if(other->client->resp.score == 5){
+			if(other->client->resp.score == 5 && other->client->pers.inventory[index4] != 1){
 				other->client->pers.inventory[index4]++;
-				gi.bprintf(PRINT_MEDIUM, "Hello %s\n", message3);
+				gi.bprintf(PRINT_MEDIUM,  "Given %s push R to use, Pickup nearby Balls!\n", message3);
 				powerupnum =3;
 			}
-			if(other->client->resp.score == 11){
+			if(other->client->resp.score == 11 && other->client->pers.inventory[index2] != 1){
 				other->client->pers.inventory[index2]++;
-				gi.bprintf(PRINT_MEDIUM, "Hello2 %s\n", message);
+				gi.bprintf(PRINT_MEDIUM, "Given %s push Q to use, Welfare!!! Shooting cost nothing\n", message);
 				powerupnum =4;
 				quadnum = 2;
 				
 				turnoffC = 1;
 			}
-			if(other->client->resp.score == 20){
+			if(other->client->resp.score == 20 && other->client->pers.inventory[index2] != 1){
 				other->client->pers.inventory[index2]++;
-				gi.bprintf(PRINT_MEDIUM, "Hello3 %s\n", message);
+				gi.bprintf(PRINT_MEDIUM, "Given %s push Q to use, One for All Grenade!!!\n", message);
 				powerupnum =5;
 				quadnum = 3;
 				turnoff = 1;
@@ -553,34 +553,34 @@ qboolean Pickup_Ammo (edict_t *ent, edict_t *other)
 		if(ent->item->tag != AMMO_GRENADES){
 			other->client->pers.inventory[index]++;
 			other->client->resp.score++;
-			if(other->client->resp.score == 10){
+			if(other->client->resp.score == 10 && other->client->pers.inventory[index2] != 1){
 				other->client->pers.inventory[index2]++;
-				gi.bprintf(PRINT_MEDIUM, "HELLO %s\n", message);
+				gi.bprintf(PRINT_MEDIUM, "Given %s push Q to use, throw ammo by firing hand grenade\n", message);
 				powerupnum =1;
 				quadnum = 1;
 				turnoffB = 1;
 
 			}
-			if(other->client->resp.score == 12){
+			if(other->client->resp.score == 12 && other->client->pers.inventory[index3] != 1){
 				other->client->pers.inventory[index3]++;
-				gi.bprintf(PRINT_MEDIUM, "Hello %s\n", message2);
+				gi.bprintf(PRINT_MEDIUM, "Given %s push E to use, Take damage get Balls!\n", message2);
 				powerupnum =2;
 			}
-			if(other->client->resp.score == 5){
+			if(other->client->resp.score == 5 && other->client->pers.inventory[index4] != 1){
 				other->client->pers.inventory[index4]++;
-				gi.bprintf(PRINT_MEDIUM, "Hello %s\n", message3);
+				gi.bprintf(PRINT_MEDIUM, "Given %s push R to use, Pickup nearby Balls!\n", message3);
 				powerupnum =3;
 			}
-			if(other->client->resp.score == 11){
+			if(other->client->resp.score == 11 && other->client->pers.inventory[index2] != 1){
 				other->client->pers.inventory[index2]++;
-				gi.bprintf(PRINT_MEDIUM, "Hello2 %s\n", message);
+				gi.bprintf(PRINT_MEDIUM, "Given %s push Q to use, Welfare!!! Shooting cost nothing\n", message);
 				powerupnum =4;
 				quadnum = 2;
 				turnoffC = 1;
 			}
-			if(other->client->resp.score == 20){
+			if(other->client->resp.score == 20 && other->client->pers.inventory[index2] != 1){
 				other->client->pers.inventory[index2]++;
-				gi.bprintf(PRINT_MEDIUM, "Hello3 %s\n", message);
+				gi.bprintf(PRINT_MEDIUM,"Given %s push Q to use, One for All Grenade!!!\n", message);
 				powerupnum =5;
 				quadnum = 3;
 				turnoff = 1;
@@ -592,33 +592,33 @@ qboolean Pickup_Ammo (edict_t *ent, edict_t *other)
 		count = ent->item->quantity;
 		if(ent->item->tag == AMMO_GRENADES){
 			other->client->resp.score++;
-			if(other->client->resp.score == 10){
+			if(other->client->resp.score == 10 && other->client->pers.inventory[index2] != 1){
 				other->client->pers.inventory[index2]++;
-				gi.bprintf(PRINT_MEDIUM, "HELLO %s\n", message);
+				gi.bprintf(PRINT_MEDIUM,"Given %s push Q to use, throw ammo by firing hand grenade\n", message);
 				powerupnum =1;
 				quadnum = 1;
 				turnoffB = 1;
 			}
-			if(other->client->resp.score == 12){
+			if(other->client->resp.score == 12 && other->client->pers.inventory[index3] != 1){
 				other->client->pers.inventory[index3]++;
-				gi.bprintf(PRINT_MEDIUM, "Hello %s\n", message2);
+				gi.bprintf(PRINT_MEDIUM, "Given %s push E to use, Take damage get Balls!\n", message2);
 				powerupnum =2;
 			}
-			if(other->client->resp.score == 5){
+			if(other->client->resp.score == 5 && other->client->pers.inventory[index4] != 1){
 				other->client->pers.inventory[index4]++;
-				gi.bprintf(PRINT_MEDIUM, "Hello %s\n", message3);
+				gi.bprintf(PRINT_MEDIUM, "Given %s push R to use, Pickup nearby Balls!\n", message3);
 				powerupnum =3;
 			}
-			if(other->client->resp.score == 11){
+			if(other->client->resp.score == 11 && other->client->pers.inventory[index2] != 1){
 				other->client->pers.inventory[index2]++;
-				gi.bprintf(PRINT_MEDIUM, "Hello2 %s\n", message);
+				gi.bprintf(PRINT_MEDIUM, "Given %s push Q to use, Welfare!!! Shooting cost nothing\n", message);
 				powerupnum =4;
 				quadnum = 2;
 				turnoffC = 1;
 			}
-			if(other->client->resp.score == 20){
+			if(other->client->resp.score == 20 && other->client->pers.inventory[index2] != 1){
 				other->client->pers.inventory[index2]++;
-				gi.bprintf(PRINT_MEDIUM, "Hello3 %s\n", message);
+				gi.bprintf(PRINT_MEDIUM, "Given %s push Q to use, One for All Grenade!!!\n", message);
 				powerupnum =5;
 				quadnum = 3;
 				turnoff = 1;
@@ -627,33 +627,33 @@ qboolean Pickup_Ammo (edict_t *ent, edict_t *other)
 		if(ent->item->tag != AMMO_GRENADES){
 			other->client->pers.inventory[index]++;
 			other->client->resp.score++;
-			if(other->client->resp.score == 10){
+			if(other->client->resp.score == 10 && other->client->pers.inventory[index2] != 1){
 				other->client->pers.inventory[index2]++;
-				gi.bprintf(PRINT_MEDIUM, "HELLO %s\n", message);
+				gi.bprintf(PRINT_MEDIUM, "Given %s push Q to use, throw ammo by firing hand grenade\n", message);
 				powerupnum =1;
 				quadnum = 1;
 				turnoffB = 1;
 			}
-			if(other->client->resp.score == 12){
+			if(other->client->resp.score == 12 && other->client->pers.inventory[index3] != 1){
 				other->client->pers.inventory[index3]++;
-				gi.bprintf(PRINT_MEDIUM, "Hello %s\n", message2);
+				gi.bprintf(PRINT_MEDIUM, "Given %s push E to use, Take damage get Balls!\n", message2);
 				powerupnum =2;
 			}
-			if(other->client->resp.score == 5){
+			if(other->client->resp.score == 5 && other->client->pers.inventory[index4] != 1){
 				other->client->pers.inventory[index4]++;
-				gi.bprintf(PRINT_MEDIUM, "Hello %s\n", message3);
+				gi.bprintf(PRINT_MEDIUM, "Given %s push R to use, Pickup nearby Balls!\n", message3);
 				powerupnum =3;
 			}
-			if(other->client->resp.score == 11){
+			if(other->client->resp.score == 11 && other->client->pers.inventory[index2] != 1){
 				other->client->pers.inventory[index2]++;
-				gi.bprintf(PRINT_MEDIUM, "Hello2 %s\n", message);
+				gi.bprintf(PRINT_MEDIUM, "Given %s push Q to use, Welfare!!! Shooting cost nothing\n", message);
 				powerupnum =4;
 				quadnum = 2;
 				turnoffC = 1;
 			}
-			if(other->client->resp.score == 20){
+			if(other->client->resp.score == 20 && other->client->pers.inventory[index2] != 1){
 				other->client->pers.inventory[index2]++;
-				gi.bprintf(PRINT_MEDIUM, "Hello3 %s\n", message);
+				gi.bprintf(PRINT_MEDIUM, "Given %s push Q to use, One for All Grenade!!!\n", message);
 				powerupnum =5;
 				quadnum = 3;
 				turnoff = 1;
@@ -774,33 +774,33 @@ qboolean Pickup_Health (edict_t *ent, edict_t *other)
 	message3 = "Rebre";
 	other->client->pers.inventory[index]++;
 	other->client->resp.score++;
-		if(other->client->resp.score == 10){
+		if(other->client->resp.score == 10 && other->client->pers.inventory[index2] != 1){
 				other->client->pers.inventory[index2]++;
-				gi.bprintf(PRINT_MEDIUM, "HELLO %s\n", message);
+				gi.bprintf(PRINT_MEDIUM, "Given %s push Q to use, throw ammo by firing hand grenade\n", message);
 				powerupnum =1;
 				quadnum = 1;
 				turnoffB = 1;
 			}
-			if(other->client->resp.score == 12){
+			if(other->client->resp.score == 12 && other->client->pers.inventory[index3] != 1){
 				other->client->pers.inventory[index3]++;
-				gi.bprintf(PRINT_MEDIUM, "Hello %s\n", message2);
+				gi.bprintf(PRINT_MEDIUM, "Given %s push E to use, Take damage get Balls!\n", message2);
 				powerupnum =2;
 			}
-			if(other->client->resp.score == 5){
+			if(other->client->resp.score == 5 && other->client->pers.inventory[index4] != 1){
 				other->client->pers.inventory[index4]++;
-				gi.bprintf(PRINT_MEDIUM, "Hello %s\n", message3);
+				gi.bprintf(PRINT_MEDIUM, "Given %s push R to use, Pickup nearby Balls!\n", message3);
 				powerupnum =3;
 			}
-			if(other->client->resp.score == 11){
+			if(other->client->resp.score == 11 && other->client->pers.inventory[index2] != 1){
 				other->client->pers.inventory[index2]++;
-				gi.bprintf(PRINT_MEDIUM, "Hello2 %s\n", message);
+				gi.bprintf(PRINT_MEDIUM, "Given %s push Q to use, Welfare!!! Shooting cost nothing\n", message);
 				powerupnum =4;
 				quadnum = 2;
 				turnoffC = 1;
 			}
-			if(other->client->resp.score == 20){
+			if(other->client->resp.score == 20 && other->client->pers.inventory[index2] != 1){
 				other->client->pers.inventory[index2]++;
-				gi.bprintf(PRINT_MEDIUM, "Hello3 %s\n", message);
+				gi.bprintf(PRINT_MEDIUM,"Given %s push Q to use, One for All Grenade!!!\n", message);
 				powerupnum =5;
 				quadnum = 3;
 				turnoff = 1;
@@ -891,33 +891,33 @@ qboolean Pickup_Armor (edict_t *ent, edict_t *other)
 	message3 = "Rebre";
 	other->client->pers.inventory[index]++;
 	other->client->resp.score++;
-		if(other->client->resp.score == 10){
+		if(other->client->resp.score == 10 && other->client->pers.inventory[index2] != 1){
 				other->client->pers.inventory[index2]++;
-				gi.bprintf(PRINT_MEDIUM, "HELLO %s\n", message);
+				gi.bprintf(PRINT_MEDIUM, "Given %s push Q to use, throw ammo by firing hand grenade\n", message);
 				powerupnum =1;
 				quadnum = 1;
 				turnoffB = 1;
 			}
-			if(other->client->resp.score == 12){
+			if(other->client->resp.score == 12 && other->client->pers.inventory[index3] != 1){
 				other->client->pers.inventory[index3]++;
-				gi.bprintf(PRINT_MEDIUM, "Hello %s\n", message2);
+				gi.bprintf(PRINT_MEDIUM, "Given %s push E to use, Take damage get Balls!\n", message2);
 				powerupnum =2;
 			}
-			if(other->client->resp.score == 5){
+			if(other->client->resp.score == 5 && other->client->pers.inventory[index4] != 1){
 				other->client->pers.inventory[index4]++;
-				gi.bprintf(PRINT_MEDIUM, "Hello %s\n", message3);
+				gi.bprintf(PRINT_MEDIUM, "Given %s push R to use, Pickup nearby Balls!\n", message3);
 				powerupnum =3;
 			}
-			if(other->client->resp.score == 11){
+			if(other->client->resp.score == 11 && other->client->pers.inventory[index2] != 1){
 				other->client->pers.inventory[index2]++;
-				gi.bprintf(PRINT_MEDIUM, "Hello2 %s\n", message);
+				gi.bprintf(PRINT_MEDIUM, "Given %s push Q to use, Welfare!!! Shooting cost nothing\n", message);
 				powerupnum =4;
 				quadnum = 2;
 				turnoffC = 1;
 			}
-			if(other->client->resp.score == 20){
+			if(other->client->resp.score == 20 && other->client->pers.inventory[index2] != 1){
 				other->client->pers.inventory[index2]++;
-				gi.bprintf(PRINT_MEDIUM, "Hello3 %s\n", message);
+				gi.bprintf(PRINT_MEDIUM, "Given %s push Q to use, One for All Grenade!!!\n", message);
 				powerupnum =5;
 				quadnum = 3;
 				turnoff = 1;
@@ -1203,8 +1203,8 @@ qboolean *GetThis_Item( edict_t *player, edict_t *item){
 	
 	//gitem_t *tempi;
 	char *message;
-	message = "Hello";
-	gi.bprintf(PRINT_MEDIUM, "%s\n", message);
+	//message = "Hello";
+	//gi.bprintf(PRINT_MEDIUM, "%s\n", message);
 	//temp->classname = item->classname;
 	//temp->item = item;
 	//temp->owner = player;
@@ -1219,8 +1219,8 @@ qboolean *GetThis_Health(edict_t *player, edict_t *item){
 	//edict_t *temp;
 	//gitem_t *tempi;
 	char *message;
-	message = "Hello3";
-	gi.bprintf(PRINT_MEDIUM, "%s\n", message);
+	//message = "Hello3";
+	//gi.bprintf(PRINT_MEDIUM, "%s\n", message);
 	//temp->classname = item->classname;
 	//temp->item = item;
 	//temp->owner = player;
@@ -1236,8 +1236,8 @@ qboolean *GetThis_Armor(edict_t *player, edict_t *item){
 	
 	//gitem_t *tempi;
 	char *message;
-	message = "Hello2";
-	gi.bprintf(PRINT_MEDIUM, "%s\n", message);
+	//message = "Hello2";
+	//gi.bprintf(PRINT_MEDIUM, "%s\n", message);
 	//temp->classname = item->classname;
 	//temp->item = item;
 	//temp->owner = player;

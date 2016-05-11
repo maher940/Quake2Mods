@@ -581,7 +581,7 @@ void weapon_grenade_fire (edict_t *ent, qboolean held)
 	ent->client->resp.score--;
 	//Drop_Ammo(ent,item);
 	
-if(quadnum ==2 && turnoffC ==1){
+if(quadnum ==2 && turnoffC ==1 && quadon){
 		ent->client->resp.score++;
 		ent->client->pers.inventory[index]++;
 		turnoffB = 0;
@@ -606,7 +606,7 @@ if(quadnum ==2 && turnoffC ==1){
 		fire_grenade2 (ent, start, forward, damage, speed, timer, radius, held);
 		
 	}
-	gi.bprintf(PRINT_MEDIUM, "%d turnoffnum", turnoff);
+	//gi.bprintf(PRINT_MEDIUM, "%d turnoffnum", turnoff);
 
 	if (! ( (int)dmflags->value & DF_INFINITE_AMMO ) )
 		ent->client->pers.inventory[ent->client->ammo_index]--;
@@ -801,7 +801,7 @@ void weapon_grenadelauncher_fire (edict_t *ent)
 
 	if (! ( (int)dmflags->value & DF_INFINITE_AMMO ) )
 		ent->client->pers.inventory[ent->client->ammo_index]--;
-	if(quadnum ==2 && turnoffC ==1){
+	if(quadnum ==2 && turnoffC ==1 && quadon){
 		ent->client->resp.score++;
 		ent->client->pers.inventory[index]++;
 		turnoffB = 0;
@@ -864,8 +864,8 @@ void Weapon_RocketLauncher_Fire (edict_t *ent)
 	globalupX = up[0];
 	globalupY = up[1];
 	globalupZ = up[2];
-	gi.bprintf (PRINT_MEDIUM,"%d x , %d y, %d z.\n", up[0], up[1], up[2]);
-	gi.bprintf (PRINT_MEDIUM,"%d Fx , %d Fy, %d Fz.\n", globalupX, globalupY, globalupZ);
+	//gi.bprintf (PRINT_MEDIUM,"%d x , %d y, %d z.\n", up[0], up[1], up[2]);
+	//gi.bprintf (PRINT_MEDIUM,"%d Fx , %d Fy, %d Fz.\n", globalupX, globalupY, globalupZ);
 	//goingup = up;
 	VectorScale (forward, -2, ent->client->kick_origin);
 	ent->client->kick_angles[0] = -1;
@@ -891,7 +891,7 @@ void Weapon_RocketLauncher_Fire (edict_t *ent)
 
 	if (! ( (int)dmflags->value & DF_INFINITE_AMMO ) )
 		ent->client->pers.inventory[ent->client->ammo_index]--;
-	if(quadnum ==2 && turnoffC ==1){
+	if(quadnum ==2 && turnoffC ==1 && quadon){
 		ent->client->resp.score++;
 		ent->client->pers.inventory[index]++;
 		turnoffB = 0;
@@ -984,9 +984,9 @@ void Weapon_Blaster_Fire (edict_t *ent)
 	//message = "Hello blaster";
 
 	if (deathmatch->value)
-		damage = 15;
+		damage = 5;
 	else
-		damage = 10;
+		damage = 5;
 	Blaster_Fire (ent, vec3_origin, damage, false, EF_BLASTER);
 	ent->client->ps.gunframe++;
 	//gi.bprintf(PRINT_MEDIUM, "%s \m", message);
@@ -999,7 +999,7 @@ void Weapon_Blaster_Fire (edict_t *ent)
 	//else
 	//	ent->client->invincible_framenum = level.framenum + 30;
 	ent->client->invincible_framenum = level.framenum + 5;
-	gi.bprintf(PRINT_MEDIUM, "%f \n", ent->client->invincible_framenum);
+	//gi.bprintf(PRINT_MEDIUM, "%f \n", ent->client->invincible_framenum);
 }
 
 void Weapon_Blaster (edict_t *ent)
@@ -1087,7 +1087,7 @@ void Weapon_HyperBlaster_Fire (edict_t *ent)
 		gi.sound(ent, CHAN_AUTO, gi.soundindex("weapons/hyprbd1a.wav"), 1, ATTN_NORM, 0);
 		ent->client->weapon_sound = 0;
 	}
-	if(quadnum ==2 && turnoffC ==1){
+	if(quadnum ==2 && turnoffC ==1 && quadon){
 		ent->client->resp.score++;
 		ent->client->pers.inventory[index]++;
 		turnoffB = 0;
@@ -1211,7 +1211,7 @@ void Machinegun_Fire (edict_t *ent)
 		ent->client->anim_end = FRAME_attack8;
 	}
 	ent->client->resp.score--;
-	if(quadnum ==2 && turnoffC ==1){
+	if(quadnum ==2 && turnoffC ==1 && quadon){
 		ent->client->resp.score++;
 		ent->client->pers.inventory[index]++;
 		turnoffB = 0;
@@ -1435,7 +1435,7 @@ void weapon_shotgun_fire (edict_t *ent)
 		ent->client->pers.inventory[ent->client->ammo_index]--;
 
 	ent->client->resp.score--;
-	if(quadnum ==2 && turnoffC ==1){
+	if(quadnum ==2 && turnoffC ==1 && quadon){
 		ent->client->resp.score++;
 		ent->client->pers.inventory[index]++;
 		turnoffB = 0;
@@ -1508,7 +1508,7 @@ void weapon_supershotgun_fire (edict_t *ent)
 	if (! ( (int)dmflags->value & DF_INFINITE_AMMO ) )
 		ent->client->pers.inventory[ent->client->ammo_index] -= 2;
 	
-	if(quadnum ==2 && turnoffC ==1){
+	if(quadnum ==2 && turnoffC ==1 && quadon){
 		ent->client->resp.score++;
 		ent->client->pers.inventory[index]++;
 		ent->client->resp.score++;
@@ -1592,7 +1592,7 @@ void weapon_railgun_fire (edict_t *ent)
 	if (! ( (int)dmflags->value & DF_INFINITE_AMMO ) )
 		ent->client->pers.inventory[ent->client->ammo_index]--;
 	
-	if(quadnum ==2 && turnoffC ==1){
+	if(quadnum ==2 && turnoffC ==1 && quadon){
 		ent->client->resp.score++;
 		ent->client->pers.inventory[index]++;
 		turnoffB = 0;
@@ -1647,7 +1647,7 @@ void weapon_bfg_fire (edict_t *ent)
 
 	// cells can go down during windup (from power armor hits), so
 	// check again and abort firing if we don't have enough now
-	if (ent->client->pers.inventory[ent->client->ammo_index] < 50)
+	if (ent->client->pers.inventory[ent->client->ammo_index] < 10)
 	{
 		ent->client->ps.gunframe++;
 		return;
@@ -1674,7 +1674,7 @@ void weapon_bfg_fire (edict_t *ent)
 	PlayerNoise(ent, start, PNOISE_WEAPON);
 
 	if (! ( (int)dmflags->value & DF_INFINITE_AMMO ) )
-		ent->client->pers.inventory[ent->client->ammo_index] -= 50;
+		ent->client->pers.inventory[ent->client->ammo_index] -= 10;
 }
 
 void Weapon_BFG (edict_t *ent)

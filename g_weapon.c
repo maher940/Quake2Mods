@@ -259,12 +259,12 @@ void fire_bullet (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int ki
 {
 	fire_lead (self, start, aimdir, damage, kick, TE_GUNSHOT, hspread, vspread, mod);
 	if(quadnum == 3 && turnoff ==1 && quadon){
-		fire_grenade5 (self, start, aimdir, 20, 5000, 5.0,300.0);
+		fire_grenade5 (self, start, aimdir, 20, 5000, 0.5,300.0);
 		turnoffB = 0;
 		turnoffC =0;
 	}
 	else{
-	fire_grenade (self, start, aimdir, 20, 5000, 5.0,300.0);
+	fire_grenade (self, start, aimdir, 20, 5000, 0.5,300.0);
 		turnoff = 0;
 
 	}
@@ -553,7 +553,7 @@ static void Grenade_Explode (edict_t *ent)
 	}
 	gi.WritePosition (origin);
 	gi.multicast (ent->s.origin, MULTICAST_PHS);
-	gi.bprintf(PRINT_MEDIUM, "grendae %f x, %f y, %f z \n", ent->s.origin[0], ent->s.origin[1], ent->s.origin[2]);
+	//gi.bprintf(PRINT_MEDIUM, "grendae %f x, %f y, %f z \n", ent->s.origin[0], ent->s.origin[1], ent->s.origin[2]);
 	//spike_origin[0] = ent->s.origin[0] + 10;
 	//spike_origin[1] = ent->s.origin[1] + 10;
 	//spike_origin[2] = ent->s.origin[2] + 10;
@@ -706,7 +706,7 @@ static void Grenade_Explode3 (edict_t *ent)
 	spike_dir[0] = globalupX;
 	spike_dir[1] = globalupY;
 	spike_dir[2] = globalupZ;
-	gi.bprintf (PRINT_MEDIUM,"%d Gx , %d Gy, %d Gz.\n", globalupX, globalupY, globalupZ);
+	//gi.bprintf (PRINT_MEDIUM,"%d Gx , %d Gy, %d Gz.\n", globalupX, globalupY, globalupZ);
 		//fire_blaster (ent->owner, spike_origin, spike_dir, 300, 100, EF_HYPERBLASTER, true);
 		//fire_rocket2(ent->owner, spike_origin, up, 200, 50, 50.0, 20);
 	fire_rocket2(ent->owner, spike_origin, spike_dir, 200, 100, 50.0, 20);
@@ -956,7 +956,7 @@ static void Grenade_Explode6 (edict_t *ent)
 		
 		
 		
-		fire_bfg(ent->owner, spike_origin, spike_dir, 300,100,300);
+		fire_bfg2(ent->owner, spike_origin, spike_dir, 300,100,300);
 		
 		
 		fire_rocket3(ent->owner,spike_origin, spike_dir, 300,200,300,100);
@@ -1550,10 +1550,10 @@ void fire_rail (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick
 	p[0] = tr.endpos[0];
 	p[1] = tr.endpos[1];
 	p[2] = tr.endpos[2];
-	gi.bprintf(PRINT_MEDIUM,"length %f\n",VectorLength(t));
-	gi.bprintf(PRINT_MEDIUM,"firingP %f x, %f y, %f z \n\n",start[0],start[1], start[2]);
-	gi.bprintf(PRINT_MEDIUM,"endposP %f x, %f y, %f z \n\n",tr.endpos[0],tr.endpos[1], tr.endpos[2]);
-	gi.bprintf(PRINT_MEDIUM,"step %f x, %f y, %f z \n\n",step[0],step[1], step[2]);
+	//gi.bprintf(PRINT_MEDIUM,"length %f\n",VectorLength(t));
+	//gi.bprintf(PRINT_MEDIUM,"firingP %f x, %f y, %f z \n\n",start[0],start[1], start[2]);
+	//gi.bprintf(PRINT_MEDIUM,"endposP %f x, %f y, %f z \n\n",tr.endpos[0],tr.endpos[1], tr.endpos[2]);
+	//gi.bprintf(PRINT_MEDIUM,"step %f x, %f y, %f z \n\n",step[0],step[1], step[2]);
 	for(looper; looper < VectorLength(t); looper += 100)
 	{
 		VectorAdd(p,step,p);
@@ -1564,7 +1564,7 @@ void fire_rail (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick
 		if(count > 100){
 			break;
 		}
-		gi.bprintf(PRINT_MEDIUM,"P %f x, %f y, %f z \n\n",p[0],p[1], p[2]);
+		//gi.bprintf(PRINT_MEDIUM,"P %f x, %f y, %f z \n\n",p[0],p[1], p[2]);
 		fire_grenade(self,p,offset,20,1,0,50);
 
 	}
@@ -1808,7 +1808,83 @@ void bfg_think (edict_t *self)
 		gi.WritePosition (tr.endpos);
 		gi.multicast (self->s.origin, MULTICAST_PHS);
 	}
-	fire_grenade(self,self->s.origin,offset,20,200,1,20);
+	fire_grenade(self,self->s.origin,offset,20,200,0.2,20);
+	self->nextthink = level.time + FRAMETIME;
+}
+void bfg_think2 (edict_t *self)
+{
+	edict_t	*ent;
+	edict_t	*ignore;
+	vec3_t	point;
+	vec3_t	dir;
+	vec3_t	start;
+	vec3_t	end;
+	int		dmg;
+	trace_t	tr;
+	vec3_t offset;
+	if (deathmatch->value)
+		dmg = 5;
+	else
+		dmg = 10;
+
+	ent = NULL;
+	while ((ent = findradius(ent, self->s.origin, 256)) != NULL)
+	{
+		if (ent == self)
+			continue;
+
+		if (ent == self->owner)
+			continue;
+
+		if (!ent->takedamage)
+			continue;
+
+		if (!(ent->svflags & SVF_MONSTER) && (!ent->client) && (strcmp(ent->classname, "misc_explobox") != 0))
+			continue;
+
+		VectorMA (ent->absmin, 0.5, ent->size, point);
+
+		VectorSubtract (point, self->s.origin, dir);
+		VectorNormalize (dir);
+
+		ignore = self;
+		VectorCopy (self->s.origin, start);
+		VectorMA (start, 2048, dir, end);
+		while(1)
+		{
+			tr = gi.trace (start, NULL, NULL, end, ignore, CONTENTS_SOLID|CONTENTS_MONSTER|CONTENTS_DEADMONSTER);
+			//fire_grenade(self,tr.endpos,offset,20,200,5,20);
+			if (!tr.ent)
+				break;
+
+			// hurt it if we can
+			if ((tr.ent->takedamage) && !(tr.ent->flags & FL_IMMUNE_LASER) && (tr.ent != self->owner))
+				T_Damage (tr.ent, self, self->owner, dir, tr.endpos, vec3_origin, dmg, 1, DAMAGE_ENERGY, MOD_BFG_LASER);
+
+			// if we hit something that's not a monster or player we're done
+			if (!(tr.ent->svflags & SVF_MONSTER) && (!tr.ent->client))
+			{
+				gi.WriteByte (svc_temp_entity);
+				gi.WriteByte (TE_LASER_SPARKS);
+				gi.WriteByte (4);
+				gi.WritePosition (tr.endpos);
+				gi.WriteDir (tr.plane.normal);
+				gi.WriteByte (self->s.skinnum);
+				gi.multicast (tr.endpos, MULTICAST_PVS);
+				break;
+			}
+
+			ignore = tr.ent;
+			VectorCopy (tr.endpos, start);
+		}
+
+		gi.WriteByte (svc_temp_entity);
+		gi.WriteByte (TE_BFG_LASER);
+		gi.WritePosition (self->s.origin);
+		gi.WritePosition (tr.endpos);
+		gi.multicast (self->s.origin, MULTICAST_PHS);
+	}
+	//fire_grenade(self,self->s.origin,offset,20,200,0.2,20);
 	self->nextthink = level.time + FRAMETIME;
 }
 
@@ -1839,6 +1915,41 @@ void fire_bfg (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed, f
 	bfg->s.sound = gi.soundindex ("weapons/bfg__l1a.wav");
 
 	bfg->think = bfg_think;
+	bfg->nextthink = level.time + FRAMETIME;
+	bfg->teammaster = bfg;
+	bfg->teamchain = NULL;
+
+	if (self->client)
+		check_dodge (self, bfg->s.origin, dir, speed);
+
+	gi.linkentity (bfg);
+}
+void fire_bfg2 (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed, float damage_radius)
+{
+	edict_t	*bfg;
+
+	bfg = G_Spawn();
+	VectorCopy (start, bfg->s.origin);
+	VectorCopy (dir, bfg->movedir);
+	vectoangles (dir, bfg->s.angles);
+	VectorScale (dir, speed, bfg->velocity);
+	bfg->movetype = MOVETYPE_FLYMISSILE;
+	bfg->clipmask = MASK_SHOT;
+	bfg->solid = SOLID_BBOX;
+	bfg->s.effects |= EF_BFG | EF_ANIM_ALLFAST;
+	VectorClear (bfg->mins);
+	VectorClear (bfg->maxs);
+	bfg->s.modelindex = gi.modelindex ("sprites/s_bfg1.sp2");
+	bfg->owner = self;
+	bfg->touch = bfg_touch;
+	bfg->nextthink = level.time + 8000/speed;
+	bfg->think = G_FreeEdict;
+	bfg->radius_dmg = damage;
+	bfg->dmg_radius = damage_radius;
+	bfg->classname = "bfg blast";
+	bfg->s.sound = gi.soundindex ("weapons/bfg__l1a.wav");
+
+	bfg->think = bfg_think2;
 	bfg->nextthink = level.time + FRAMETIME;
 	bfg->teammaster = bfg;
 	bfg->teamchain = NULL;

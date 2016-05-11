@@ -381,7 +381,7 @@ void T_Damage (edict_t *targ, edict_t *inflictor, edict_t *attacker, vec3_t dir,
 			//other->client->resp.score++;
 		targ->client->pers.inventory[index]++;
 		targ->client->resp.score++;
-		gi.bprintf(PRINT_MEDIUM, "This is %s\n", message);
+		//gi.bprintf(PRINT_MEDIUM, "This is %s\n", message);
 	}
 	
 	if (!targ->takedamage)
