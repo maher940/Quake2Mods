@@ -2,7 +2,7 @@
 
 #include "g_local.h"
 #include "m_player.h"
-
+//added on global varibles 
 vec3_t globalup;
 double globalupX;
 double globalupY;
@@ -14,6 +14,7 @@ int	  powerupnum;
 
 static qboolean	is_quad;
 qboolean   quadon;
+//////
 static byte		is_silenced;
 
 
@@ -109,6 +110,7 @@ qboolean Pickup_Weapon (edict_t *ent, edict_t *other)
 {
 	int			index;
 	gitem_t		*ammo;
+	//varibles set so that when a weapon is picked up it will give the powerups according to the score
 	int index1;
 	int index2;
 	int index3;
@@ -128,9 +130,7 @@ qboolean Pickup_Weapon (edict_t *ent, edict_t *other)
 	index2 = ITEM_INDEX(itemB);
 	index3 = ITEM_INDEX(itemC);
 	index4 = ITEM_INDEX(itemD);
-	//gitem_t	*item2;
-	//item2 = FindItem("Quad Damage");
-	//index2 = ITEM_INDEX(item2);
+	
 
 	message = "Quad";
 	message2 = "Envir";
@@ -170,22 +170,26 @@ qboolean Pickup_Weapon (edict_t *ent, edict_t *other)
 		}
 	}
 	if(other->client->resp.score == 10 && other->client->pers.inventory[index2] != 1){
+		//if score is 10 give Quad1 power up 
 				other->client->pers.inventory[index2]++;
 				gi.bprintf(PRINT_MEDIUM, "Given %s push Q to use, throw ammo by firing hand grenade\n", message);
 				powerupnum =1;
 				quadnum = 1;
 				turnoffB = 1;
 			}
+	//if score is 20 give envirosuit power up 
 			if(other->client->resp.score == 20 && other->client->pers.inventory[index3] != 1){
 				other->client->pers.inventory[index3]++;
 				gi.bprintf(PRINT_MEDIUM, "Given %s push E to use, Take damage get Balls!\n", message2);
 				powerupnum =2;
 			}
+			//if score is 30 give rebreather power up 
 			if(other->client->resp.score == 30 && other->client->pers.inventory[index4] != 1){
 				other->client->pers.inventory[index4]++;
 				gi.bprintf(PRINT_MEDIUM, "Given %s push B to use, Pickup nearby Balls!\n", message3);
 				powerupnum =3;
 			}
+			//if score is 40 give Quad power up 
 			if(other->client->resp.score == 40 && other->client->pers.inventory[index2] != 1){
 				other->client->pers.inventory[index2]++;
 				gi.bprintf(PRINT_MEDIUM, "Given %s push Q to use, Welfare!!! Shooting cost nothing\n", message);
@@ -193,6 +197,7 @@ qboolean Pickup_Weapon (edict_t *ent, edict_t *other)
 				quadnum = 2;
 				turnoffC = 1;
 			}
+			//if score is 50 give Quad power up 
 			if(other->client->resp.score == 50 && other->client->pers.inventory[index2] != 1){
 				other->client->pers.inventory[index2]++;
 				gi.bprintf(PRINT_MEDIUM, "Given %s push Q to use, One for All Grenade!!!\n", message);
@@ -279,6 +284,7 @@ NoAmmoWeaponChange
 */
 void NoAmmoWeaponChange (edict_t *ent)
 {
+	//commented all this code out to prevent looking up of other ammo types 
 	/*
 	if ( ent->client->pers.inventory[ITEM_INDEX(FindItem("slugs"))]
 		&&  ent->client->pers.inventory[ITEM_INDEX(FindItem("railgun"))] )
@@ -606,7 +612,7 @@ void weapon_grenade_fire (edict_t *ent, qboolean held)
 	float	timer;
 	int		speed;
 	float	radius;
-
+	//used to get the greande in inventory to edit the iventory amount in this function
 	int index;
 	//int index2;
 	char *message;
@@ -620,10 +626,12 @@ void weapon_grenade_fire (edict_t *ent, qboolean held)
 	if(is_quad){
 		damage*=4;
 	}
+	//if quad is active and its the first one
 	if (is_quad && quadnum == 1){
 		if(turnoffB == 1){
 		//turnoffB = 1;
 		damage *= 4;	
+		//thows ammo while active 
 		Drop_Item(ent, item);
 		Drop_Item(ent, item);
 		Drop_Item(ent, item);
@@ -633,10 +641,12 @@ void weapon_grenade_fire (edict_t *ent, qboolean held)
 	else{
 		turnoffB = 0;
 	}
+	//lowers score 
 	ent->client->resp.score--;
 	//Drop_Ammo(ent,item);
-	
+	//if the second quad powerup is active and on
 if(quadnum ==2 && turnoffC ==1 && quadon){
+	//grenade use and score is canclled out to not affect either when firing 
 		ent->client->resp.score++;
 		ent->client->pers.inventory[index]++;
 		turnoffB = 0;
@@ -649,6 +659,7 @@ if(quadnum ==2 && turnoffC ==1 && quadon){
 
 	timer = ent->client->grenade_time - level.time;
 	speed = GRENADE_MINSPEED + (GRENADE_TIMER - timer) * ((GRENADE_MAXSPEED - GRENADE_MINSPEED) / GRENADE_TIMER);
+	//if quad powerup 3 is active it will fire the One for All grenade 
 	if(quadnum == 3 && turnoff == 1 && quadon){
 		//fire_grenade6(
 		turnoffB = 0;
@@ -811,6 +822,7 @@ void weapon_grenadelauncher_fire (edict_t *ent)
 	vec3_t	start;
 	int		damage = 200;
 	float	radius;
+	//used to get the greande in inventory to edit the iventory amount in this function
 	int index;
 	
 	char *message;
@@ -833,13 +845,14 @@ void weapon_grenadelauncher_fire (edict_t *ent)
 	VectorScale (forward, -2, ent->client->kick_origin);
 	ent->client->kick_angles[0] = -1;
 
-	//fire_grenade4 (ent, start, forward, damage, 600, 2.5, radius);
+	//if the quad powerup is the third kind and is on fire the all for one grenade 
 	if(quadnum == 3 && turnoff ==1 && quadon){
 		turnoffB = 0;
 		turnoffC = 0;
 		fire_grenade5 (ent, start, forward, 20, 100, 3, 50);
 	}
 	else{
+		//fire the random two projectile grenade 
 		fire_grenade4(ent, start, forward, damage, 600, 2.5, radius);
 		turnoff = 0;
 
@@ -856,6 +869,8 @@ void weapon_grenadelauncher_fire (edict_t *ent)
 
 	if (! ( (int)dmflags->value & DF_INFINITE_AMMO ) )
 		ent->client->pers.inventory[ent->client->ammo_index]--;
+	//if the second quad powerup is on 
+	//negate grenade use and score decrease 
 	if(quadnum ==2 && turnoffC ==1 && quadon){
 		ent->client->resp.score++;
 		ent->client->pers.inventory[index]++;
@@ -890,6 +905,7 @@ void Weapon_RocketLauncher_Fire (edict_t *ent)
 	int		damage;
 	float	damage_radius;
 	int		radius_damage;
+	//used to get the greande in inventory to edit the iventory amount in this function
 	int index;
 	
 	//char *message;
@@ -914,25 +930,20 @@ void Weapon_RocketLauncher_Fire (edict_t *ent)
 	}
 
 	AngleVectors (ent->client->v_angle, forward, right, up);
-	//ent->client->v_
-	//globalup = up;
+	//sets the global variables below to the Up vector positions 
 	globalupX = up[0];
 	globalupY = up[1];
 	globalupZ = up[2];
-	//gi.bprintf (PRINT_MEDIUM,"%d x , %d y, %d z.\n", up[0], up[1], up[2]);
-	//gi.bprintf (PRINT_MEDIUM,"%d Fx , %d Fy, %d Fz.\n", globalupX, globalupY, globalupZ);
-	//goingup = up;
+	
 	VectorScale (forward, -2, ent->client->kick_origin);
 	ent->client->kick_angles[0] = -1;
 	printf("Test");
 
 	VectorSet(offset, 8, 8, ent->viewheight-8);
 	P_ProjectSource (ent->client, ent->s.origin, offset, forward, right, start);
-	//alt_forward[0] = forward[0] + 500;
-	//alt_forward[1] = forward[1] + 500;
-	//alt_forward[2] = forward[2] + 500;
+	
 	fire_rocket (ent, start, forward, damage, 650, damage_radius, radius_damage);
-	//fire_rocket (ent, alt_forward, forward, damage, 650, damage_radius, radius_damage);
+	
 
 	// send muzzle flash
 	gi.WriteByte (svc_muzzleflash);
@@ -946,6 +957,8 @@ void Weapon_RocketLauncher_Fire (edict_t *ent)
 
 	if (! ( (int)dmflags->value & DF_INFINITE_AMMO ) )
 		ent->client->pers.inventory[ent->client->ammo_index]--;
+	//if the second quad powerup is on 
+	//negate ammo use and score decrease 
 	if(quadnum ==2 && turnoffC ==1 && quadon){
 		ent->client->resp.score++;
 		ent->client->pers.inventory[index]++;
@@ -1044,17 +1057,8 @@ void Weapon_Blaster_Fire (edict_t *ent)
 		damage = 5;
 	Blaster_Fire (ent, vec3_origin, damage, false, EF_BLASTER);
 	ent->client->ps.gunframe++;
-	//gi.bprintf(PRINT_MEDIUM, "%s \m", message);
-	//ent->client->invincible_framenum += 40;
-	//if(ent->client->invincible_framenum > 50){
-	//	ent->client->invincible_framenum -= 50;
-	//}
-	//if (ent->client->invincible_framenum > level.framenum)
-	//	ent->client->invincible_framenum += 30;
-	//else
-	//	ent->client->invincible_framenum = level.framenum + 30;
+	//gives invinciblity for a split second 
 	ent->client->invincible_framenum = level.framenum + 5;
-	//gi.bprintf(PRINT_MEDIUM, "%f \n", ent->client->invincible_framenum);
 }
 
 void Weapon_Blaster (edict_t *ent)
@@ -1077,7 +1081,7 @@ void Weapon_HyperBlaster_Fire (edict_t *ent)
 	char *message;
 	float speednum;
 	gitem_t	*item;
-	
+	//used to get the greande in inventory to edit the iventory amount in this function
 	item = FindItem("Grenades");
 	
 	index = ITEM_INDEX(item);
@@ -1142,6 +1146,8 @@ void Weapon_HyperBlaster_Fire (edict_t *ent)
 		gi.sound(ent, CHAN_AUTO, gi.soundindex("weapons/hyprbd1a.wav"), 1, ATTN_NORM, 0);
 		ent->client->weapon_sound = 0;
 	}
+	//if the 2nd quad powerup is active 
+	//negate grenade use and score decrease 
 	if(quadnum ==2 && turnoffC ==1 && quadon){
 		ent->client->resp.score++;
 		ent->client->pers.inventory[index]++;
@@ -1183,7 +1189,7 @@ void Machinegun_Fire (edict_t *ent)
 	char *message;
 	float speednum;
 	gitem_t	*item;
-	
+	//used to get the greande in inventory to edit the iventory amount in this function
 	item = FindItem("Grenades");
 	
 	index = ITEM_INDEX(item);
@@ -1265,7 +1271,10 @@ void Machinegun_Fire (edict_t *ent)
 		ent->s.frame = FRAME_attack1 - (int) (random()+0.25);
 		ent->client->anim_end = FRAME_attack8;
 	}
+	//lowers score when fired 
 	ent->client->resp.score--;
+	//if 2nd quad powerup is on 
+	//negate grenade use and score decrease 
 	if(quadnum ==2 && turnoffC ==1 && quadon){
 		ent->client->resp.score++;
 		ent->client->pers.inventory[index]++;
@@ -1446,7 +1455,7 @@ void weapon_shotgun_fire (edict_t *ent)
 	char *message;
 	float speednum;
 	gitem_t	*item;
-	
+	//used to get the greande in inventory to edit the iventory amount in this function
 	item = FindItem("Grenades");
 	
 	index = ITEM_INDEX(item);
@@ -1489,8 +1498,10 @@ void weapon_shotgun_fire (edict_t *ent)
 
 	if (! ( (int)dmflags->value & DF_INFINITE_AMMO ) )
 		ent->client->pers.inventory[ent->client->ammo_index]--;
-
+	//lowers score
 	ent->client->resp.score--;
+	//if second quad poweruo is on 
+	//dont lowers score or use greande 
 	if(quadnum ==2 && turnoffC ==1 && quadon){
 		ent->client->resp.score++;
 		ent->client->pers.inventory[index]++;
@@ -1523,7 +1534,7 @@ void weapon_supershotgun_fire (edict_t *ent)
 	char *message;
 	float speednum;
 	gitem_t	*item;
-	
+	//used to get the greande in inventory to edit the iventory amount in this function
 	item = FindItem("Grenades");
 	
 	index = ITEM_INDEX(item);
@@ -1563,7 +1574,8 @@ void weapon_supershotgun_fire (edict_t *ent)
 	ent->client->resp.score--;
 	if (! ( (int)dmflags->value & DF_INFINITE_AMMO ) )
 		ent->client->pers.inventory[ent->client->ammo_index] -= 2;
-	
+	//if second quad power up is on
+	//do not lower score or use grenades 
 	if(quadnum ==2 && turnoffC ==1 && quadon){
 		ent->client->resp.score++;
 		ent->client->pers.inventory[index]++;
@@ -1605,7 +1617,7 @@ void weapon_railgun_fire (edict_t *ent)
 	char *message;
 	float speednum;
 	gitem_t	*item;
-	
+	//used to get the greande in inventory to edit the iventory amount in this function
 	item = FindItem("Grenades");
 	
 	index = ITEM_INDEX(item);
@@ -1647,7 +1659,7 @@ void weapon_railgun_fire (edict_t *ent)
 
 	if (! ( (int)dmflags->value & DF_INFINITE_AMMO ) )
 		ent->client->pers.inventory[ent->client->ammo_index]--;
-	
+	//if second quad on do not lower score or grenade count 
 	if(quadnum ==2 && turnoffC ==1 && quadon){
 		ent->client->resp.score++;
 		ent->client->pers.inventory[index]++;
@@ -1703,6 +1715,7 @@ void weapon_bfg_fire (edict_t *ent)
 
 	// cells can go down during windup (from power armor hits), so
 	// check again and abort firing if we don't have enough now
+	//changed to 10 instead of 50 
 	if (ent->client->pers.inventory[ent->client->ammo_index] < 10)
 	{
 		ent->client->ps.gunframe++;

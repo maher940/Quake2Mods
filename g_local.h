@@ -275,8 +275,7 @@ typedef struct
 	qboolean	autosaved;
 } game_locals_t;
 
-//extern vec3_t globalup;
-//extern int test;
+//have these externs to be used as global variables 
 extern double globalupX;
 extern double globalupY;
 extern double globalupZ;
@@ -287,7 +286,7 @@ extern int	  turnoff;
 extern int	  turnoffB;
 extern int	  turnoffC;
 extern qboolean quadon;
-
+extern int		dmgtake;
 //
 // this structure is cleared as each map is entered
 // it is read/written to the level.sav file for savegames
@@ -607,9 +606,11 @@ gitem_t	*FindItem (char *pickup_name);
 gitem_t	*FindItemByClassname (char *classname);
 #define	ITEM_INDEX(x) ((x)-itemlist)
 edict_t *Drop_Item (edict_t *ent, gitem_t *item);
+//added these function so i can access the pickup function of items in other files
 qboolean	*GetThis_Item(edict_t *player, edict_t *item);
 qboolean	*GetThis_Health( edict_t *player, edict_t *item);
 qboolean	*GetThis_Armor( edict_t *player, edict_t *item);
+///
 void SetRespawn (edict_t *ent, float delay);
 void ChangeWeapon (edict_t *ent);
 void SpawnItem (edict_t *ent, gitem_t *item);
@@ -726,22 +727,29 @@ qboolean fire_hit (edict_t *self, vec3_t aim, int damage, int kick);
 void fire_bullet (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick, int hspread, int vspread, int mod);
 void fire_shotgun (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick, int hspread, int vspread, int count, int mod);
 void fire_blaster (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int speed, int effect, qboolean hyper);
+//added another fire_blaster function to be used for a different purpose 
 void fire_blaster2 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int speed, int effect, qboolean hyper);
 void fire_grenade (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int speed, float timer, float damage_radius);
 void fire_grenade2 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int speed, float timer, float damage_radius, qboolean held);
+//added other fire_greande function to be used by other weapons for different purposes 
 void fire_grenade3 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int speed, float timer, float damage_radius);
 void fire_grenade4 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int speed, float timer, float damage_radius);
 void fire_grenade5 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int speed, float timer, float damage_radius);
 void fire_grenade6 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int speed, float timer, float damage_radius, qboolean held);
 void fire_rocket (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed, float damage_radius, int radius_damage);
+//added another rocket function to be used for a different purpose 
 void fire_rocket2 (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed, float damage_radius, int radius_damage);
 void fire_rail (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick);
 void fire_bfg (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed, float damage_radius);
+//added another fire_bfg function to be used for a different purpose 
 void fire_bfg2 (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed, float damage_radius);
-//for grenade laucher
+//added another rocket function to be used for a different purpose 
 void fire_rocket3 (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed, float damage_radius, int radius_damage);
+//added another fire_bulelt function to be used for a different purpose 
 void fire_bullet2 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick, int hspread, int vspread, int mod);
+//added another fire_shotgun function to be used for a different purpose 
 void fire_shotgun2 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick, int hspread, int vspread, int count, int mod);
+//added another fire_rail function to be used for a different purpose 
 void fire_rail2 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick);
 //
 // g_ptrail.c

@@ -565,12 +565,22 @@ void P_WorldEffects (void)
 	int			waterlevel, old_waterlevel;
 	//edict_t	*ent;
 	edict_t *ent;
-	char *message;
+	//char *message;
 	char *message2;
 	char *message3;
 	int times;
+	int index;
+	//int index2;
+
+//	char *message;
+	gitem_t	*item;
+	
+	//used to get the greande in inventory to edit the iventory amount in this function or to access it 
+	item = FindItem("Grenades");
+	
+	index = ITEM_INDEX(item);
 	times = 0;
-	//message = "Slugs near";
+	
 
 	if (current_player->movetype == MOVETYPE_NOCLIP)
 	{
@@ -729,6 +739,12 @@ void P_WorldEffects (void)
 	}
 	if(envirosuit){
 		powerupnum = 2;
+		if(dmgtake ==1)
+		{
+			current_player->client->pers.inventory[index]++;
+			current_player->client->resp.score++;
+			dmgtake =0;
+		}
 	}
 	else{
 		powerupnum = 1;

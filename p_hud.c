@@ -455,26 +455,26 @@ void G_SetStats (edict_t *ent)
 	}
 
 
-	//game time
-	//level.framenum - cl->resp.enterframe)/600
-	//ent->client->ps.stats[STAT_TIMEON] = level.framenum - ent->client->resp.enterframe/600;
+	//sets the STAT_TIMEON to the level time //minus four is there cause it does not line up perfectly just using level.time
 	ent->client->ps.stats[STAT_TIMEON] = (level.time -4);
+	//if the STAT_TIMEON is divisible by 60 add to the STAT_TIMEMIN stat
 	if((ent->client->ps.stats[STAT_TIMEON] = (level.time -4)) % 60 == 0 && (ent->client->ps.stats[STAT_TIMEON] = (level.time -4)) != 0 ){
 		ent->client->ps.stats[STAT_TIMEMIN]++;
-		//divisnum++;
-		//divisnum = divisnum -9;
-		//divisnum *= 60;
-		///divisnum = ent->client->ps.stats[STAT_TIMEON];
-		//gi.bprintf(PRINT_MEDIUM, "divisnum %d", divisnum);
-		//ent->client->ps.stats[STAT_TIMEON] = (level.time -4);
+	
 	}
-	//ent->client->ps.stats[STAT_TIMEMIN] = (ent->client->ps.stats[STAT_TIMEMIN]) / 10;
 	
 	
+	//if the stat_timemin is divisible by 10 divide it by ten
+	//this is here because the above function has it set to 10,20 etc when it should be 1,2 
 	if((ent->client->ps.stats[STAT_TIMEMIN]) % 10 == 0 && (ent->client->ps.stats[STAT_TIMEMIN]) != 0){
 
-		ent->client->ps.stats[STAT_TIMEMIN] = (ent->client->ps.stats[STAT_TIMEMIN]) - 9;
+		//ent->client->ps.stats[STAT_TIMEMIN] = (ent->client->ps.stats[STAT_TIMEMIN]) - 9;
+		//ent->client->pers.score
+		ent->client->ps.stats[STAT_TIMEMIN] = ent->client->ps.stats[STAT_TIMEMIN] /= 10;
+
 	}
+	//if the STAT_TIMEON is greater than or equal to 60 subtract 60(times how many mins its been)
+	//keeps the number at 60 
 	if((ent->client->ps.stats[STAT_TIMEON] = (level.time -4)) >= 60)
 	{
 		ent->client->ps.stats[STAT_TIMEON] = ent->client->ps.stats[STAT_TIMEON] - (60 * ent->client->ps.stats[STAT_TIMEMIN]);

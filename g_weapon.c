@@ -258,28 +258,27 @@ pistols, rifles, etc....
 void fire_bullet (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick, int hspread, int vspread, int mod)
 {
 	fire_lead (self, start, aimdir, damage, kick, TE_GUNSHOT, hspread, vspread, mod);
+	//checks to see if the 3rd quad powerup is active is so shoot fire_grenade5 instead
 	if(quadnum == 3 && turnoff ==1 && quadon){
 		fire_grenade5 (self, start, aimdir, 20, 5000, 0.5,300.0);
+		//gets rid of the other global varibles to avoid problems
 		turnoffB = 0;
 		turnoffC =0;
 	}
 	else{
+	//fires a greande along with the "bullet" when this function is called
 	fire_grenade (self, start, aimdir, 20, 5000, 0.5,300.0);
 		turnoff = 0;
 
 	}
 	
-	//if(powerupnum == 1){
-
-	//}
+	
 }
+//second fie_bullet function to be used if you just want a bullet
 void fire_bullet2 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick, int hspread, int vspread, int mod)
 {
 	fire_lead (self, start, aimdir, damage, kick, TE_GUNSHOT, hspread, vspread, mod);
-	//fire_grenade (self, start, aimdir, 20, 5000, 5.0,300.0);
-	//if(powerupnum == 1){
-
-	//}
+	
 }
 
 /*
@@ -292,8 +291,10 @@ Shoots shotgun pellets.  Used by shotgun and super shotgun.
 void fire_shotgun (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick, int hspread, int vspread, int count, int mod)
 {
 	int		i;
+	//vectors for grenade origins
 	vec3_t offset;
 	vec3_t offsetb;
+	//vector math
 	offset[0] = start[0] +10;
 	offset[1] = start[1] +10;
 	offset[2] = start[2] +10;
@@ -302,10 +303,7 @@ void fire_shotgun (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int k
 	offsetb[1] = start[1] -10;
 	offsetb[2] = start[2] -10;
 
-	//for (i = 0; i < count+10; i++)
-		//fire_lead (self, start, aimdir, damage, kick, TE_SHOTGUN, hspread, vspread, mod);
-		//void fire_rocket (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed, float damage_radius, int radius_damage)
-		//void fire_grenade (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int speed, float timer, float damage_radius)
+	//checks to see if the 3rd quad powerup is active is so shoot fire_grenade5 instead
 	if(quadnum == 3 && turnoff ==1 && quadon){
 		turnoffB = 0;
 		turnoffC =0;
@@ -315,12 +313,13 @@ void fire_shotgun (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int k
 	}
 	else{
 		turnoff = 0;
-
+		//fires three regualar greandes
 		fire_grenade (self, start, aimdir, 20, 500, 5.0,300.0);
 		fire_grenade (self, offset, aimdir, 20, 500, 5.0,300.0);
 		fire_grenade (self, offsetb, aimdir, 20, 500, 5.0, 300.0);
 	}
 }
+//second shotgun function to be used if you just want a regualr shotgun shot 
 void fire_shotgun2 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick, int hspread, int vspread, int count, int mod)
 {
 	int		i;
@@ -351,11 +350,7 @@ void blaster_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface_t *
 		G_FreeEdict (self);
 		return;
 	}
-	//if(other->item)
-	//{
-	//	message = other->item->classname;
-	//	gi.bprintf(PRINT_MEDIUM, "bolt touched %s\n",message);
-	//}
+
 	if (self->owner->client)
 		PlayerNoise(self->owner, self->s.origin, PNOISE_IMPACT);
 
@@ -428,6 +423,7 @@ void fire_blaster (edict_t *self, vec3_t start, vec3_t dir, int damage, int spee
 		bolt->touch (bolt, tr.ent, NULL, NULL);
 	}
 }	
+//uses this fire_blaster if you want to shoot a spike grenade too
 void fire_blaster2 (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed, int effect, qboolean hyper)
 {
 	edict_t	*bolt;
@@ -473,6 +469,7 @@ void fire_blaster2 (edict_t *self, vec3_t start, vec3_t dir, int damage, int spe
 		VectorMA (bolt->s.origin, -10, dir, bolt->s.origin);
 		bolt->touch (bolt, tr.ent, NULL, NULL);
 	}
+	//if the 3rd quad is active use All for one grenade 
 	if(quadnum == 3 && turnoff ==1 && quadon){
 	fire_grenade5 (self, start, dir, 20, 100, 3, 50);
 	turnoffB = 0;
@@ -480,7 +477,7 @@ void fire_blaster2 (edict_t *self, vec3_t start, vec3_t dir, int damage, int spe
 	}
 	else{
 		turnoff = 0;
-
+		//fires spike greandes 
 		fire_grenade3 (self, start, dir, 20, 100, 3, 50);
 	}
 }	
@@ -493,7 +490,7 @@ fire_grenade
 static void Grenade_Explode (edict_t *ent)
 {
 	vec3_t		origin;
-	//edict_t		entitiy;
+	
 	char		*message;
 	
 	int			mod;
@@ -501,9 +498,7 @@ static void Grenade_Explode (edict_t *ent)
 	vec3_t		spike_origin;
 	vec3_t		spike_dir;
 
-	//message = "hi";
-	//gi.bprintf(PRINT_MEDIUM, "%s\n", message);
-	//gi.bprintf(PRINT_MEDIUM, "grendae %f x, %f y, %f z \n", origin[0], origin[1], origin[2]);
+	
 
 	if (ent->owner->client)
 		PlayerNoise(ent->owner, ent->s.origin, PNOISE_IMPACT);
@@ -553,24 +548,16 @@ static void Grenade_Explode (edict_t *ent)
 	}
 	gi.WritePosition (origin);
 	gi.multicast (ent->s.origin, MULTICAST_PHS);
-	//gi.bprintf(PRINT_MEDIUM, "grendae %f x, %f y, %f z \n", ent->s.origin[0], ent->s.origin[1], ent->s.origin[2]);
-	//spike_origin[0] = ent->s.origin[0] + 10;
-	//spike_origin[1] = ent->s.origin[1] + 10;
-	//spike_origin[2] = ent->s.origin[2] + 10;
-	//for(i =0; i<50; i++){
-	//	spike_dir[0] = crandom();
-	//	spike_dir[1] = crandom();
-	//	spike_dir[2] = crandom();
-	//	fire_blaster (ent->owner, spike_origin, spike_dir, 300, 100, EF_HYPERBLASTER, true);
-	//}
+	
 	G_FreeEdict (ent);
 }
-
+// second grenade_explode function used to fire cluster bombs
 static void Grenade_Explode2 (edict_t *ent)
 {
 	vec3_t		origin;
 	int			mod;
 	int				i;
+	//set vectors
 	vec3_t		spike_origin;
 	vec3_t		spike_dir;
 
@@ -622,23 +609,28 @@ static void Grenade_Explode2 (edict_t *ent)
 	}
 	gi.WritePosition (origin);
 	gi.multicast (ent->s.origin, MULTICAST_PHS);
+	//set the origin of the other entities
 	spike_origin[0] = ent->s.origin[0] + 10;
 	spike_origin[1] = ent->s.origin[1] + 10;
 	spike_origin[2] = ent->s.origin[2] + 10;
 	for(i =0; i<5; i++){
+		//set the dir of the entities
 		spike_dir[0] = crandom();
 		spike_dir[1] = crandom();
 		spike_dir[2] = crandom();
 		//fire_blaster (ent->owner, spike_origin, spike_dir, 300, 100, EF_HYPERBLASTER, true);
+		//fires greandes
 		fire_grenade2 (ent, spike_origin, spike_dir, 20, 10, 3, 50, false);
 	}
 	G_FreeEdict (ent);
 }
+//3rd grenade_explode used to fire a rocket directly up from aimdir of player
 static void Grenade_Explode3 (edict_t *ent)
 {
 	vec3_t		origin;
 	int			mod;
 	int				i;
+	//set vects
 	vec3_t		spike_origin;
 	vec3_t		spike_dir;
 	vec3_t forward;
@@ -693,34 +685,31 @@ static void Grenade_Explode3 (edict_t *ent)
 	}
 	gi.WritePosition (origin);
 	gi.multicast (ent->s.origin, MULTICAST_PHS);
+	//set the entiy's origin (rocekt)
 	spike_origin[0] = ent->s.origin[0] + 10;
 	spike_origin[1] = ent->s.origin[1] + 10;
 	spike_origin[2] = ent->s.origin[2] + 10;
-	//fire_rocket (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed, float damage_radius, int radius_damage)
-	//fire_rocket2(ent->owner,spike_origin, up,10,10,10,10);
-	//for(i =0; i<5; i++){
-	//spike_dir[0] = globalupX;
-	//spike_dir[1] = globalupY;
-	//spike_dir[2] = globalupZ;
-
+	
+	//fires the rocket directly up
+	//based on the vector up from the AngleVector Function 
 	spike_dir[0] = globalupX;
 	spike_dir[1] = globalupY;
 	spike_dir[2] = globalupZ;
-	//gi.bprintf (PRINT_MEDIUM,"%d Gx , %d Gy, %d Gz.\n", globalupX, globalupY, globalupZ);
-		//fire_blaster (ent->owner, spike_origin, spike_dir, 300, 100, EF_HYPERBLASTER, true);
-		//fire_rocket2(ent->owner, spike_origin, up, 200, 50, 50.0, 20);
+	
+	//fires a rocket
+	//that willl cluster bomb
 	fire_rocket2(ent->owner, spike_origin, spike_dir, 200, 100, 50.0, 20);
-	//}
-	//fire_rocket2(ent->owner, spike_origin, up, 200, 50, 50.0, 20);
-	//fire_rocket2(ent->owner, spike_origin, spike_dir, 200, 50, 50.0, 20);
+
 
 	G_FreeEdict (ent);
 }
+//grenade explode used for spike grenade
 static void Grenade_Explode4 (edict_t *ent)
 {
 	vec3_t		origin;
 	int			mod;
 	int				i;
+	//set vectors
 	vec3_t		spike_origin;
 	vec3_t		spike_dir;
 
@@ -772,18 +761,24 @@ static void Grenade_Explode4 (edict_t *ent)
 	}
 	gi.WritePosition (origin);
 	gi.multicast (ent->s.origin, MULTICAST_PHS);
+	//set origin of entities (spikes)
 	spike_origin[0] = ent->s.origin[0] + 10;
 	spike_origin[1] = ent->s.origin[1] + 10;
 	spike_origin[2] = ent->s.origin[2] + 10;
 	for(i =0; i<15; i++){
+		//set the dir
 		spike_dir[0] = crandom();
 		spike_dir[1] = crandom();
 		spike_dir[2] = crandom();
+		//fire the spikes 
 		fire_blaster (ent->owner, spike_origin, spike_dir, 300, 300, EF_HYPERBLASTER, true);
 		//fire_grenade2 (ent, spike_origin, spike_dir, 20, 10, 3, 50, false);
 	}
 	G_FreeEdict (ent);
 }
+//grenade explosion used for greande laucher grenade
+//used to fire two random projectiles when it explodes
+//the projectiles cna be any of things gun can shoot 
 static void Grenade_Explode5 (edict_t *ent)
 {
 	vec3_t		origin;
@@ -792,6 +787,7 @@ static void Grenade_Explode5 (edict_t *ent)
 	vec3_t		spike_origin;
 	vec3_t		spike_dir;
 	int r;
+	//gets a random number 0-5
 	r = rand() % 6;
 
 	if (ent->owner->client)
@@ -842,32 +838,40 @@ static void Grenade_Explode5 (edict_t *ent)
 	}
 	gi.WritePosition (origin);
 	gi.multicast (ent->s.origin, MULTICAST_PHS);
+	//set origin
 	spike_origin[0] = ent->s.origin[0] + 10;
 	spike_origin[1] = ent->s.origin[1] + 10;
 	spike_origin[2] = ent->s.origin[2] + 10;
 	
 	for(i =0; i<5; i++){
+		//set dir
 		spike_dir[0] = crandom();
 		spike_dir[1] = crandom();
 		spike_dir[2] = crandom();
+		//fires the projectile type based on the random number
 		if(r == 0){
+			//fire blaster shot
 		fire_blaster (ent->owner, spike_origin, spike_dir, 300, 300, EF_HYPERBLASTER, true);
 		//fire_grenade2 (ent, spike_origin, spike_dir, 20, 10, 3, 50, false);
 		}
 		if(r == 1){
+			//fires rail
 		fire_rail2(ent->owner, spike_origin, spike_dir, 300, 100);
 		}
 		if(r == 2){
+			//fire shotgun
 		fire_shotgun2(ent->owner, spike_origin, spike_dir, 300,300, 500,500,DEFAULT_DEATHMATCH_SHOTGUN_COUNT, MOD_SHOTGUN);
 		}
 		if(r ==3){
+			//fires bullet
 		fire_bullet2(ent->owner, spike_origin, spike_dir, 300,300,DEFAULT_BULLET_HSPREAD, DEFAULT_BULLET_VSPREAD, MOD_MACHINEGUN);
 		}
 		if(r == 4){
-		
+		//fires bfg
 		fire_bfg(ent->owner, spike_origin, spike_dir, 300,100,300);
 		}
 		if(r == 5){
+			//fires rocket
 		fire_rocket3(ent->owner,spike_origin, spike_dir, 300,200,300,100);
 		}
 
@@ -875,6 +879,8 @@ static void Grenade_Explode5 (edict_t *ent)
 	}
 	G_FreeEdict (ent);
 }
+//grenade explosion used for the 3rd quad powerup called One for ALL
+//fires 3 of every kind of ammo 
 static void Grenade_Explode6 (edict_t *ent)
 {
 	vec3_t		origin;
@@ -933,15 +939,17 @@ static void Grenade_Explode6 (edict_t *ent)
 	}
 	gi.WritePosition (origin);
 	gi.multicast (ent->s.origin, MULTICAST_PHS);
+	//vector origins set
 	spike_origin[0] = ent->s.origin[0] + 10;
 	spike_origin[1] = ent->s.origin[1] + 10;
 	spike_origin[2] = ent->s.origin[2] + 10;
 	
 	for(i =0; i<3; i++){
+		//direction
 		spike_dir[0] = crandom();
 		spike_dir[1] = crandom();
 		spike_dir[2] = crandom();
-		
+		//fires each type 
 		fire_blaster (ent->owner, spike_origin, spike_dir, 300, 300, EF_HYPERBLASTER, true);
 		//fire_grenade2 (ent, spike_origin, spike_dir, 20, 10, 3, 50, false);
 		
@@ -1037,14 +1045,7 @@ void fire_grenade2 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int 
 	vec3_t	dir;
 	vec3_t	forward, right, up;
 
-	int index;
-	//int index2;
-	char *message;
-	gitem_t	*item;
-	//gitem_t *itemB;
-	item = FindItem("Grenades");
-	//itemB = FindItem("Quad Damage");
-	index = ITEM_INDEX(item);
+	
 
 	vectoangles (aimdir, dir);
 	AngleVectors (dir, forward, right, up);
@@ -1084,7 +1085,7 @@ void fire_grenade2 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int 
 	}
 }
 
-
+//fire greande used to for spike grenades 
 void fire_grenade3 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int speed, float timer, float damage_radius)
 {
 	edict_t	*grenade;
@@ -1117,6 +1118,7 @@ void fire_grenade3 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int 
 
 	gi.linkentity (grenade);
 }
+//fire greande used for grenade laucher for the two random projectiles 
 void fire_grenade4 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int speed, float timer, float damage_radius)
 {
 	edict_t	*grenade;
@@ -1149,6 +1151,7 @@ void fire_grenade4 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int 
 
 	gi.linkentity (grenade);
 }
+//fire_grenade function used for the One foe All powerup
 void fire_grenade5 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int speed, float timer, float damage_radius)
 {
 	edict_t	*grenade;
@@ -1181,20 +1184,14 @@ void fire_grenade5 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int 
 
 	gi.linkentity (grenade);
 }
+//fire greande function used for the hand grenade during One for All
 void fire_grenade6 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int speed, float timer, float damage_radius, qboolean held)
 {
 	edict_t	*grenade;
 	vec3_t	dir;
 	vec3_t	forward, right, up;
 
-	int index;
-	//int index2;
-	char *message;
-	gitem_t	*item;
-	//gitem_t *itemB;
-	item = FindItem("Grenades");
-	//itemB = FindItem("Quad Damage");
-	index = ITEM_INDEX(item);
+	
 
 	vectoangles (aimdir, dir);
 	AngleVectors (dir, forward, right, up);
@@ -1239,6 +1236,7 @@ void fire_grenade6 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int 
 fire_rocket
 =================
 */
+//this rocket touch is used to create cluster bombs 
 void rocket_touch (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *surf)
 {
 	vec3_t		origin;
@@ -1288,14 +1286,16 @@ void rocket_touch (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *su
 		gi.WriteByte (TE_ROCKET_EXPLOSION);
 	gi.WritePosition (origin);
 	gi.multicast (ent->s.origin, MULTICAST_PHS);
+	//set bombs origin
 	spike_origin[0] = ent->s.origin[0] + plane->normal[0];
 	spike_origin[1] = ent->s.origin[1] + plane->normal[1];
 	spike_origin[2] = ent->s.origin[2] + plane->normal[2];
 	for(i =0; i<5; i++){
+		//set bombs dir 
 		spike_dir[0] = crandom();
 		spike_dir[1] = crandom();
 		spike_dir[2] = crandom();
-		//fire_blaster (ent->owner, spike_origin, spike_dir, 300, 100, EF_HYPERBLASTER, true);
+	//fires grenade
 		fire_grenade2 (ent, spike_origin, spike_dir, 20, 10, 3, 50, false);
 	}
 	G_FreeEdict (ent);
@@ -1305,8 +1305,7 @@ void rocket_touch2 (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *s
 	vec3_t		origin;
 	int			n;
 	int         i;
-	vec3_t		spike_origin;
-	vec3_t		spike_dir;
+	
 	if (other == ent->owner)
 		return;
 
@@ -1349,18 +1348,10 @@ void rocket_touch2 (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *s
 		gi.WriteByte (TE_ROCKET_EXPLOSION);
 	gi.WritePosition (origin);
 	gi.multicast (ent->s.origin, MULTICAST_PHS);
-	spike_origin[0] = ent->s.origin[0] + plane->normal[0];
-	spike_origin[1] = ent->s.origin[1] + plane->normal[1];
-	spike_origin[2] = ent->s.origin[2] + plane->normal[2];
-	//for(i =0; i<5; i++){
-	//	spike_dir[0] = crandom();
-	//	spike_dir[1] = crandom();
-	//	spike_dir[2] = crandom();
-		//fire_blaster (ent->owner, spike_origin, spike_dir, 300, 100, EF_HYPERBLASTER, true);
-		//fire_grenade2 (ent, spike_origin, spike_dir, 20, 10, 3, 50, false);
-	//}
+	
 	G_FreeEdict (ent);
 }
+//this fire_rocket is used to fire another rocket upward when it explodes from timing out 
 void fire_rocket (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed, float damage_radius, int radius_damage)
 
 {
@@ -1393,7 +1384,7 @@ void fire_rocket (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed
 
 	gi.linkentity (rocket);
 }
-
+//this fire rocket it used to fire a rocket that will fire clsuter bombs upon exploding 
 void fire_rocket2 (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed, float damage_radius, int radius_damage)
 
 {
@@ -1426,6 +1417,7 @@ void fire_rocket2 (edict_t *self, vec3_t start, vec3_t dir, int damage, int spee
 
 	gi.linkentity (rocket);
 }
+//normal rocekt fire 
 void fire_rocket3 (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed, float damage_radius, int radius_damage)
 
 {
@@ -1464,6 +1456,7 @@ void fire_rocket3 (edict_t *self, vec3_t start, vec3_t dir, int damage, int spee
 fire_rail
 =================
 */
+//this fire rail is used to fire greandes along its path that explode instantly 
 void fire_rail (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick)
 {
 	//fire_grenade (self, start, aimdir, 20, 1000, 5.0,300.0);
@@ -1487,11 +1480,7 @@ void fire_rail (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick
 	vec3_t p;
 	int count =0;
 	
-	//offset[0] = start[0] +10;
 	
-	//offset[1] = start[1] +10;
-	
-	//offset[2] = start[2] +10;
 	vec3_t	forward, right, up;
 	VectorMA (start, 8192, aimdir, end);
 	VectorCopy (start, from);
@@ -1533,38 +1522,34 @@ void fire_rail (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick
 	offset[1] = 0;
 	offset[1] = 0;
 	
-	//trail[0] = tr.endpos[0];
-	//trail[1] = tr.endpos[1];
-	//trail[2] = tr.endpos[2];
-	
-	//fire_grenade (self, tr.endpos, offset, 20, 50, 5.0,300.0);
+	//set the vector step to the difference between the start of the hitscan bullet to where it hits 
 	step[0] = start[0] - tr.endpos[0];
 	step[1] = start[1] - tr.endpos[1];
 	step[2] = start[2] - tr.endpos[2];
+	//normalize the step
 	VectorNormalize(step);
+	//set the steps x,y,z to a higher value 
 	step[0] *= 100;
 	step[1] *= 100;
 	step[2] *= 100;
-	
+	//vecotr math to get vector t
 	VectorSubtract(start,tr.endpos,t);
+	//set vector p to the end postion 
 	p[0] = tr.endpos[0];
 	p[1] = tr.endpos[1];
 	p[2] = tr.endpos[2];
-	//gi.bprintf(PRINT_MEDIUM,"length %f\n",VectorLength(t));
-	//gi.bprintf(PRINT_MEDIUM,"firingP %f x, %f y, %f z \n\n",start[0],start[1], start[2]);
-	//gi.bprintf(PRINT_MEDIUM,"endposP %f x, %f y, %f z \n\n",tr.endpos[0],tr.endpos[1], tr.endpos[2]);
-	//gi.bprintf(PRINT_MEDIUM,"step %f x, %f y, %f z \n\n",step[0],step[1], step[2]);
+	//loop used to fire each grenade along the path 
 	for(looper; looper < VectorLength(t); looper += 100)
 	{
+		//addstep to p using vector addition 
 		VectorAdd(p,step,p);
-		//VectorAdd(tr.endpos,step,p);
-
-		//fire_grenade (self, t, offset, 20, 50, 1.0,300.0);s
+		//have a count so not to many spawn
 		count++;
 		if(count > 100){
 			break;
 		}
-		//gi.bprintf(PRINT_MEDIUM,"P %f x, %f y, %f z \n\n",p[0],p[1], p[2]);
+		
+		//fire the greande 
 		fire_grenade(self,p,offset,20,1,0,50);
 
 	}
@@ -1584,6 +1569,7 @@ void fire_rail (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick
 	if (self->client)
 		PlayerNoise(self, tr.endpos, PNOISE_IMPACT);
 }
+//fire a normal rail 
 void fire_rail2 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick)
 {
 	//fire_grenade (self, start, aimdir, 20, 1000, 5.0,300.0);
@@ -1622,7 +1608,7 @@ void fire_rail2 (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kic
 		}
 
 		VectorCopy (tr.endpos, from);
-		//fire_grenade (self, tr.endpos, aimdir, 20, 50, 5.0,300.0);
+		
 	}
 
 	// send gun puff / flash
@@ -1734,7 +1720,7 @@ void bfg_touch (edict_t *self, edict_t *other, cplane_t *plane, csurface_t *surf
 	gi.multicast (self->s.origin, MULTICAST_PVS);
 }
 
-
+//this bfg think function drops grenades as it flys 
 void bfg_think (edict_t *self)
 {
 	edict_t	*ent;
@@ -1745,9 +1731,10 @@ void bfg_think (edict_t *self)
 	vec3_t	end;
 	int		dmg;
 	trace_t	tr;
+	//set vects
 	vec3_t offset;
 	vec3_t origin;
-
+	//set the origin of the vector origin 
 	origin[0] = crandom();
 	origin[1] = crandom();
 	origin[2] = crandom();
@@ -1813,9 +1800,11 @@ void bfg_think (edict_t *self)
 		gi.WritePosition (tr.endpos);
 		gi.multicast (self->s.origin, MULTICAST_PHS);
 	}
+	//fire the greandes 
 	fire_grenade(self,self->s.origin,offset,20,200,1.0,20);
 	self->nextthink = level.time + FRAMETIME;
 }
+//normal bfg think function 
 void bfg_think2 (edict_t *self)
 {
 	edict_t	*ent;
@@ -1893,7 +1882,7 @@ void bfg_think2 (edict_t *self)
 	self->nextthink = level.time + FRAMETIME;
 }
 
-
+//fire the greande dropping bfg 
 void fire_bfg (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed, float damage_radius)
 {
 	edict_t	*bfg;
@@ -1929,6 +1918,7 @@ void fire_bfg (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed, f
 
 	gi.linkentity (bfg);
 }
+//normal bfg fire 
 void fire_bfg2 (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed, float damage_radius)
 {
 	edict_t	*bfg;

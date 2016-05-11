@@ -762,12 +762,14 @@ char *dm_statusbar =
   "stat_string 16 "
 "endif "
 
+//timer for seconds
 // timer
 "	xr	-200 "
 "	num	3 18 "
 "	xv	100 "
+//timer for minutes 
 // timer mins
-"	xr	-250 "
+"	xr	-270 "
 "	num	3 19 "
 "	xv	100 "
 ;

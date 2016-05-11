@@ -255,8 +255,8 @@ qboolean Pickup_Pack (edict_t *ent, edict_t *other)
 		other->client->pers.max_shells = 200;
 	if (other->client->pers.max_rockets < 100)
 		other->client->pers.max_rockets = 100;
-	if (other->client->pers.max_grenades < 100)
-		other->client->pers.max_grenades = 100;
+	if (other->client->pers.max_grenades < 200)
+		other->client->pers.max_grenades = 200;
 	if (other->client->pers.max_cells < 300)
 		other->client->pers.max_cells = 300;
 	if (other->client->pers.max_slugs < 100)
@@ -339,6 +339,7 @@ void Use_Quad (edict_t *ent, gitem_t *item)
 	}
 	else
 	{
+		//lowered time 
 		timeout = 100;
 	}
 
@@ -348,6 +349,7 @@ void Use_Quad (edict_t *ent, gitem_t *item)
 		ent->client->quad_framenum = level.framenum + timeout;
 
 	gi.sound(ent, CHAN_ITEM, gi.soundindex("items/damage.wav"), 1, ATTN_NORM, 0);
+	//makes the other quad powerups types active 
 	turnoff = 1;
 	turnoffB =1;
 	turnoffC =1;
@@ -361,8 +363,10 @@ void Use_Breather (edict_t *ent, gitem_t *item)
 	ValidateSelectedItem (ent);
 
 	if (ent->client->breather_framenum > level.framenum)
+		//lowered time
 		ent->client->breather_framenum += 100;
 	else
+		//lowered time 
 		ent->client->breather_framenum = level.framenum + 100;
 
 //	gi.sound(ent, CHAN_ITEM, gi.soundindex("items/damage.wav"), 1, ATTN_NORM, 0);
@@ -376,8 +380,10 @@ void Use_Envirosuit (edict_t *ent, gitem_t *item)
 	ValidateSelectedItem (ent);
 
 	if (ent->client->enviro_framenum > level.framenum)
+		//lowered time
 		ent->client->enviro_framenum += 100;
 	else
+		//lowered time 
 		ent->client->enviro_framenum = level.framenum + 100;
 
 //	gi.sound(ent, CHAN_ITEM, gi.soundindex("items/damage.wav"), 1, ATTN_NORM, 0);
@@ -480,7 +486,8 @@ qboolean Pickup_Ammo (edict_t *ent, edict_t *other)
 	int			oldcount;
 	int			count;
 	qboolean	weapon;
-	
+	//these declare varaibles to get the right items to increment 
+	//mostly to give powerups to players when they pick up the "Balls"
 	int index;
 	int index2;
 	int index3;
@@ -500,10 +507,6 @@ qboolean Pickup_Ammo (edict_t *ent, edict_t *other)
 	index2 = ITEM_INDEX(itemB);
 	index3 = ITEM_INDEX(itemC);
 	index4 = ITEM_INDEX(itemD);
-	//gitem_t	*item2;
-	//item2 = FindItem("Quad Damage");
-	//index2 = ITEM_INDEX(item2);
-
 	message = "Quad";
 	message2 = "Envir";
 	message3 = "Rebre";
@@ -514,8 +517,10 @@ qboolean Pickup_Ammo (edict_t *ent, edict_t *other)
 		count = 1000;
 	else if (ent->count){
 		count = ent->count;
+		//if the itme is a grenade add to score
 		if(ent->item->tag == AMMO_GRENADES){
 			other->client->resp.score++;
+			//if the score is ten give a quad powerup to the inventory
 			if(other->client->resp.score == 10 && other->client->pers.inventory[index2] != 1){
 				other->client->pers.inventory[index2]++;
 				gi.bprintf(PRINT_MEDIUM, "Given %s push Q to use, throw ammo by firing hand grenade\n", message);
@@ -524,16 +529,19 @@ qboolean Pickup_Ammo (edict_t *ent, edict_t *other)
 				turnoffB = 1;
 				
 			}
+			//if the score is 20 give a Envirosuit powerup to the inventory
 			if(other->client->resp.score == 20 && other->client->pers.inventory[index3] != 1){
 				other->client->pers.inventory[index3]++;
 				gi.bprintf(PRINT_MEDIUM, "Given %s push E to use, Take damage get Balls!\n", message2);
 				powerupnum =2;
 			}
+			//if the score is 30 give a rebreather powerup to the inventory
 			if(other->client->resp.score == 30 && other->client->pers.inventory[index4] != 1){
 				other->client->pers.inventory[index4]++;
 				gi.bprintf(PRINT_MEDIUM,  "Given %s push B to use, Pickup nearby Balls!\n", message3);
 				powerupnum =3;
 			}
+			//if the score is 40 give a quad powerup to the inventory
 			if(other->client->resp.score == 40 && other->client->pers.inventory[index2] != 1){
 				other->client->pers.inventory[index2]++;
 				gi.bprintf(PRINT_MEDIUM, "Given %s push Q to use, Welfare!!! Shooting cost nothing\n", message);
@@ -542,6 +550,7 @@ qboolean Pickup_Ammo (edict_t *ent, edict_t *other)
 				
 				turnoffC = 1;
 			}
+			//if the score is 50 give a quad powerup to the inventory
 			if(other->client->resp.score == 50 && other->client->pers.inventory[index2] != 1){
 				other->client->pers.inventory[index2]++;
 				gi.bprintf(PRINT_MEDIUM, "Given %s push Q to use, One for All Grenade!!!\n", message);
@@ -550,9 +559,11 @@ qboolean Pickup_Ammo (edict_t *ent, edict_t *other)
 				turnoff = 1;
 			}
 		}
+		//if the picked up ammo is not a grenade add to the score and give grenades 
 		if(ent->item->tag != AMMO_GRENADES){
 			other->client->pers.inventory[index]++;
 			other->client->resp.score++;
+			//if the score is ten give a quad powerup to the inventory
 			if(other->client->resp.score == 10 && other->client->pers.inventory[index2] != 1){
 				other->client->pers.inventory[index2]++;
 				gi.bprintf(PRINT_MEDIUM, "Given %s push Q to use, throw ammo by firing hand grenade\n", message);
@@ -561,16 +572,19 @@ qboolean Pickup_Ammo (edict_t *ent, edict_t *other)
 				turnoffB = 1;
 
 			}
+			//if the score is 20 give a envirosuit powerup to the inventory
 			if(other->client->resp.score == 20 && other->client->pers.inventory[index3] != 1){
 				other->client->pers.inventory[index3]++;
 				gi.bprintf(PRINT_MEDIUM, "Given %s push E to use, Take damage get Balls!\n", message2);
 				powerupnum =2;
 			}
+			//if the score is 30 give a rebreather powerup to the inventory
 			if(other->client->resp.score == 30 && other->client->pers.inventory[index4] != 1){
 				other->client->pers.inventory[index4]++;
 				gi.bprintf(PRINT_MEDIUM, "Given %s push B to use, Pickup nearby Balls!\n", message3);
 				powerupnum =3;
 			}
+			////if the score is 40 give a quad powerup to the inventory
 			if(other->client->resp.score == 40 && other->client->pers.inventory[index2] != 1){
 				other->client->pers.inventory[index2]++;
 				gi.bprintf(PRINT_MEDIUM, "Given %s push Q to use, Welfare!!! Shooting cost nothing\n", message);
@@ -578,6 +592,7 @@ qboolean Pickup_Ammo (edict_t *ent, edict_t *other)
 				quadnum = 2;
 				turnoffC = 1;
 			}
+			//if the score is 50 give a quad powerup to the inventory
 			if(other->client->resp.score == 50 && other->client->pers.inventory[index2] != 1){
 				other->client->pers.inventory[index2]++;
 				gi.bprintf(PRINT_MEDIUM,"Given %s push Q to use, One for All Grenade!!!\n", message);
@@ -590,8 +605,10 @@ qboolean Pickup_Ammo (edict_t *ent, edict_t *other)
 	}
 	else{
 		count = ent->item->quantity;
+		//makes sure to give the player greandes and add to the score 
 		if(ent->item->tag == AMMO_GRENADES){
 			other->client->resp.score++;
+			//if the score is ten give a quad powerup to the inventory
 			if(other->client->resp.score == 10 && other->client->pers.inventory[index2] != 1){
 				other->client->pers.inventory[index2]++;
 				gi.bprintf(PRINT_MEDIUM,"Given %s push Q to use, throw ammo by firing hand grenade\n", message);
@@ -599,16 +616,19 @@ qboolean Pickup_Ammo (edict_t *ent, edict_t *other)
 				quadnum = 1;
 				turnoffB = 1;
 			}
+			//if the score is 20 give a envirosuit powerup to the inventory
 			if(other->client->resp.score == 20 && other->client->pers.inventory[index3] != 1){
 				other->client->pers.inventory[index3]++;
 				gi.bprintf(PRINT_MEDIUM, "Given %s push E to use, Take damage get Balls!\n", message2);
 				powerupnum =2;
 			}
+			//if the score is 30 give a rebreather powerup to the inventory
 			if(other->client->resp.score == 30 && other->client->pers.inventory[index4] != 1){
 				other->client->pers.inventory[index4]++;
 				gi.bprintf(PRINT_MEDIUM, "Given %s push B to use, Pickup nearby Balls!\n", message3);
 				powerupnum =3;
 			}
+			//if the score is 40 give a quad powerup to the inventory
 			if(other->client->resp.score == 40 && other->client->pers.inventory[index2] != 1){
 				other->client->pers.inventory[index2]++;
 				gi.bprintf(PRINT_MEDIUM, "Given %s push Q to use, Welfare!!! Shooting cost nothing\n", message);
@@ -616,6 +636,7 @@ qboolean Pickup_Ammo (edict_t *ent, edict_t *other)
 				quadnum = 2;
 				turnoffC = 1;
 			}
+			//if the score is 50 give a quad powerup to the inventory
 			if(other->client->resp.score == 50 && other->client->pers.inventory[index2] != 1){
 				other->client->pers.inventory[index2]++;
 				gi.bprintf(PRINT_MEDIUM, "Given %s push Q to use, One for All Grenade!!!\n", message);
@@ -624,9 +645,11 @@ qboolean Pickup_Ammo (edict_t *ent, edict_t *other)
 				turnoff = 1;
 			}
 		}
+		//makes sure the player gets grenades and score is increased 
 		if(ent->item->tag != AMMO_GRENADES){
 			other->client->pers.inventory[index]++;
 			other->client->resp.score++;
+			//if the score is ten give a quad powerup to the inventory
 			if(other->client->resp.score == 10 && other->client->pers.inventory[index2] != 1){
 				other->client->pers.inventory[index2]++;
 				gi.bprintf(PRINT_MEDIUM, "Given %s push Q to use, throw ammo by firing hand grenade\n", message);
@@ -634,16 +657,19 @@ qboolean Pickup_Ammo (edict_t *ent, edict_t *other)
 				quadnum = 1;
 				turnoffB = 1;
 			}
+			//if the score is 20 give a envirosuit powerup to the inventory
 			if(other->client->resp.score == 20 && other->client->pers.inventory[index3] != 1){
 				other->client->pers.inventory[index3]++;
 				gi.bprintf(PRINT_MEDIUM, "Given %s push E to use, Take damage get Balls!\n", message2);
 				powerupnum =2;
 			}
+			//if the score is 30 give a rebreather powerup to the inventory
 			if(other->client->resp.score == 30 && other->client->pers.inventory[index4] != 1){
 				other->client->pers.inventory[index4]++;
 				gi.bprintf(PRINT_MEDIUM, "Given %s push B to use, Pickup nearby Balls!\n", message3);
 				powerupnum =3;
 			}
+			//if the score is 40 give a quad powerup to the inventory
 			if(other->client->resp.score == 40 && other->client->pers.inventory[index2] != 1){
 				other->client->pers.inventory[index2]++;
 				gi.bprintf(PRINT_MEDIUM, "Given %s push Q to use, Welfare!!! Shooting cost nothing\n", message);
@@ -651,6 +677,7 @@ qboolean Pickup_Ammo (edict_t *ent, edict_t *other)
 				quadnum = 2;
 				turnoffC = 1;
 			}
+			//if the score is 50 give a quad powerup to the inventory
 			if(other->client->resp.score == 50 && other->client->pers.inventory[index2] != 1){
 				other->client->pers.inventory[index2]++;
 				gi.bprintf(PRINT_MEDIUM, "Given %s push Q to use, One for All Grenade!!!\n", message);
@@ -746,6 +773,9 @@ void MegaHealth_think (edict_t *self)
 
 qboolean Pickup_Health (edict_t *ent, edict_t *other)
 {
+
+	//these declare varaibles to get the right items to increment 
+	//mostly to give powerups to players when they pick up the "Balls"
 	int index;
 	int index2;
 	int index3;
@@ -772,8 +802,13 @@ qboolean Pickup_Health (edict_t *ent, edict_t *other)
 	message = "Quad";
 	message2 = "Envir";
 	message3 = "Rebre";
+	//addes greandes when they pick up health
+	//addes to score when its pickedup
+	//im pretty sure this code is redundant becasue of the changes to the health function below
+	//but ill leave it here just in case
 	other->client->pers.inventory[index]++;
 	other->client->resp.score++;
+	//if the score is ten give a quad powerup to the inventory
 		if(other->client->resp.score == 10 && other->client->pers.inventory[index2] != 1){
 				other->client->pers.inventory[index2]++;
 				gi.bprintf(PRINT_MEDIUM, "Given %s push Q to use, throw ammo by firing hand grenade\n", message);
@@ -781,16 +816,19 @@ qboolean Pickup_Health (edict_t *ent, edict_t *other)
 				quadnum = 1;
 				turnoffB = 1;
 			}
+		//if the score is 20 give a envirosuit powerup to the inventory
 			if(other->client->resp.score == 20 && other->client->pers.inventory[index3] != 1){
 				other->client->pers.inventory[index3]++;
 				gi.bprintf(PRINT_MEDIUM, "Given %s push E to use, Take damage get Balls!\n", message2);
 				powerupnum =2;
 			}
+			//if the score is 30 give a rebreather powerup to the inventory
 			if(other->client->resp.score == 30 && other->client->pers.inventory[index4] != 1){
 				other->client->pers.inventory[index4]++;
 				gi.bprintf(PRINT_MEDIUM, "Given %s push B to use, Pickup nearby Balls!\n", message3);
 				powerupnum =3;
 			}
+			//if the score is 40 give a quad powerup to the inventory
 			if(other->client->resp.score == 40 && other->client->pers.inventory[index2] != 1){
 				other->client->pers.inventory[index2]++;
 				gi.bprintf(PRINT_MEDIUM, "Given %s push Q to use, Welfare!!! Shooting cost nothing\n", message);
@@ -798,6 +836,7 @@ qboolean Pickup_Health (edict_t *ent, edict_t *other)
 				quadnum = 2;
 				turnoffC = 1;
 			}
+			//if the score is 50 give a quad powerup to the inventory
 			if(other->client->resp.score == 50 && other->client->pers.inventory[index2] != 1){
 				other->client->pers.inventory[index2]++;
 				gi.bprintf(PRINT_MEDIUM,"Given %s push Q to use, One for All Grenade!!!\n", message);
@@ -863,6 +902,8 @@ qboolean Pickup_Armor (edict_t *ent, edict_t *other)
 	int				newcount;
 	float			salvage;
 	int				salvagecount;
+	//these declare varaibles to get the right items to increment 
+	//mostly to give powerups to players when they pick up the "Balls"
 	int index;
 	int index2;
 	int index3;
@@ -882,15 +923,17 @@ qboolean Pickup_Armor (edict_t *ent, edict_t *other)
 	index2 = ITEM_INDEX(itemB);
 	index3 = ITEM_INDEX(itemC);
 	index4 = ITEM_INDEX(itemD);
-	//gitem_t	*item2;
-	//item2 = FindItem("Quad Damage");
-	//index2 = ITEM_INDEX(item2);
+	
 
 	message = "Quad";
 	message2 = "Envir";
 	message3 = "Rebre";
+	//gives greandes and score when armor is picked up
+	//this code might be redundant like the health one 
+	//but everything runs fine
 	other->client->pers.inventory[index]++;
 	other->client->resp.score++;
+	//if the score is ten give a quad powerup to the inventory
 		if(other->client->resp.score == 10 && other->client->pers.inventory[index2] != 1){
 				other->client->pers.inventory[index2]++;
 				gi.bprintf(PRINT_MEDIUM, "Given %s push Q to use, throw ammo by firing hand grenade\n", message);
@@ -898,16 +941,19 @@ qboolean Pickup_Armor (edict_t *ent, edict_t *other)
 				quadnum = 1;
 				turnoffB = 1;
 			}
+		//if the score is 20 give a envirosuit powerup to the inventory
 			if(other->client->resp.score == 20 && other->client->pers.inventory[index3] != 1){
 				other->client->pers.inventory[index3]++;
 				gi.bprintf(PRINT_MEDIUM, "Given %s push E to use, Take damage get Balls!\n", message2);
 				powerupnum =2;
 			}
+			//if the score is 30 give a rebreather powerup to the inventory
 			if(other->client->resp.score == 30 && other->client->pers.inventory[index4] != 1){
 				other->client->pers.inventory[index4]++;
 				gi.bprintf(PRINT_MEDIUM, "Given %s push B to use, Pickup nearby Balls!\n", message3);
 				powerupnum =3;
 			}
+			////if the score is 40 give a quad powerup to the inventory
 			if(other->client->resp.score == 40 && other->client->pers.inventory[index2] != 1){
 				other->client->pers.inventory[index2]++;
 				gi.bprintf(PRINT_MEDIUM, "Given %s push Q to use, Welfare!!! Shooting cost nothing\n", message);
@@ -915,6 +961,7 @@ qboolean Pickup_Armor (edict_t *ent, edict_t *other)
 				quadnum = 2;
 				turnoffC = 1;
 			}
+			//if the score is 50 give a quad powerup to the inventory
 			if(other->client->resp.score == 50 && other->client->pers.inventory[index2] != 1){
 				other->client->pers.inventory[index2]++;
 				gi.bprintf(PRINT_MEDIUM, "Given %s push Q to use, One for All Grenade!!!\n", message);
@@ -1198,54 +1245,35 @@ edict_t *Drop_Item (edict_t *ent, gitem_t *item)
 
 	return dropped;
 }
+//this function is called during the rebreather powerup 
+//it allowd for ammo to be picked up when it enters the radius 
 qboolean *GetThis_Item( edict_t *player, edict_t *item){
-	//edict_t *temp;
 	
-	//gitem_t *tempi;
 	char *message;
-	//message = "Hello";
-	//gi.bprintf(PRINT_MEDIUM, "%s\n", message);
-	//temp->classname = item->classname;
-	//temp->item = item;
-	//temp->owner = player;
-//	tempi = item->item;
-	//temp->item = item;
+	
 	Pickup_Ammo(item, player);
-	//return tempi;
+	
 	return 0;
 	
 }
+//this function is called during the rebreathert powerup 
+//it allowd for health to be picked up when it enters the radius 
 qboolean *GetThis_Health(edict_t *player, edict_t *item){
-	//edict_t *temp;
-	//gitem_t *tempi;
+	
 	char *message;
-	//message = "Hello3";
-	//gi.bprintf(PRINT_MEDIUM, "%s\n", message);
-	//temp->classname = item->classname;
-	//temp->item = item;
-	//temp->owner = player;
-//	tempi = item->item;
-	//temp->item = item;
-	//Pickup_Ammo(item, player);
+	
 	Pickup_Health(item, player);
-	//return tempi;
+	
 	return 0;
 }
+//this function is called during the rebreather powerup 
+//it allowd for armor to be picked up when it enters the radius 
 qboolean *GetThis_Armor(edict_t *player, edict_t *item){
-	//edict_t *temp;
 	
-	//gitem_t *tempi;
 	char *message;
-	//message = "Hello2";
-	//gi.bprintf(PRINT_MEDIUM, "%s\n", message);
-	//temp->classname = item->classname;
-	//temp->item = item;
-	//temp->owner = player;
-//	tempi = item->item;
-	//temp->item = item;
-	//Pickup_Ammo(item, player);
+
 	Pickup_Armor(item,player);
-	//return tempi;
+	
 	return 0;
 }
 void Use_Item (edict_t *ent, edict_t *other, edict_t *activator)
@@ -1501,6 +1529,8 @@ gitem_t	itemlist[] =
 	//
 	/*QUAKED ammo_grenades (.3 .3 1) (-16 -16 -16) (16 16 16)
 */
+//moved ammo_grenades to the top
+//so it can be accessed by all items
 	{
 		"ammo_grenades",
 		Pickup_Ammo,
@@ -1523,6 +1553,7 @@ gitem_t	itemlist[] =
 	},
 /*QUAKED item_armor_body (.3 .3 1) (-16 -16 -16) (16 16 16)
 */
+//changed the model and pick up to grenades
 	{
 		"item_armor_body", 
 		Pickup_Armor,
@@ -1544,8 +1575,10 @@ gitem_t	itemlist[] =
 /* precache */ ""
 	},
 
+
 /*QUAKED item_armor_combat (.3 .3 1) (-16 -16 -16) (16 16 16)
 */
+//changed the model and pick up to grenades
 	{
 		"item_armor_combat", 
 		Pickup_Armor,
@@ -1569,6 +1602,7 @@ gitem_t	itemlist[] =
 
 /*QUAKED item_armor_jacket (.3 .3 1) (-16 -16 -16) (16 16 16)
 */
+//changed the model and pick up to grenades
 	{
 		"item_armor_jacket", 
 		Pickup_Armor,
@@ -1592,6 +1626,7 @@ gitem_t	itemlist[] =
 
 /*QUAKED item_armor_shard (.3 .3 1) (-16 -16 -16) (16 16 16)
 */
+//changed the model and pick up to grenades
 	{
 		"item_armor_shard", 
 		Pickup_Armor,
@@ -1616,6 +1651,7 @@ gitem_t	itemlist[] =
 
 /*QUAKED item_power_screen (.3 .3 1) (-16 -16 -16) (16 16 16)
 */
+
 	{
 		"item_power_screen", 
 		Pickup_PowerArmor,
@@ -1691,6 +1727,7 @@ always owned, never in the world
 
 /*QUAKED weapon_shotgun (.3 .3 1) (-16 -16 -16) (16 16 16)
 */
+//changed to so it uses greandes now "Grenades" instead of "slugs"|"Bullet"|"Cells" etc
 	{
 		"weapon_shotgun", 
 		Pickup_Weapon,
@@ -1714,6 +1751,7 @@ always owned, never in the world
 
 /*QUAKED weapon_supershotgun (.3 .3 1) (-16 -16 -16) (16 16 16)
 */
+//changed to so it uses greandes now "Grenades" instead of "slugs"|"Bullet"|"Cells" etc
 	{
 		"weapon_supershotgun", 
 		Pickup_Weapon,
@@ -1737,6 +1775,7 @@ always owned, never in the world
 
 /*QUAKED weapon_machinegun (.3 .3 1) (-16 -16 -16) (16 16 16)
 */
+//changed to so it uses greandes now "Grenades" instead of "slugs"|"Bullet"|"Cells" etc
 	{
 		"weapon_machinegun", 
 		Pickup_Weapon,
@@ -1760,6 +1799,8 @@ always owned, never in the world
 
 /*QUAKED weapon_chaingun (.3 .3 1) (-16 -16 -16) (16 16 16)
 */
+//removed the chaingun
+//causes to many enities to spawn
 	{
 		"1weapon_chaingun", 
 		Pickup_Weapon,
@@ -1807,6 +1848,7 @@ always owned, never in the world
 
 /*QUAKED weapon_rocketlauncher (.3 .3 1) (-16 -16 -16) (16 16 16)
 */
+//changed to so it uses greandes now "Grenades" instead of "slugs"|"Bullet"|"Cells" etc
 	{
 		"weapon_rocketlauncher",
 		Pickup_Weapon,
@@ -1830,6 +1872,7 @@ always owned, never in the world
 
 /*QUAKED weapon_hyperblaster (.3 .3 1) (-16 -16 -16) (16 16 16)
 */
+//changed to so it uses greandes now "Grenades" instead of "slugs"|"Bullet"|"Cells" etc
 	{
 		"weapon_hyperblaster", 
 		Pickup_Weapon,
@@ -1853,6 +1896,7 @@ always owned, never in the world
 
 /*QUAKED weapon_railgun (.3 .3 1) (-16 -16 -16) (16 16 16)
 */
+//changed to so it uses greandes now "Grenades" instead of "slugs"|"Bullet"|"Cells" etc
 	{
 		"weapon_railgun", 
 		Pickup_Weapon,
@@ -1876,6 +1920,7 @@ always owned, never in the world
 
 /*QUAKED weapon_bfg (.3 .3 1) (-16 -16 -16) (16 16 16)
 */
+//changed to so it uses greandes now "Grenades" instead of "slugs"|"Bullet"|"Cells" etc
 	{
 		"weapon_bfg",
 		Pickup_Weapon,
@@ -1903,6 +1948,7 @@ always owned, never in the world
 
 /*QUAKED ammo_shells (.3 .3 1) (-16 -16 -16) (16 16 16)
 */
+//made it so it looks like ammo_grenades and gives Grenades instead of its normal pickup
 	{
 		"ammo_shells",
 		Pickup_Ammo,
@@ -1926,6 +1972,7 @@ always owned, never in the world
 
 /*QUAKED ammo_bullets (.3 .3 1) (-16 -16 -16) (16 16 16)
 */
+//made it so it looks like ammo_grenades and gives Grenades instead of its normal pickup
 	{
 		"ammo_bullets",
 		Pickup_Ammo,
@@ -1949,6 +1996,7 @@ always owned, never in the world
 
 /*QUAKED ammo_cells (.3 .3 1) (-16 -16 -16) (16 16 16)
 */
+//made it so it looks like ammo_grenades and gives Grenades instead of its normal pickup
 	{
 		"ammo_cells",
 		Pickup_Ammo,
@@ -1972,6 +2020,7 @@ always owned, never in the world
 
 /*QUAKED ammo_rockets (.3 .3 1) (-16 -16 -16) (16 16 16)
 */
+//made it so it looks like ammo_grenades and gives Grenades instead of its normal pickup
 	{
 		"ammo_rockets",
 		Pickup_Ammo,
@@ -1995,6 +2044,7 @@ always owned, never in the world
 
 /*QUAKED ammo_slugs (.3 .3 1) (-16 -16 -16) (16 16 16)
 */
+//made it so it looks like ammo_grenades and gives Grenades instead of its normal pickup
 	{
 		"ammo_slugs",
 		Pickup_Ammo,
@@ -2483,7 +2533,7 @@ void SP_item_health (edict_t *self)
 		G_FreeEdict (self);
 		return;
 	}
-
+	//made it look like greandes and spawn a grenade instead of health
 	self->model = "models/items/ammo/grenades/medium/tris.md2";
 	self->count = 1;
 	SpawnItem (self, FindItem ("Grenades"));
@@ -2500,7 +2550,7 @@ void SP_item_health_small (edict_t *self)
 		G_FreeEdict (self);
 		return;
 	}
-
+	//made it look like greandes and spawn a grenade instead of health
 	self->model = "models/items/ammo/grenades/medium/tris.md2";
 	self->count = 1;
 	SpawnItem (self, FindItem ("Grenades"));
@@ -2517,7 +2567,7 @@ void SP_item_health_large (edict_t *self)
 		G_FreeEdict (self);
 		return;
 	}
-
+	//made it look like greandes and spawn a grenade instead of health
 	self->model = "models/items/ammo/grenades/medium/tris.md2";
 	self->count = 1;
 	SpawnItem (self, FindItem ("Grenades"));
@@ -2535,7 +2585,7 @@ void SP_item_health_mega (edict_t *self)
 		G_FreeEdict (self);
 		return;
 	}
-
+	//made it look like greandes and spawn a grenade instead of health
 	self->model = "models/items/ammo/grenades/medium/tris.md2";
 	self->count = 1;
 	SpawnItem (self, FindItem ("Grenades"));
@@ -2568,7 +2618,7 @@ void SetItemNames (void)
 		it = &itemlist[i];
 		gi.configstring (CS_ITEMS+i, it->pickup_name);
 	}
-
+	//removed these items so they can be grenades 
 	//jacket_armor_index = ITEM_INDEX(FindItem("Jacket Armor"));
 	//combat_armor_index = ITEM_INDEX(FindItem("Combat Armor"));
 	//body_armor_index   = ITEM_INDEX(FindItem("Body Armor"));
