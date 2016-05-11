@@ -537,6 +537,7 @@ void player_die (edict_t *self, edict_t *inflictor, edict_t *attacker, int damag
 	self->client->breather_framenum = 0;
 	self->client->enviro_framenum = 0;
 	self->flags &= ~FL_POWER_ARMOR;
+	//if the player dies reset the score and drop a grenade 
 	self->client->resp.score = self->client->pers.score = 0;
 	Drop_Item(self, item);
 

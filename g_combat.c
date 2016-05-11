@@ -367,21 +367,20 @@ void T_Damage (edict_t *targ, edict_t *inflictor, edict_t *attacker, vec3_t dir,
 	
 	
 	int index;
-	//int index2;
+	
 
 	char *message;
 	gitem_t	*item;
-	//gitem_t *itemB;
+	;
 	item = FindItem("Grenades");
-	//itemB = FindItem("Quad Damage");
+	//if the player hurts themselves give them a extra grenade and score 
 	index = ITEM_INDEX(item);
 	message = "Envirosuit dmg";
 	if(powerupnum == 2){
-		//other->client->pers.inventory[index]++;
-			//other->client->resp.score++;
+		
 		targ->client->pers.inventory[index]++;
 		targ->client->resp.score++;
-		//gi.bprintf(PRINT_MEDIUM, "This is %s\n", message);
+		
 	}
 	
 	if (!targ->takedamage)
@@ -545,6 +544,7 @@ void T_Damage (edict_t *targ, edict_t *inflictor, edict_t *attacker, vec3_t dir,
 		targ->client->resp.score++;
 		//gi.bprintf(PRINT_MEDIUM, "This is %s\n", message);
 	}
+	//set dmgtake to 1 for the enviroment powerup 
 	dmgtake = 1;
 	
 }

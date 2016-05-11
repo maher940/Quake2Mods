@@ -737,8 +737,10 @@ void P_WorldEffects (void)
 			}
 		}
 	}
+	//if the person has the enviroment suit active 
 	if(envirosuit){
 		powerupnum = 2;
+		//if they take damage give them grenade and score 
 		if(dmgtake ==1)
 		{
 			current_player->client->pers.inventory[index]++;
@@ -749,44 +751,17 @@ void P_WorldEffects (void)
 	else{
 		powerupnum = 1;
 	}
-	/*
-	if(quad)
-	{
-		if(quadnum == 3){
-			turnoff = 1;
-		}
-		//else{
-		//	turnoff = 0;
-		//}
-	}
-	*/
-	//else{
-	//}
+	//if the breather is active pickup n a radius the items that are grenades or give greandes 
 	if (breather){
 		
 		
 		message2 = "Not item";
 		message3 = "no item";
-		//while ((ent = findradius(current_player, current_player->s.origin, 100)) != NULL){
-		//	if(ent->item){
-		//	gi.bprintf(PRINT_MEDIUM, "real %s\n", message);
-			//if(ent->item->tag == AMMO_GRENADES){
-			//	gi.bprintf(PRINT_MEDIUM, "%s is slugs\n", message);
-			//}
-		//}
-		//if(!ent->item){
-		//	gi.bprintf(PRINT_MEDIUM, "%s\n", message2);
-		//}
-		
-		//}
+		//find entities with in a radius and as long as the entitiy found is not null
 		if((ent = findradius(current_player, current_player->s.origin, 100)) != NULL){
-			//message = ent->item->classname;
-			//message2 = ent->item->pickup_name;
-			
-			//if(ent->item->pickup_name == "Grenades"){
-			//	gi.bprintf(PRINT_MEDIUM, "Gonna pick up %s\n", message);
-				//GetThis_Item(current_player, ent);
-			//}
+			//if the entity found is an item 
+			//pick up the item if they are of this class name
+			//use the right GetThis function 
 			if(ent->item){
 			if(ent->item->classname == "ammo_bullets"){
 				GetThis_Item(current_player, ent);
@@ -807,37 +782,35 @@ void P_WorldEffects (void)
 				GetThis_Item(current_player, ent);
 			}
 			if(ent->item->classname == "item_armor_shard"){
-				//gi.bprintf(PRINT_MEDIUM, "Gonna pick up %s\n", message);
+				
 				GetThis_Armor(current_player, ent);
 			}
 			if(ent->item->classname == "item_armor_jacket"){
-				//gi.bprintf(PRINT_MEDIUM, "Gonna pick up %s\n", message);
+				
 				GetThis_Armor(current_player, ent);
 			}
 			if(ent->item->classname == "item_armor_combat"){
-				//gi.bprintf(PRINT_MEDIUM, "Gonna pick up %s\n", message);
+				
 				GetThis_Armor(current_player, ent);
 			}
 			if(ent->item->classname == "item_armor_body"){
-				//gi.bprintf(PRINT_MEDIUM, "Gonna pick up %s\n", message);
+				
 				GetThis_Armor(current_player, ent);
 			}
 			
 			if(ent->item->classname == "item_pack"){
-				//gi.bprintf(PRINT_MEDIUM, "Gonna pick up %s\n", message);
+				
 				GetThis_Item(current_player, ent);
 			}
 			if(ent->item->pickup_name == "Health"){
-				//gi.bprintf(PRINT_MEDIUM, "Gonna pick up %s\n", message2);
+				
 				GetThis_Health(current_player, ent);
 			}
 			}
 		}
 	
 	}
-	//else{"item_armor_jacket"
-	//	powerupnum =0;
-	//}
+	
 }
 
 
