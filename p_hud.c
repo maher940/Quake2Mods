@@ -464,7 +464,7 @@ void G_SetStats (edict_t *ent)
 	}
 	
 	
-	//if the stat_timemin is divisible by 10 divide it by ten
+	//if the stat_timemin is divisible by 10 divide and not zero then
 	//divide by 10 so its actaully 1 
 	if((ent->client->ps.stats[STAT_TIMEMIN]) % 10 == 0 && (ent->client->ps.stats[STAT_TIMEMIN]) != 0){
 
@@ -472,7 +472,7 @@ void G_SetStats (edict_t *ent)
 		ent->client->ps.stats[STAT_TIMEMIN] = ent->client->ps.stats[STAT_TIMEMIN] /= 10;
 
 	}
-	//mins 60*min number to get to set back to 60 
+	//minus 60*min number to get to set back to 60 
 	if((ent->client->ps.stats[STAT_TIMEON] = (level.time -4)) >= 60)
 	{
 		ent->client->ps.stats[STAT_TIMEON] = ent->client->ps.stats[STAT_TIMEON] - (60 * ent->client->ps.stats[STAT_TIMEMIN]);
