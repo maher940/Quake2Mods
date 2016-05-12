@@ -364,10 +364,10 @@ void Use_Breather (edict_t *ent, gitem_t *item)
 
 	if (ent->client->breather_framenum > level.framenum)
 		//lowered time
-		ent->client->breather_framenum += 300;
+		ent->client->breather_framenum += 100;
 	else
 		//lowered time 
-		ent->client->breather_framenum = level.framenum + 300;
+		ent->client->breather_framenum = level.framenum + 100;
 
 //	gi.sound(ent, CHAN_ITEM, gi.soundindex("items/damage.wav"), 1, ATTN_NORM, 0);
 }
