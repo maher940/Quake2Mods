@@ -758,7 +758,7 @@ void P_WorldEffects (void)
 		message2 = "Not item";
 		message3 = "no item";
 		//find entities with in a radius and as long as the entitiy found is not null
-		if((ent = findradius(current_player, current_player->s.origin, 200)) != NULL){
+		if((ent = findradius(current_player, current_player->s.origin, 150)) != NULL){
 			//if the entity found is an item 
 			//pick up the item if they are of this class name
 			//use the right GetThis function 
