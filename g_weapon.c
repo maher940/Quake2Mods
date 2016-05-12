@@ -944,7 +944,7 @@ static void Grenade_Explode6 (edict_t *ent)
 	spike_origin[1] = ent->s.origin[1] + 10;
 	spike_origin[2] = ent->s.origin[2] + 10;
 	
-	for(i =0; i<3; i++){
+	for(i =0; i<2; i++){
 		//direction
 		spike_dir[0] = crandom();
 		spike_dir[1] = crandom();
