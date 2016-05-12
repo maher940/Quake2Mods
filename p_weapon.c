@@ -1066,7 +1066,7 @@ void Weapon_Blaster (edict_t *ent)
 {
 	static int	pause_frames[]	= {19, 32, 0};
 	static int	fire_frames[]	= {5, 0};
-
+	//made fire rate longer 
 	Weapon_Generic (ent, 4, 20, 52, 55, pause_frames, fire_frames, Weapon_Blaster_Fire);
 }
 
