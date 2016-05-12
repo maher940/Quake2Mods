@@ -837,6 +837,7 @@ void weapon_grenadelauncher_fire (edict_t *ent)
 	radius = damage+100;
 	if (is_quad)
 		damage *= 4;
+	//lowers score
 	ent->client->resp.score--;
 	VectorSet(offset, 8, 8, ent->viewheight-8);
 	AngleVectors (ent->client->v_angle, forward, right, NULL);
@@ -1570,6 +1571,7 @@ void weapon_supershotgun_fire (edict_t *ent)
 
 	ent->client->ps.gunframe++;
 	PlayerNoise(ent, start, PNOISE_WEAPON);
+	//lowers score twice since it shoots two 
 	ent->client->resp.score--;
 	ent->client->resp.score--;
 	if (! ( (int)dmflags->value & DF_INFINITE_AMMO ) )
